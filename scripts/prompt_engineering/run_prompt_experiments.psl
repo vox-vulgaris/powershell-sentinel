@@ -1,0 +1,28 @@
+# Phase 4: Model Training & Evaluation
+# Index: [14b]
+#
+# Part 2 of the Prompt Engineering experiment. This PowerShell script automates the
+# process of running the three separate, small-scale fine-tuning jobs.
+
+Write-Host "--- Starting Prompt Engineering Experiment ---" -ForegroundColor Green
+
+$env:PYTHONIOENCODING="UTF-8" # Ensure proper encoding for python scripts
+
+$baseModel = "google/gemma-2b" # Or whichever base model you choose
+$dataDir = "./scripts/prompt_engineering"
+$modelsDir = "./models/prompt_experiments"
+$mainTrainScript = "./powershell_sentinel/train.py"
+
+# Train model with Prompt A
+Write-Host "--- Training model with Prompt A (Direct)... ---" -ForegroundColor Yellow
+python $mainTrainScript --model_name $baseModel --dataset_path "$dataDir/dataset_prompt_A_Direct.json" --output_dir "$modelsDir/prompt_A_model" --is_mini_run
+
+# Train model with Prompt B
+Write-Host "--- Training model with Prompt B (RolePlay)... ---" -ForegroundColor Yellow
+python $mainTrainScript --model_name $baseModel --dataset_path "$dataDir/dataset_prompt_B_RolePlay.json" --output_dir "$modelsDir/prompt_B_model" --is_mini_run
+
+# Train model with Prompt C
+Write-Host "--- Training model with Prompt C (Detailed)... ---" -ForegroundColor Yellow
+python $mainTrainScript --model_name $baseModel --dataset_path "$dataDir/dataset_prompt_C_Detailed.json" --output_dir "$modelsDir/prompt_C_model" --is_mini_run
+
+Write-Host "--- All Prompt Models Trained ---" -ForegroundColor Green

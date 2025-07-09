@@ -1,0 +1,36 @@
+[
+  {
+    "primitive_id": "CLI-TEST-001",
+    "primitive_command": "Get-Service",
+    "intent": [
+      "Service Discovery"
+    ],
+    "mitre_ttps": [
+      "T1007"
+    ],
+    "telemetry_rules": [
+      {
+        "source": "PowerShell",
+        "event_id": 4103,
+        "details": "Executing command Get-Service."
+      }
+    ]
+  },
+  {
+    "primitive_id": "CLI-TEST-002",
+    "primitive_command": "net user",
+    "intent": [
+      "Account Discovery"
+    ],
+    "mitre_ttps": [
+      "T1087.001"
+    ],
+    "telemetry_rules": [
+      {
+        "source": "Security",
+        "event_id": 4688,
+        "details": "Process created: net.exe with command line net user"
+      }
+    ]
+  }
+]

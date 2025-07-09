@@ -1,0 +1,46 @@
+[
+  {
+    "primitive_id": "PS-001",
+    "primitive_command": "Get-Process",
+    "intent": [
+      "Process Discovery"
+    ],
+    "mitre_ttps": [
+      "T1057"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-002",
+    "primitive_command": "Get-NetIPAddress",
+    "intent": [
+      "System Network Configuration Discovery"
+    ],
+    "mitre_ttps": [
+      "T1016"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-003",
+    "primitive_command": "Get-ChildItem -Path C:\\ -Recurse -ErrorAction SilentlyContinue",
+    "intent": [
+      "File and Directory Discovery"
+    ],
+    "mitre_ttps": [
+      "T1083"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-004",
+    "primitive_command": "(Get-WmiObject -Class Win32_OperatingSystem).Caption",
+    "intent": [
+      "System Information Discovery"
+    ],
+    "mitre_ttps": [
+      "T1082"
+    ],
+    "telemetry_rules": []
+  }
+]

@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.env
+
+# Generated Data - never commit large generated files
+data/generated/*
+data/sets/*
+data/interim/delta_logs/*
+
+# Logs
+*.log
+
+# IDE files
+.idea/
+.vscode/
