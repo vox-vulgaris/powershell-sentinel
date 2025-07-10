@@ -66,7 +66,7 @@ This directory is organized to separate raw source data, intermediate artifacts,
     *   **`primitives_library.json`**: This is the master knowledge base. It is a list of "primitive" PowerShell commands representing various adversarial techniques. Each entry is a JSON object with a specific, required schema. This file is the primary input for the data factory.
         *   **Schema:** `primitive_id`, `primitive_command`, `intent` (list), `mitre_ttps` (list), `telemetry_rules` (list of objects). The `telemetry_rules` field starts empty and is populated by the `primitives_manager.py` tool.
 
-    *   **`mitre_ttp_library.json`**: A predefined list of MITRE ATT&CK techniques, used to populate selection menus within the `primitives_manager.py` tool to ensure data consistency and accuracy.
+    *   **`mitre_ttp_library.json`**: A project-specific lookup file that provides canonical data (name and tactic) for every MITRE ATT&CK technique referenced in `primitives_library.json`. This file is not an exhaustive database of the entire ATT&CK framework; instead, it is curated iteratively. As new primitives are developed, any new TTPs they reference are added here. This ensures the `primitives_manager.py` tool has a consistent and validated source for populating its selection menus.
 
 *   #### `/data/interim/`
     Holds temporary data generated during the curation process, such as the `delta_logs` for each primitive.
