@@ -1,17 +1,245 @@
 [
   {
     "primitive_id": "PS-001",
-    "primitive_command": "Get-Process",
+    "primitive_command": "hostname",
     "intent": [
-      "Process Discovery"
+      "System Information Discovery"
     ],
     "mitre_ttps": [
-      "T1057"
+      "T1082"
     ],
     "telemetry_rules": []
   },
   {
     "primitive_id": "PS-002",
+    "primitive_command": "Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object -Property Caption, Version",
+    "intent": [
+      "System Information Discovery"
+    ],
+    "mitre_ttps": [
+      "T1082"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-003",
+    "primitive_command": "Get-Command Get-Process",
+    "intent": [
+      "System Information Discovery",
+      "Software Discovery"
+    ],
+    "mitre_ttps": [
+      "T1082",
+      "T1518"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-004",
+    "primitive_command": "Get-Module",
+    "intent": [
+      "Software Discovery"
+    ],
+    "mitre_ttps": [
+      "T1518"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-005",
+    "primitive_command": "Get-ChildItem Env:",
+    "intent": [
+      "System Information Discovery",
+      "System Owner/User Discovery"
+    ],
+    "mitre_ttps": [
+      "T1082",
+      "T1033"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-006",
+    "primitive_command": "dir C:\\Windows",
+    "intent": [
+      "File and Directory Discovery"
+    ],
+    "mitre_ttps": [
+      "T1083"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-007",
+    "primitive_command": "tree /F C:\\Windows\\System32\\drivers\\etc",
+    "intent": [
+      "File and Directory Discovery"
+    ],
+    "mitre_ttps": [
+      "T1083"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-008",
+    "primitive_command": "Get-Content C:\\Windows\\System32\\drivers\\etc\\hosts",
+    "intent": [
+      "File and Directory Discovery",
+      "System Network Configuration Discovery"
+    ],
+    "mitre_ttps": [
+      "T1083",
+      "T1016"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-009",
+    "primitive_command": "whoami",
+    "intent": [
+      "System Owner/User Discovery"
+    ],
+    "mitre_ttps": [
+      "T1033"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-010",
+    "primitive_command": "whoami /priv",
+    "intent": [
+      "Permission Groups Discovery"
+    ],
+    "mitre_ttps": [
+      "T1069"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-011",
+    "primitive_command": "whoami /groups",
+    "intent": [
+      "Permission Groups Discovery"
+    ],
+    "mitre_ttps": [
+      "T1069"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-012",
+    "primitive_command": "net user",
+    "intent": [
+      "Account Discovery"
+    ],
+    "mitre_ttps": [
+      "T1087"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-013",
+    "primitive_command": "net localgroup",
+    "intent": [
+      "Permission Groups Discovery: Local Groups"
+    ],
+    "mitre_ttps": [
+      "T1069.001"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-014",
+    "primitive_command": "Get-LocalUser",
+    "intent": [
+      "Account Discovery: Local Account"
+    ],
+    "mitre_ttps": [
+      "T1087.001"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-015",
+    "primitive_command": "Get-LocalGroup",
+    "intent": [
+      "Local Groups"
+    ],
+    "mitre_ttps": [
+      "T1069.001"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-016",
+    "primitive_command": "Get-LocalGroupMember -Group \"Administrators\"",
+    "intent": [
+      "Local Groups"
+    ],
+    "mitre_ttps": [
+      "T1069.001"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-017",
+    "primitive_command": "ipconfig /all",
+    "intent": [
+      "System Network Configuration Discovery"
+    ],
+    "mitre_ttps": [
+      "T1016"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-018",
+    "primitive_command": "arp -a",
+    "intent": [
+      "Remote System Discovery"
+    ],
+    "mitre_ttps": [
+      "T1018"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-019",
+    "primitive_command": "netstat -an",
+    "intent": [
+      "System Network Connections Discovery",
+      "Network Service Discovery"
+    ],
+    "mitre_ttps": [
+      "T1049",
+      "T1046"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-020",
+    "primitive_command": "nslookup www.google.com",
+    "intent": [
+      "Internet Connection Discovery"
+    ],
+    "mitre_ttps": [
+      "T1016.001"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-021",
+    "primitive_command": "net share",
+    "intent": [
+      "Network Share Discovery"
+    ],
+    "mitre_ttps": [
+      "T1135"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-022",
     "primitive_command": "Get-NetIPAddress",
     "intent": [
       "System Network Configuration Discovery"
@@ -22,24 +250,127 @@
     "telemetry_rules": []
   },
   {
-    "primitive_id": "PS-003",
-    "primitive_command": "Get-ChildItem -Path C:\\ -Recurse -ErrorAction SilentlyContinue",
+    "primitive_id": "PS-023",
+    "primitive_command": "Get-NetRoute",
     "intent": [
-      "File and Directory Discovery"
+      "System Network Configuration Discovery"
     ],
     "mitre_ttps": [
-      "T1083"
+      "T1016"
     ],
     "telemetry_rules": []
   },
   {
-    "primitive_id": "PS-004",
-    "primitive_command": "(Get-WmiObject -Class Win32_OperatingSystem).Caption",
+    "primitive_id": "PS-024",
+    "primitive_command": "Get-NetNeighbor",
     "intent": [
-      "System Information Discovery"
+      "Remote System Discovery"
     ],
     "mitre_ttps": [
-      "T1082"
+      "T1018"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-025",
+    "primitive_command": "Get-Service",
+    "intent": [
+      "System Service Discovery"
+    ],
+    "mitre_ttps": [
+      "T1007"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-026",
+    "primitive_command": "sc.exe query",
+    "intent": [
+      "System Service Discovery"
+    ],
+    "mitre_ttps": [
+      "T1007"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-027",
+    "primitive_command": "net start",
+    "intent": [
+      "System Service Discovery"
+    ],
+    "mitre_ttps": [
+      "T1007"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-028",
+    "primitive_command": "Get-CimInstance -ClassName Win32_Service | Select-Object State, Name, ProcessId, StartMode",
+    "intent": [
+      "System Service Discovery",
+      "Process Discovery"
+    ],
+    "mitre_ttps": [
+      "T1007",
+      "T1057"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-029",
+    "primitive_command": "schtasks /query",
+    "intent": [
+      "Scheduled Task/Job: Scheduled Task"
+    ],
+    "mitre_ttps": [
+      "T1053.005"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-030",
+    "primitive_command": "REG QUERY HKLM\\Software\\Microsoft\\Windows\\CurrentVersion",
+    "intent": [
+      "Query Registry"
+    ],
+    "mitre_ttps": [
+      "T1012"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-031",
+    "primitive_command": "findstr \"127.0.0.1\" C:\\Windows\\System32\\drivers\\etc\\hosts",
+    "intent": [
+      "File and Directory Discovery",
+      "System Network Configuration Discovery"
+    ],
+    "mitre_ttps": [
+      "T1083",
+      "T1016"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-032",
+    "primitive_command": "New-Item -Path C:\\Users\\Public\\Documents\\ -Name \"sentinel_test_file.txt\" -ItemType File",
+    "intent": [
+      "Local Data Staging"
+    ],
+    "mitre_ttps": [
+      "T1074.001"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-033",
+    "primitive_command": "Add-Content -Path C:\\Users\\Public\\Documents\\sentinel_test_log.log -Value \"log entry 1\"",
+    "intent": [
+      "Local Data Staging"
+    ],
+    "mitre_ttps": [
+      "T1074.001"
     ],
     "telemetry_rules": []
   }

@@ -1,6 +1,118 @@
 {
-  "T1595.001": {
-    "name": "Scanning IP Blocks",
-    "tactic": "Reconnaissance"
+  "T1082": {
+    "name": "System Information Discovery",
+    "tactic": [
+      "Discovery"
+    ]
+  },
+  "T1518": {
+    "name": "Software Discovery",
+    "tactic": [
+      "Discovery"
+    ]
+  },
+  "T1033": {
+    "name": "System Owner/User Discovery",
+    "tactic": [
+      "Discovery"
+    ]
+  },
+  "T1083": {
+    "name": "File and Directory Discovery",
+    "tactic": [
+      "Discovery"
+    ]
+  },
+  "T1016": {
+    "name": "System Network Configuration Discovery",
+    "tactic": [
+      "Discovery"
+    ]
+  },
+  "T1069": {
+    "name": "Permission Groups Discovery",
+    "tactic": [
+      "Discovery"
+    ]
+  },
+  "T1087": {
+    "name": "Account Discovery",
+    "tactic": [
+      "Discovery"
+    ]
+  },
+  "T1069.001": {
+    "name": "Permission Groups Discovery: Local Groups",
+    "tactic": [
+      "Discovery"
+    ]
+  },
+  "T1087.001": {
+    "name": "Account Discovery: Local Account",
+    "tactic": [
+      "Discovery"
+    ]
+  },
+  "T1018": {
+    "name": "Remote System Discovery",
+    "tactic": [
+      "Discovery"
+    ]
+  },
+  "T1049": {
+    "name": "System Network Connections Discovery",
+    "tactic": [
+      "Discovery"
+    ]
+  },
+  "T1046": {
+    "name": "Network Service Discovery",
+    "tactic": [
+      "Discovery"
+    ]
+  },
+  "T1016.001": {
+    "name": "System Network Configuration Discovery: Internet Connection Discovery",
+    "tactic": [
+      "Discovery"
+    ]
+  },
+  "T1135": {
+    "name": "Network Share Discovery",
+    "tactic": [
+      "Discovery"
+    ]
+  },
+  "T1007": {
+    "name": "System Service Discovery",
+    "tactic": [
+      "Discovery"
+    ]
+  },
+  "T1057": {
+    "name": "Process Discovery",
+    "tactic": [
+      "Discovery"
+    ]
+  },
+  "T1053.005": {
+    "name": "Scheduled Task/Job: Scheduled Task",
+    "tactic": [
+      "Execution",
+      "Persistence",
+      "Privilege Escalation"
+    ]
+  },
+  "T1012": {
+    "name": "Query Registry",
+    "tactic": [
+      "Discovery"
+    ]
+  },
+  "T1074.001": {
+    "name": "Data Staging: Local Data Staging",
+    "tactic": [
+      "Collection"
+    ]
   }
 }
