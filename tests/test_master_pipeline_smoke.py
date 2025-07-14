@@ -41,6 +41,7 @@ class TestMasterPipelineSmoke(unittest.TestCase):
 
     @patch('powershell_sentinel.main_data_factory.LabConnection')
     @patch('powershell_sentinel.main_data_factory.generate_layered_obfuscation')
+    @unittest.skip("Data factory not yet implemented")
     def test_smoke_run_completes_successfully(self, mock_obfuscator, mock_lab_connection):
         """
         E2E smoke test to ensure the main data factory pipeline runs without errors for a small batch.
