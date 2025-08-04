@@ -3,43 +3,53 @@
 #
 # Unit tests for the snapshot_differ.py module.
 #
-# REQUIREMENTS:
+# REQUIREMENTS (Pydantic-aware):
 # 1. Test the core `get_delta_logs` function.
-# 2. Use mock data to represent "before" and "after" log states.
+# 2. Use Pydantic `SplunkLogEvent` models to represent "before" and "after" log states.
 # 3. Assert that the function correctly identifies only the new logs.
 # 4. Assert that common/noise logs present in both lists are successfully excluded.
 # 5. Test edge cases, such as empty input lists.
 
 import unittest
 from powershell_sentinel.modules.snapshot_differ import get_delta_logs
+from powershell_sentinel.models import SplunkLogEvent
 
 class TestSnapshotDiffer(unittest.TestCase):
 
     def setUp(self):
-        """Set up common test data."""
+        """Set up common test data using Pydantic models."""
+        # A helper function to create dummy SplunkLogEvent objects
+        def create_log(raw_content: str) -> SplunkLogEvent:
+            return SplunkLogEvent.model_validate({
+                "_raw": raw_content,
+                "_time": "2023-01-01T12:00:00.000+00:00",
+                "source": "TestSource",
+                "sourcetype": "TestSourcetype"
+            })
+
         self.before_logs = [
-            {"EventID": 4688, "ProcessName": "svchost.exe", "CommandLine": "C:\\Windows\\system32\\svchost.exe -k netsvcs"},
-            {"EventID": 4104, "Message": "Noise script block"}
+            create_log("noise log 1: svchost.exe"),
+            create_log("noise log 2: some other system event")
         ]
         
         # The "after" state contains the original logs plus new "golden signals"
+        self.signal_1 = create_log("signal log 1: powershell.exe -c Get-Process")
+        self.signal_2 = create_log("signal log 2: ScriptBlockText containing Get-Process")
+        
         self.after_logs = [
-            {"EventID": 4688, "ProcessName": "svchost.exe", "CommandLine": "C:\\Windows\\system32\\svchost.exe -k netsvcs"}, # Same
-            {"EventID": 4104, "Message": "Noise script block"}, # Same
-            {"EventID": 4688, "ProcessName": "powershell.exe", "CommandLine": "powershell.exe -c Get-Process"}, # New Signal 1
-            {"EventID": 4104, "Message": "Executing Get-Process..."} # New Signal 2
+            self.before_logs[0], # Same object
+            self.before_logs[1], # Same object
+            self.signal_1,
+            self.signal_2
         ]
 
-        self.expected_delta = [
-            {"EventID": 4688, "ProcessName": "powershell.exe", "CommandLine": "powershell.exe -c Get-Process"},
-            {"EventID": 4104, "Message": "Executing Get-Process..."}
-        ]
+        self.expected_delta = [self.signal_1, self.signal_2]
 
     def test_get_delta_logs_standard(self):
         """Test that new logs are correctly identified."""
         delta = get_delta_logs(self.before_logs, self.after_logs)
         self.assertEqual(len(delta), 2)
-        # Using assertCountEqual to compare lists of dictionaries regardless of order
+        # Pydantic models are comparable by default, which is very convenient
         self.assertCountEqual(delta, self.expected_delta)
 
     def test_get_delta_logs_no_new_logs(self):

@@ -13,8 +13,13 @@
 # 4. (Optional but recommended) Include a separate, clearly marked integration test that can be
 #    run manually to verify actual connectivity to the configured lab environment.
 
+# tests/test_lab_connection.py
+
 import unittest
-from unittest.mock import patch, MagicMock, mock_open
+from unittest.mock import patch, MagicMock
+
+# Import the Pydantic models we will be testing against
+from powershell_sentinel.models import CommandOutput, SplunkLogEvent
 
 # We need to set mock environment variables BEFORE the module is imported.
 with patch.dict('os.environ', {
@@ -23,80 +28,85 @@ with patch.dict('os.environ', {
     'VICTIM_VM_PASS': 'testpass',
     'SPLUNK_PASS': 'splunkpass'
 }):
+    # Import the class AFTER setting the mock environment
     from powershell_sentinel.lab_connector import LabConnection
 
 class TestLabConnection(unittest.TestCase):
 
-    # Patch the entire winrm.Protocol class and splunklib.client.connect function
     @patch('splunklib.client.connect')
     @patch('winrm.Protocol')
     def test_run_remote_powershell_success(self, mock_protocol, mock_splunk_connect):
         """
-        Test that run_remote_powershell correctly calls the winrm library
-        and returns the expected dictionary on success.
+        Test that run_remote_powershell correctly uses the multi-step WinRM
+        process and returns a valid CommandOutput Pydantic model on success.
         """
-        # TODO: This test needs to be properly implemented once LabConnection is built.
-        # IMPLEMENTATION: The test is now fully implemented.
-        
-        # Arrange: Configure the mock to return a specific result
-        # The return_value of the patch is the mock instance of the Protocol class
+        # --- Arrange: Configure the mock for the multi-step WinRM execution ---
         mock_winrm_instance = mock_protocol.return_value
         
-        # The run_ps method returns an object with attributes, so we use MagicMock
-        mock_winrm_instance.run_ps.return_value = MagicMock(
-            std_out=b'SuccessOutput\r\n', # Include carriage returns to test stripping
-            std_err=b'',
-            status_code=0
-        )
-        
+        # Define the return values for each step in the new execution flow
+        fake_shell_id = 'SHELL_ID_12345'
+        fake_command_id = 'COMMAND_ID_67890'
+        fake_stdout = b'SuccessOutput\r\n'
+        fake_stderr = b''
+        fake_return_code = 0
+
+        mock_winrm_instance.open_shell.return_value = fake_shell_id
+        mock_winrm_instance.run_command.return_value = fake_command_id
+        mock_winrm_instance.get_command_output.return_value = (fake_stdout, fake_stderr, fake_return_code)
+
         lab_conn = LabConnection()
         command_to_run = "Get-Process"
         
-        # Act
+        # --- Act: Run the method ---
         result = lab_conn.run_remote_powershell(command_to_run)
         
-        # Assert
-        # Verify that the run_ps method on our mocked instance was called exactly once with our command
-        mock_winrm_instance.run_ps.assert_called_once_with(command_to_run)
-        self.assertEqual(result['return_code'], 0)
-        self.assertEqual(result['stdout'], 'SuccessOutput') # Also tests that output is decoded and stripped
-        self.assertEqual(result['stderr'], '')
+        # --- Assert: Verify the logic and the returned model ---
+        # Verify that the entire multi-step process was called correctly
+        mock_winrm_instance.open_shell.assert_called_once()
+        mock_winrm_instance.run_command.assert_called_once_with(fake_shell_id, 'powershell.exe', ['-Command', command_to_run])
+        mock_winrm_instance.get_command_output.assert_called_once_with(fake_shell_id, fake_command_id)
+        mock_winrm_instance.cleanup_command.assert_called_once_with(fake_shell_id, fake_command_id)
+        mock_winrm_instance.close_shell.assert_called_once_with(fake_shell_id)
 
+        # Assert that the result is a Pydantic model with the correct data
+        self.assertIsInstance(result, CommandOutput)
+        self.assertEqual(result.return_code, 0)
+        self.assertEqual(result.stdout, 'SuccessOutput') # Also tests that output is decoded and stripped
+        self.assertEqual(result.stderr, '')
 
     @patch('splunklib.client.connect')
     @patch('winrm.Protocol')
     def test_query_splunk_success(self, mock_protocol, mock_splunk_connect):
         """
         Test that query_splunk correctly calls the splunk-sdk and
-        returns a list of results.
+        returns a list of valid SplunkLogEvent Pydantic models.
         """
-        # TODO: This test needs to be properly implemented once LabConnection is built.
-        # IMPLEMENTATION: The test is now fully implemented.
-
-        # Arrange: Configure the mock service and job
+        # --- Arrange: Configure the mock service and job ---
         mock_service = mock_splunk_connect.return_value
         mock_job = MagicMock()
         
-        # Mock the results() method of the job object to return an iterable with our fake logs
-        mock_results_reader = [
-            {'_raw': 'log1', 'sourcetype': 'WinEventLog:Security'},
-            {'_raw': 'log2', 'sourcetype': 'WinEventLog:Security'}
+        # Create mock log data that will pass Pydantic validation
+        mock_dict_results = [
+            {'_raw': 'log1', '_time': '2025-08-04T21:00:00.000+00:00', 'source': 'test.log', 'sourcetype': 'test'},
+            {'_raw': 'log2', '_time': '2025-08-04T21:00:01.000+00:00', 'source': 'test.log', 'sourcetype': 'test'}
         ]
-        # We patch the splunklib.results.ResultsReader to return our list directly
-        with patch('splunklib.results.ResultsReader', return_value=mock_results_reader):
+        
+        # Patch the ResultsReader to return our list of dictionaries
+        with patch('splunklib.results.ResultsReader', return_value=mock_dict_results):
             mock_service.jobs.create.return_value = mock_job
             
             lab_conn = LabConnection()
             search_query = "search index=main"
             
-            # Act
+            # --- Act: Run the method ---
             results_list = lab_conn.query_splunk(search_query)
             
-            # Assert
+            # --- Assert: Verify the logic and the returned models ---
             # Verify the job was created with the correct query and execution mode
             mock_service.jobs.create.assert_called_once_with(search_query, exec_mode="blocking", output_mode="json")
+            
+            # Assert that we received a list of Pydantic models with the correct data
             self.assertEqual(len(results_list), 2)
-            self.assertEqual(results_list, mock_results_reader)
-
-# To run tests from the command line from the project root:
-# python -m unittest discover tests
+            self.assertIsInstance(results_list[0], SplunkLogEvent)
+            self.assertEqual(results_list[0].raw, 'log1')
+            self.assertEqual(results_list[1].sourcetype, 'test')

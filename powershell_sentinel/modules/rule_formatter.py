@@ -2,58 +2,90 @@
 # Index: [7]
 #
 # This is a small but crucial utility module. Its sole purpose is to take a list
-# of selected raw log events (which can be verbose and have many fields) and
-# convert them into the final, clean, structured JSON format required for the
-# `telemetry_rules` field in `primitives_library.json`.
+# of selected raw SplunkLogEvent models and convert them into the final, clean,
+# structured TelemetryRule format required for the `primitives_library.json`.
 #
-# REQUIREMENTS (per v1.3 blueprint):
-# 1. Must contain a function, e.g., `format_rules`.
-# 2. Must accept a list of log dictionaries as input.
-# 3. For each log, it must extract only the most important key-value pairs
-#    (e.g., 'EventID', 'ProcessName', 'CommandLine', 'Message') to create a concise,
-#    human-readable rule.
-# 4. It must return a new list of these formatted rule dictionaries.
+# REQUIREMENTS (Pydantic-aware):
+# 1. Must contain a function, `format_rules`.
+# 2. Must accept a list of `SplunkLogEvent` models as input.
+# 3. For each log, it must parse the raw JSON to extract key details.
+# 4. It must return a new list of validated `TelemetryRule` models.
 
-def format_rules(selected_logs: list[dict]) -> list[dict]:
+import json
+from typing import List, Optional
+from powershell_sentinel.models import SplunkLogEvent, TelemetryRule
+
+def _parse_raw_log(log: SplunkLogEvent) -> Optional[TelemetryRule]:
+    """Helper function to parse a single raw log into a TelemetryRule."""
+    try:
+        # Splunk's _raw field is often a full JSON object within a string
+        log_data = json.loads(log.raw)
+        event_id = int(log_data.get('EventID', 0))
+
+        # --- Rule Logic: Add more parsers here for different event IDs ---
+        
+        # Windows Security Auditing: Process Creation
+        if event_id == 4688:
+            process_name = log_data.get('NewProcessName', 'N/A').split('\\')[-1]
+            command_line = log_data.get('CommandLine', 'N/A')
+            return TelemetryRule(
+                source="Security",
+                event_id=event_id,
+                details=f"Process created: {process_name} with command line: {command_line}"
+            )
+
+        # PowerShell Script Block Logging
+        elif event_id == 4104:
+            script_block = log_data.get('ScriptBlockText', 'N/A')
+            truncated_script = (script_block[:100] + '...') if len(script_block) > 103 else script_block
+            return TelemetryRule(
+                source="PowerShell",
+                event_id=event_id,
+                details=f"Script block executed containing: '{truncated_script}'"
+            )
+
+        # Sysmon: Process Creation
+        elif event_id == 1 and log.source == "XmlWinEventLog:Microsoft-Windows-Sysmon/Operational":
+            image = log_data.get('Image', 'N/A').split('\\')[-1]
+            command_line = log_data.get('CommandLine', 'N/A')
+            return TelemetryRule(
+                source="Sysmon",
+                event_id=event_id,
+                details=f"Process created: {image} with command line: {command_line}"
+            )
+            
+        # TODO: Add parsers for other important Event IDs (e.g., Sysmon EID 3, 10, 11)
+
+    except (json.JSONDecodeError, KeyError, TypeError):
+        # If the log isn't in the expected JSON format or is missing keys, skip it.
+        return None
+    
+    return None
+
+
+def format_rules(selected_logs: List[SplunkLogEvent]) -> List[TelemetryRule]:
     """
-    Converts a list of raw log objects into the final structured telemetry_rules format.
+    Converts a list of raw SplunkLogEvent objects into the final structured TelemetryRule format.
 
     Args:
-        selected_logs: A list of raw log dictionaries selected by the user or the
+        selected_logs: A list of raw SplunkLogEvent models selected by the user or the
                        recommendation engine.
 
     Returns:
-        A list of cleanly formatted rule dictionaries ready for saving.
+        A list of cleanly formatted and validated TelemetryRule models.
     """
     # TODO: Implement the logic.
-    # 1. Define the schema for the final rules. A good schema might include:
-    #    - 'source': The log source (e.g., 'Sysmon', 'PowerShell', 'Security').
-    #    - 'event_id': The Event ID.
-    #    - 'details': A human-readable string summarizing the event's key details.
-    #
-    # 2. Initialize an empty list `formatted_rules`.
-    # 3. Iterate through each log in `selected_logs`.
-    # 4. Inside the loop, use a series of if/elif statements or a mapping dictionary
-    #    to determine how to parse the log based on its source or EventID.
-    #    - e.g., if EventID is 4688, extract 'ProcessName' and 'CommandLine'.
-    #    - e.g., if EventID is 4104, extract the 'Message' or 'ScriptBlockText'.
-    #    - e.g., if EventID is 1 (Sysmon ProcessCreate), extract 'Image' and 'CommandLine'.
-    # 5. Construct the new, clean dictionary and append it to `formatted_rules`.
-    # 6. Return `formatted_rules`.
+    # 1. Initialize an empty list `formatted_rules`.
+    # 2. Iterate through each `SplunkLogEvent` in `selected_logs`.
+    # 3. Call the `_parse_raw_log` helper function for each log.
+    # 4. If the helper returns a valid `TelemetryRule` object (not None),
+    #    append it to the `formatted_rules` list.
+    # 5. Return `formatted_rules`.
 
-    # Dummy implementation
     formatted_rules = []
     for log in selected_logs:
-        rule = {}
-        if log.get("EventID") == 4688:
-            rule['source'] = 'Security'
-            rule['event_id'] = 4688
-            rule['details'] = f"Process created: {log.get('ProcessName')} with command line {log.get('CommandLine')}"
+        rule = _parse_raw_log(log)
+        if rule:
             formatted_rules.append(rule)
-        elif log.get("EventID") == 4104:
-            rule['source'] = 'PowerShell'
-            rule['event_id'] = 4104
-            rule['details'] = f"Script block executed containing: {log.get('Message', '')[:100]}..." # Truncate for brevity
-            formatted_rules.append(rule)
-
+    
     return formatted_rules
