@@ -5,9 +5,8 @@
 # Using these models instead of generic dictionaries provides type safety,
 # automatic validation, and self-documenting code.
 
-# VERSION 2: This version is refined based on the actual content of the
-# source JSON files from data/source. It uses Enums to provide
-# strict validation for fields like 'intent' and 'mitre_ttps'.
+# VERSION 3: This version adds the ParsingRule model to support the new
+# interactive, deterministic parsing engine.
 
 import json
 from enum import Enum
@@ -47,7 +46,6 @@ class IntentEnum(str, Enum):
     QUERY_REGISTRY = "Query Registry"
     LOCAL_DATA_STAGING = "Local Data Staging"
 
-
 # --- Lab Connector & Raw Data Models ---
 
 class CommandOutput(BaseModel):
@@ -67,6 +65,24 @@ class SplunkLogEvent(BaseModel):
 
 
 # --- Primitive & Curation Models ---
+
+class ExtractionMethodEnum(str, Enum):
+    """Defines the method to extract details from a raw log."""
+    REGEX = "regex"
+    KEY_VALUE = "key_value"
+    
+class ParsingRule(BaseModel):
+    """
+    A user-defined rule for parsing a specific type of raw log event.
+    These rules are created interactively by the analyst via the primitives_manager CLI
+    and stored in parsing_rules.json.
+    """
+    rule_name: str = Field(..., description="A unique, human-readable name for the rule.")
+    event_id: int = Field(..., description="The Event ID this rule applies to.")
+    source_match: Optional[str] = Field(None, description="A substring that must exist in the log's source field.")
+    extraction_method: ExtractionMethodEnum
+    # The regex pattern or key name used to extract the 'details' field.
+    detail_key_or_pattern: str
 
 class TelemetryRule(BaseModel):
     """A clean, curated, human-readable rule representing a key telemetry signal."""
