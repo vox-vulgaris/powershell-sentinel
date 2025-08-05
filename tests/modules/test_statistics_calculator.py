@@ -23,19 +23,20 @@ class TestStatisticsCalculator(unittest.TestCase):
         self.rule2 = TelemetryRule(source="PowerShell", event_id=4104, details="Get-Process executed") # Appears in 1 primitive
         self.rule3 = TelemetryRule(source="Sysmon", event_id=1, details="whoami.exe created")       # Appears in 1 primitive
 
+        # Corrected TTPs based on the error message
         self.mock_library = [
             Primitive(
                 primitive_id="PS-001",
                 primitive_command="Get-Process",
                 intent=[IntentEnum.PROCESS_DISCOVERY],
-                mitre_ttps=[MitreTTPEnum.T1059_001, MitreTTPEnum.T1057],
+                mitre_ttps=[MitreTTPEnum.T1069_001, MitreTTPEnum.T1057], # CORRECTED
                 telemetry_rules=[self.rule1, self.rule2]
             ),
             Primitive(
                 primitive_id="PS-002",
                 primitive_command="whoami",
                 intent=[IntentEnum.USER_DISCOVERY],
-                mitre_ttps=[MitreTTPEnum.T1059_001],
+                mitre_ttps=[MitreTTPEnum.T1069_001], # CORRECTED
                 telemetry_rules=[self.rule1, self.rule3]
             )
         ]
@@ -55,10 +56,10 @@ class TestStatisticsCalculator(unittest.TestCase):
 
     def test_calculate_local_relevance(self):
         """Test the calculation of P(Log|Tag)."""
-        # For T1059.001 (appears in 2 primitives):
-        # - rule1 appears 2 times with T1059.001. P(rule1|T1059.001) = 2/2 = 1.0
-        # - rule2 appears 1 time with T1059.001. P(rule2|T1059.001) = 1/2 = 0.5
-        # - rule3 appears 1 time with T1059.001. P(rule3|T1059.001) = 1/2 = 0.5
+        # For T1069.001 (appears in 2 primitives): -- CORRECTED COMMENT
+        # - rule1 appears 2 times with T1069.001. P(rule1|T1069.001) = 2/2 = 1.0
+        # - rule2 appears 1 time with T1069.001. P(rule2|T1069.001) = 1/2 = 0.5
+        # - rule3 appears 1 time with T1069.001. P(rule3|T1069.001) = 1/2 = 0.5
         #
         # For T1057 (appears in 1 primitive):
         # - rule1 appears 1 time with T1057. P(rule1|T1057) = 1/1 = 1.0
@@ -67,8 +68,8 @@ class TestStatisticsCalculator(unittest.TestCase):
         relevance_scores = calculate_local_relevance(self.mock_library)
         
         # Test a few key values
-        self.assertAlmostEqual(relevance_scores[MitreTTPEnum.T1059_001.value][self.rule1.model_dump_json()], 1.0)
-        self.assertAlmostEqual(relevance_scores[MitreTTPEnum.T1059_001.value][self.rule2.model_dump_json()], 0.5)
+        self.assertAlmostEqual(relevance_scores[MitreTTPEnum.T1069_001.value][self.rule1.model_dump_json()], 1.0) # CORRECTED
+        self.assertAlmostEqual(relevance_scores[MitreTTPEnum.T1069_001.value][self.rule2.model_dump_json()], 0.5) # CORRECTED
         self.assertAlmostEqual(relevance_scores[MitreTTPEnum.T1057.value][self.rule2.model_dump_json()], 1.0)
         # Check that a rule not associated with a tag isn't present
         self.assertNotIn(self.rule3.model_dump_json(), relevance_scores.get(MitreTTPEnum.T1057.value, {}))
