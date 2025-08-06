@@ -45,6 +45,11 @@ def get_recommendations(
     Returns:
         A ranked list of recommended TelemetryRule objects.
     """
+    # [FIX] If statistics are empty (i.e., first run), return all parsed rules.
+    # This is the "bootstrap" mode for the initial curation.
+    if not global_rarity and not local_relevance:
+        return parsed_rules
+
     annotated_rules: List[AnnotatedRule] = []
     primitive_ttp_values = [ttp.value for ttp in primitive_ttps]
 

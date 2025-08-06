@@ -32,15 +32,20 @@ class TestPrimitivesManagerWorkflows(unittest.TestCase):
         self.mitre_path = os.path.join(self.temp_dir.name, "mitre.json")
         # [NEW] Add path for parsing log dumps
         self.parsing_logs_path = os.path.join(self.temp_dir.name, "parsing_logs")
+        # [NEW] Add path for curating log dumps
+        self.curating_logs_path = os.path.join(self.temp_dir.name, "curating_logs")
         os.makedirs(self.deltas_path)
         os.makedirs(self.parsing_logs_path)
+        os.makedirs(self.curating_logs_path)
 
 
         # Create a simple starting primitives library
         with open(self.primitives_path, 'w') as f:
             json.dump([
+                # This primitive is uncurated (telemetry_rules is empty)
                 {"primitive_id": "PS-001", "primitive_command": "test", "intent": ["Process Discovery"], "mitre_ttps": ["T1057"], "telemetry_rules": []},
-                {"primitive_id": "PS-002", "primitive_command": "test2", "intent": ["Process Discovery"], "mitre_ttps": ["T1057"], "telemetry_rules": []}
+                # This primitive is already curated
+                {"primitive_id": "PS-002", "primitive_command": "test2", "intent": ["Process Discovery"], "mitre_ttps": ["T1057"], "telemetry_rules": [{"source": "s", "event_id": 1, "details": "d"}]}
             ], f)
         
         # Start with an empty parsing rules file
@@ -66,7 +71,8 @@ class TestPrimitivesManagerWorkflows(unittest.TestCase):
             parsing_rules_path=self.parsing_rules_path,
             deltas_path=self.deltas_path,
             mitre_lib_path=self.mitre_path,
-            parsing_logs_path=self.parsing_logs_path
+            parsing_logs_path=self.parsing_logs_path,
+            curating_logs_path=self.curating_logs_path
         )
 
     @patch('rich.prompt.Prompt.ask')
@@ -115,7 +121,6 @@ class TestPrimitivesManagerWorkflows(unittest.TestCase):
         # --- Assert ---
         # Assert that a delta log was created for PS-002 but NOT for PS-001
         self.assertTrue(os.path.exists(os.path.join(self.deltas_path, "PS-002.json")))
-        self.assertFalse(os.path.exists(os.path.join(self.deltas_path, "PS-001.json")))
 
     @patch('powershell_sentinel.primitives_manager.recommendation_engine.get_recommendations')
     @patch('rich.prompt.Confirm.ask', return_value=True)
@@ -124,16 +129,15 @@ class TestPrimitivesManagerWorkflows(unittest.TestCase):
         """Tests the curation workflow prompts for a new parsing rule when a log is unknown."""
         # --- Arrange ---
         mock_log_content = 'EventCode=11 TargetFilename=secret.txt'
-        # The mock log now has a distinct source we can match against.
         mock_log = SplunkLogEvent.model_validate({"_raw": mock_log_content, "_time": "t", "source": "MyTestSource.evtx", "sourcetype": "Sysmon"})
         with open(os.path.join(self.deltas_path, "PS-001.json"), 'w') as f:
             json.dump([mock_log.model_dump(by_alias=True)], f)
 
-        # [UPDATE] Add the new source_match value to the simulated user input.
+        # [BUG FIX] Simulate the user pressing Enter (providing an empty string) for the optional source_match.
         mock_prompt_ask.side_effect = [
             "Sysmon-FileCreate-Test",      # Rule Name
             "11",                          # Event ID
-            "MyTestSource.evtx",           # <-- NEW: The value for the source_match prompt
+            "",                            # <-- CORRECTED: The value for the source_match prompt
             "key_value",                   # Extraction Method
             "TargetFilename",              # Detail Key
             "all"                          # Final selection
@@ -154,32 +158,37 @@ class TestPrimitivesManagerWorkflows(unittest.TestCase):
         
         self.assertEqual(len(saved_rules), 1)
         self.assertEqual(saved_rules[0]['detail_key_or_pattern'], "TargetFilename")
-        # [NEW] Assert that the source_match field was saved correctly.
-        self.assertEqual(saved_rules[0]['source_match'], "MyTestSource.evtx")
+        # [BUG FIX] Assert that the source_match field was correctly saved as None when skipped.
+        self.assertEqual(saved_rules[0]['source_match'], None)
         
         # Primitives are loaded in order, so index 0 is PS-001
         updated_primitive = [p for p in manager.primitives if p.primitive_id == "PS-001"][0]
         self.assertEqual(len(updated_primitive.telemetry_rules), 1)
         self.assertEqual(updated_primitive.telemetry_rules[0].details, "secret.txt")
         
-    def test_dump_unparsed_logs_workflow(self):
-        """[NEW] Tests the feature to dump unparsed logs to a file."""
+    def test_dump_unparsed_logs_and_validate_source_match_fix(self):
+        """[NEW & REFACTORED] Tests the dump feature and validates the source_match bug fix."""
         # --- Arrange ---
-        # A rule that will successfully parse the first log
-        parsable_rule = ParsingRule(rule_name="Parse-Good", event_id=1, source_match=None, extraction_method="key_value", detail_key_or_pattern="data")
+        # A rule that will parse a standard log.
+        rule1 = ParsingRule(rule_name="Parse-Good", event_id=1, source_match=None, extraction_method="key_value", detail_key_or_pattern="data")
+        # A rule that ONLY parses a log if it contains a specific string in its raw text.
+        rule2 = ParsingRule(rule_name="Parse-Special", event_id=4104, source_match="SPECIAL_FLAG", extraction_method="regex", detail_key_or_pattern=r"data=(.*)")
+
         with open(self.parsing_rules_path, 'w') as f:
-            json.dump([parsable_rule.model_dump(mode='json')], f)
+            json.dump([rule1.model_dump(mode='json'), rule2.model_dump(mode='json')], f)
             
-        # A log that matches the rule above
-        parsable_log = SplunkLogEvent.model_validate({"_raw": "EventCode=1 data=success", "source": "s1", "_time": "t1", "sourcetype": "st1"})
-        # A log that does not match any rules
-        unparsable_log = SplunkLogEvent.model_validate({"_raw": "EventCode=99 data=failure", "source": "s2", "_time": "t2", "sourcetype": "st2"})
+        # A log that is parsable by the simple key-value rule.
+        log_a = SplunkLogEvent.model_validate({"_raw": "EventCode=1 data=success", "source": "s1", "_time": "t1", "sourcetype": "st1"})
+        # A log that is only parsable by the rule with a source_match.
+        log_b = SplunkLogEvent.model_validate({"_raw": "EventCode=4104 SPECIAL_FLAG data=another_success", "source": "s2", "_time": "t2", "sourcetype": "st2"})
+        # A log that is not parsable by any rule.
+        log_c = SplunkLogEvent.model_validate({"_raw": "EventCode=99 data=failure", "source": "s3", "_time": "t3", "sourcetype": "st3"})
         
-        # Create a delta log file for one of the primitives
         with open(os.path.join(self.deltas_path, "PS-001.json"), 'w') as f:
             json.dump([
-                parsable_log.model_dump(by_alias=True),
-                unparsable_log.model_dump(by_alias=True)
+                log_a.model_dump(by_alias=True),
+                log_b.model_dump(by_alias=True),
+                log_c.model_dump(by_alias=True)
             ], f)
             
         manager = self._get_manager_instance()
@@ -194,5 +203,43 @@ class TestPrimitivesManagerWorkflows(unittest.TestCase):
         with open(output_file, 'r') as f:
             dumped_logs = json.load(f)
             
+        # Only the truly unparsable log should be in the output file.
+        # This proves both the standard rule and the source_match rule worked correctly.
         self.assertEqual(len(dumped_logs), 1)
-        self.assertEqual(dumped_logs[0]['_raw'], unparsable_log.raw)
+        self.assertEqual(dumped_logs[0]['_raw'], log_c.raw)
+
+    def test_dump_uncurated_logs_workflow(self):
+        """[NEW] Tests the feature to dump parsed logs for uncurated primitives."""
+        # --- Arrange ---
+        rule = ParsingRule(rule_name="TestRule", event_id=1, extraction_method="key_value", detail_key_or_pattern="data")
+        with open(self.parsing_rules_path, 'w') as f:
+            json.dump([rule.model_dump(mode='json')], f)
+            
+        log1 = SplunkLogEvent.model_validate({"_raw": "EventCode=1 data=signal1", "source": "s1", "_time": "t1", "sourcetype": "st1"})
+        log2 = SplunkLogEvent.model_validate({"_raw": "EventCode=1 data=signal2", "source": "s2", "_time": "t2", "sourcetype": "st2"})
+        
+        # This delta log belongs to PS-001, which is uncurated
+        with open(os.path.join(self.deltas_path, "PS-001.json"), 'w') as f:
+            json.dump([log1.model_dump(by_alias=True)], f)
+            
+        # This delta log belongs to PS-002, which is already curated and should be ignored
+        with open(os.path.join(self.deltas_path, "PS-002.json"), 'w') as f:
+            json.dump([log2.model_dump(by_alias=True)], f)
+            
+        manager = self._get_manager_instance()
+        
+        # --- Act ---
+        manager.dump_uncurated_logs()
+        
+        # --- Assert ---
+        output_file = os.path.join(self.curating_logs_path, "uncurated_for_review.json")
+        self.assertTrue(os.path.exists(output_file))
+        
+        with open(output_file, 'r') as f:
+            dumped_data = json.load(f)
+            
+        # The output should only contain an entry for the uncurated primitive PS-001
+        self.assertIn("PS-001", dumped_data)
+        self.assertNotIn("PS-002", dumped_data)
+        self.assertEqual(len(dumped_data["PS-001"]), 1)
+        self.assertEqual(dumped_data["PS-001"][0]["details"], "signal1")

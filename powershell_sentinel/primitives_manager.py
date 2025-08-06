@@ -35,13 +35,15 @@ from powershell_sentinel.modules import snapshot_differ, statistics_calculator, 
 class PrimitivesManager:
     """An interactive CLI for managing the primitives knowledge base and parsing rules."""
 
-    def __init__(self, primitives_path: str, parsing_rules_path: str, deltas_path: str, mitre_lib_path: str, parsing_logs_path: str):
+    def __init__(self, primitives_path: str, parsing_rules_path: str, deltas_path: str, mitre_lib_path: str, parsing_logs_path: str, curating_logs_path: str):
         self.primitives_path = primitives_path
         self.parsing_rules_path = parsing_rules_path
         self.deltas_path = deltas_path
         self.mitre_lib_path = mitre_lib_path
         # [NEW] Add path for the unparsed log dumps
         self.parsing_logs_path = parsing_logs_path
+        # [NEW] Add path for the uncurated log dumps
+        self.curating_logs_path = curating_logs_path
         self.console = Console()
         self.lab = LabConnection()
         self.primitives: List[Primitive] = self._load_and_validate(self.primitives_path, Primitive)
@@ -64,16 +66,19 @@ class PrimitivesManager:
             self.console.print(f"[bold red]Error loading or validating {path}: {e}[/bold red]")
             exit(1)
 
-    def _save_json(self, path: str, data: List[BaseModel]):
-        """Generic saver for our Pydantic model lists."""
+    def _save_json(self, path: str, data: List[BaseModel] | Dict):
+        """Generic saver for our Pydantic model lists or dictionaries."""
         self.console.print(f"Saving data to [cyan]{path}[/]...")
-        # FIX: Added `by_alias=True` to ensure JSON fields like '_raw' are used instead of model attribute names.
-        data_as_dict = [p.model_dump(mode='json', by_alias=True) for p in data]
+        
+        data_to_dump = data
+        if all(isinstance(p, BaseModel) for p in data):
+             data_to_dump = [p.model_dump(mode='json', by_alias=True) for p in data]
+
         try:
             # [NEW] Ensure directory exists before saving
             os.makedirs(os.path.dirname(path), exist_ok=True)
             with open(path, 'w') as f:
-                json.dump(data_as_dict, f, indent=2)
+                json.dump(data_to_dump, f, indent=2)
             self.console.print("[green]Save successful.[/green]")
         except IOError as e:
             self.console.print(f"[bold red]Error saving file {path}: {e}[/bold red]")
@@ -128,8 +133,10 @@ class PrimitivesManager:
             self.console.print("1. Batch Mode (All Primitives)")
             self.console.print("2. Individual Mode (Select a Primitive)")
             self.console.print("3. Dump Unparsed Logs for Review")
+            # [NEW] Add option to dump uncurated logs.
+            self.console.print("4. Dump Uncurated Logs for Review")
             self.console.print("b. Back to Main Menu")
-            choice = Prompt.ask("Choose an option", choices=["1", "2", "3", "b"], default="1")
+            choice = Prompt.ask("Choose an option", choices=["1", "2", "3", "4", "b"], default="1")
             
             if choice == '1':
                 self.run_telemetry_curation()
@@ -139,6 +146,8 @@ class PrimitivesManager:
                     self.run_telemetry_curation(primitive_id=primitive_id)
             elif choice == '3':
                 self.dump_unparsed_logs()
+            elif choice == '4':
+                self.dump_uncurated_logs()
             elif choice == 'b':
                 break
     
@@ -241,11 +250,10 @@ class PrimitivesManager:
     def _parse_log_with_rules(self, log: SplunkLogEvent) -> Optional[TelemetryRule]:
         """Finds the first applicable parsing rule and uses it to parse a raw log."""
         for rule in self.parsing_rules:
-            # Check if the log's Event ID is present in the raw text
             if str(rule.event_id) in log.raw:
-                # [FIX] Logic now correctly checks if source_match is a substring of log.source, as per the model's intent.
-                if rule.source_match and rule.source_match not in log.source:
-                    continue # Skip this rule if the source doesn't match
+                # [BUG FIX] The source_match string must be checked against the RAW log text, not the 'source' field.
+                if rule.source_match and rule.source_match not in log.raw:
+                    continue # Skip this rule if the source_match text isn't in the raw log.
                 
                 details = self._apply_parsing_rule(rule, log.raw)
                 if details:
@@ -254,9 +262,22 @@ class PrimitivesManager:
 
     def _prompt_for_new_parsing_rule(self, log: SplunkLogEvent) -> Optional[TelemetryRule]:
         """Handles the interactive workflow for defining a new parsing rule."""
+        # [REFACTOR] Save verbose logs to a file to prevent terminal overflow.
         self.console.print("\n[bold yellow]-- New Log Type Encountered --[/bold yellow]")
-        self.console.print("The system does not have a rule to parse this log:")
-        self.console.print(log.raw)
+        
+        # Save the full log to a file for easy viewing.
+        timestamp = int(time.time())
+        log_dump_filename = f"unparseable_log_{timestamp}.txt"
+        log_dump_path = os.path.join(self.parsing_logs_path, log_dump_filename)
+        
+        try:
+            os.makedirs(self.parsing_logs_path, exist_ok=True)
+            with open(log_dump_path, 'w', encoding='utf-8') as f:
+                f.write(log.raw)
+            self.console.print(f"Full log content saved to: [cyan]{log_dump_path}[/cyan]")
+        except IOError as e:
+            self.console.print(f"[bold red]Could not write log to file: {e}[/bold red]")
+
         if not Confirm.ask("\nWould you like to define a new parsing rule now?", default=True):
             return None
 
@@ -376,6 +397,45 @@ class PrimitivesManager:
         self._save_json(output_path, unparsed_logs_collection)
         self.console.print(f"Dumped unparsed logs to [cyan]{output_path}[/cyan]")
 
+    # [NEW] New feature to dump all uncurated but parsed logs for review.
+    def dump_uncurated_logs(self):
+        """
+        Finds all parsed logs for primitives that haven't been curated yet and
+        dumps them to a single file for efficient, offline review.
+        """
+        self.console.print("\n--- Dumping Uncurated Logs for Review ---", style="bold blue")
+        uncurated_data: Dict[str, List[Dict]] = {}
+        
+        for primitive in self.primitives:
+            # We only care about primitives that have no curated rules yet.
+            if primitive.telemetry_rules:
+                continue
+
+            delta_log_path = os.path.join(self.deltas_path, f"{primitive.primitive_id}.json")
+            if not os.path.exists(delta_log_path):
+                continue
+            
+            self.console.print(f"Checking [cyan]{primitive.primitive_id}[/cyan]...")
+            raw_logs = self._load_and_validate(delta_log_path, SplunkLogEvent, default=[])
+            
+            parsed_logs_for_primitive = []
+            for log in raw_logs:
+                parsed_rule = self._parse_log_with_rules(log)
+                if parsed_rule:
+                    parsed_logs_for_primitive.append(parsed_rule.model_dump())
+            
+            if parsed_logs_for_primitive:
+                uncurated_data[primitive.primitive_id] = parsed_logs_for_primitive
+
+        if not uncurated_data:
+            self.console.print("[green]No uncurated primitives with parseable logs found.[/green]")
+            return
+
+        output_path = os.path.join(self.curating_logs_path, "uncurated_for_review.json")
+        self.console.print(f"\nFound {len(uncurated_data)} primitives with uncurated logs.")
+        self._save_json(output_path, uncurated_data)
+        self.console.print(f"Dumped uncurated logs to [cyan]{output_path}[/cyan]")
+
 
 if __name__ == '__main__':
     manager = PrimitivesManager(
@@ -384,6 +444,7 @@ if __name__ == '__main__':
         deltas_path="data/interim/delta_logs",
         mitre_lib_path="data/source/mitre_ttp_library.json",
         # [NEW] Pass the new path to the constructor
-        parsing_logs_path="data/interim/parsing_logs"
+        parsing_logs_path="data/interim/parsing_logs",
+        curating_logs_path="data/interim/curating_logs"
     )
     manager.start()

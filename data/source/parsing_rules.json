@@ -1,0 +1,44 @@
+[
+  {
+    "rule_name": "PowerShell-EID4104-ScriptBlockText",
+    "event_id": 4104,
+    "source_match": null,
+    "extraction_method": "regex",
+    "detail_key_or_pattern": "Creating Scriptblock text \\(.*?\\):\\s*([\\s\\S]*?)\\s*\\nScriptBlock ID:"
+  },
+  {
+    "rule_name": "PowerShell-EID4103-HostApplication",
+    "event_id": 4103,
+    "source_match": null,
+    "extraction_method": "regex",
+    "detail_key_or_pattern": "Host Application\\s*=\\s*([^\\n\\r]*)"
+  },
+  {
+    "rule_name": "PowerShell-EID40962-ConsoleReady",
+    "event_id": 40962,
+    "source_match": null,
+    "extraction_method": "key_value",
+    "detail_key_or_pattern": "Message"
+  },
+  {
+    "rule_name": "PowerShell-EID53504-IPC-Listen",
+    "event_id": 53504,
+    "source_match": null,
+    "extraction_method": "key_value",
+    "detail_key_or_pattern": "Message"
+  },
+  {
+    "rule_name": "PowerShell-EID40961-ConsoleStart",
+    "event_id": 40961,
+    "source_match": null,
+    "extraction_method": "key_value",
+    "detail_key_or_pattern": "Message"
+  },
+  {
+    "rule_name": "PowerShell-EID4104-ScriptBlock-From-SplunkError",
+    "event_id": 4104,
+    "source_match": "Splunk could not get the description for this event",
+    "extraction_method": "regex",
+    "detail_key_or_pattern": "Got the following information from this event:\\s*([\\s\\S]*?)[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}"
+  }
+]
