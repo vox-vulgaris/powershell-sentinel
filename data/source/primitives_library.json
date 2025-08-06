@@ -141,7 +141,7 @@
     "primitive_id": "PS-013",
     "primitive_command": "net localgroup",
     "intent": [
-      "Permission Groups Discovery: Local Groups"
+      "Local Groups"
     ],
     "mitre_ttps": [
       "T1069.001"
