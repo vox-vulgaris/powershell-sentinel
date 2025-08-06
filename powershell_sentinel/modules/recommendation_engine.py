@@ -45,9 +45,14 @@ def get_recommendations(
     Returns:
         A ranked list of recommended TelemetryRule objects.
     """
+    # Handle the edge case of no input rules.
+    if not parsed_rules:
+        return []
+
     # [FIX] If statistics are empty (i.e., first run), return all parsed rules.
     # This is the "bootstrap" mode for the initial curation.
-    if not global_rarity and not local_relevance:
+    is_bootstrap = not global_rarity and not local_relevance
+    if is_bootstrap:
         return parsed_rules
 
     annotated_rules: List[AnnotatedRule] = []
@@ -75,6 +80,15 @@ def get_recommendations(
         if anno_rule.rarity_score >= RARITY_THRESHOLD or anno_rule.relevance_score >= RELEVANCE_THRESHOLD
     ]
 
+    # --- [NEW FALLBACK LOGIC] ---
+    # If filtering removed all candidates, it means we've encountered new telemetry
+    # that doesn't meet our current statistical model. In this case, we fall back
+    # to showing all parsed rules so the user can curate them and improve the model.
+    if not recommended:
+        # We still sort the original list to be helpful, putting the most relevant ones first.
+        annotated_rules.sort(key=lambda x: (x.relevance_score, x.rarity_score), reverse=True)
+        return [anno_rule.rule for anno_rule in annotated_rules]
+    
     # --- Step 3: Sort the filtered list to rank the best signals first ---
     recommended.sort(key=lambda x: (x.relevance_score, x.rarity_score), reverse=True)
     

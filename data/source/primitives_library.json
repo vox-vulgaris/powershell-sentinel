@@ -724,7 +724,18 @@
     "mitre_ttps": [
       "T1082"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command systeminfo"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "systeminfo"
+      }
+    ]
   },
   {
     "primitive_id": "PS-035",
@@ -735,7 +746,18 @@
     "mitre_ttps": [
       "T1033"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command quser"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "quser"
+      }
+    ]
   },
   {
     "primitive_id": "PS-036",
@@ -746,7 +768,18 @@
     "mitre_ttps": [
       "T1033"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command qwinsta"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "qwinsta"
+      }
+    ]
   },
   {
     "primitive_id": "PS-037",
@@ -757,7 +790,18 @@
     "mitre_ttps": [
       "T1018"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command nbtstat -A 10.211.55.11"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "nbtstat -A 10.211.55.11"
+      }
+    ]
   },
   {
     "primitive_id": "PS-038",
@@ -768,7 +812,18 @@
     "mitre_ttps": [
       "T1518.001"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command netsh advfirewall show allprofiles"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "netsh advfirewall show allprofiles"
+      }
+    ]
   },
   {
     "primitive_id": "PS-039",
@@ -779,7 +834,18 @@
     "mitre_ttps": [
       "T1016.002"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command netsh wlan show all"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "netsh wlan show all"
+      }
+    ]
   },
   {
     "primitive_id": "PS-040",
@@ -790,7 +856,18 @@
     "mitre_ttps": [
       "T1057"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command tasklist /V"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "tasklist /V"
+      }
+    ]
   },
   {
     "primitive_id": "PS-041",
@@ -803,7 +880,18 @@
       "T1057",
       "T1007"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command tasklist /SVC"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "tasklist /SVC"
+      }
+    ]
   },
   {
     "primitive_id": "PS-042",
@@ -814,7 +902,18 @@
     "mitre_ttps": [
       "T1082"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command Get-HotFix"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "Get-HotFix"
+      }
+    ]
   },
   {
     "primitive_id": "PS-043",
@@ -836,7 +935,18 @@
     "mitre_ttps": [
       "T1003.002"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command reg.exe save hklm\\sam C:\\sam.save"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "reg.exe save hklm\\sam C:\\sam.save"
+      }
+    ]
   },
   {
     "primitive_id": "PS-045",
@@ -847,7 +957,18 @@
     "mitre_ttps": [
       "T1003.002"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command reg.exe save hklm\\system C:\\system.save"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "reg.exe save hklm\\system C:\\system.save"
+      }
+    ]
   },
   {
     "primitive_id": "PS-046",
@@ -858,7 +979,18 @@
     "mitre_ttps": [
       "T1003.004"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command reg.exe save hklm\\security C:\\security.save"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "reg.exe save hklm\\security C:\\security.save"
+      }
+    ]
   },
   {
     "primitive_id": "PS-047",
@@ -869,7 +1001,18 @@
     "mitre_ttps": [
       "T1552.001"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command findstr /si password *.txt"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "findstr /si password *.txt"
+      }
+    ]
   },
   {
     "primitive_id": "PS-048",
@@ -880,7 +1023,18 @@
     "mitre_ttps": [
       "T1547.001"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v Backdoor /t REG_SZ /d C:\\Windows\\System32\\calc.exe"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v Backdoor /t REG_SZ /d C:\\Windows\\System32\\calc.exe"
+      }
+    ]
   },
   {
     "primitive_id": "PS-049",
@@ -891,7 +1045,18 @@
     "mitre_ttps": [
       "T1053.005"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command schtasks /create /sc minute /mo 1 /tn My Backdoor /tr C:\\Windows\\System32\\calc.exe"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "schtasks /create /sc minute /mo 1 /tn My Backdoor /tr C:\\Windows\\System32\\calc.exe"
+      }
+    ]
   },
   {
     "primitive_id": "PS-050",
@@ -902,6 +1067,17 @@
     "mitre_ttps": [
       "T1543.003"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command sc.exe create My Backdoor Service binPath= C:\\Windows\\System32\\calc.exe"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "sc.exe create My Backdoor Service binPath= C:\\Windows\\System32\\calc.exe"
+      }
+    ]
   }
 ]
