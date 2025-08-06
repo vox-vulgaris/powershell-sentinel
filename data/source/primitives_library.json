@@ -8,7 +8,18 @@
     "mitre_ttps": [
       "T1082"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command hostname"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "hostname"
+      }
+    ]
   },
   {
     "primitive_id": "PS-002",
@@ -32,7 +43,18 @@
       "T1082",
       "T1518"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command Get-Command Get-Process"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "Get-Command Get-Process"
+      }
+    ]
   },
   {
     "primitive_id": "PS-004",
@@ -43,7 +65,18 @@
     "mitre_ttps": [
       "T1518"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command Get-Module"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "Get-Module"
+      }
+    ]
   },
   {
     "primitive_id": "PS-005",
@@ -56,7 +89,18 @@
       "T1082",
       "T1033"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command Get-ChildItem Env:"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "Get-ChildItem Env:"
+      }
+    ]
   },
   {
     "primitive_id": "PS-006",
@@ -67,7 +111,18 @@
     "mitre_ttps": [
       "T1083"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command dir C:\\Windows"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "dir C:\\Windows"
+      }
+    ]
   },
   {
     "primitive_id": "PS-007",
@@ -78,7 +133,18 @@
     "mitre_ttps": [
       "T1083"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command tree /F C:\\Windows\\System32\\drivers\\etc"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "tree /F C:\\Windows\\System32\\drivers\\etc"
+      }
+    ]
   },
   {
     "primitive_id": "PS-008",
@@ -91,7 +157,18 @@
       "T1083",
       "T1016"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command Get-Content C:\\Windows\\System32\\drivers\\etc\\hosts"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "Get-Content C:\\Windows\\System32\\drivers\\etc\\hosts"
+      }
+    ]
   },
   {
     "primitive_id": "PS-009",
@@ -102,7 +179,18 @@
     "mitre_ttps": [
       "T1033"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command whoami"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "whoami"
+      }
+    ]
   },
   {
     "primitive_id": "PS-010",
@@ -113,7 +201,18 @@
     "mitre_ttps": [
       "T1069"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command whoami /priv"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "whoami /priv"
+      }
+    ]
   },
   {
     "primitive_id": "PS-011",
@@ -124,7 +223,18 @@
     "mitre_ttps": [
       "T1069"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command whoami /groups"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "whoami /groups"
+      }
+    ]
   },
   {
     "primitive_id": "PS-012",
@@ -135,7 +245,18 @@
     "mitre_ttps": [
       "T1087"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command net user"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "net user"
+      }
+    ]
   },
   {
     "primitive_id": "PS-013",
@@ -146,7 +267,18 @@
     "mitre_ttps": [
       "T1069.001"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command net localgroup"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "net localgroup"
+      }
+    ]
   },
   {
     "primitive_id": "PS-014",
@@ -157,7 +289,18 @@
     "mitre_ttps": [
       "T1087.001"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command Get-LocalUser"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "Get-LocalUser"
+      }
+    ]
   },
   {
     "primitive_id": "PS-015",
@@ -168,7 +311,18 @@
     "mitre_ttps": [
       "T1069.001"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command Get-LocalGroup"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "Get-LocalGroup"
+      }
+    ]
   },
   {
     "primitive_id": "PS-016",
@@ -179,7 +333,18 @@
     "mitre_ttps": [
       "T1069.001"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command Get-LocalGroupMember -Group Administrators"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "Get-LocalGroupMember -Group Administrators"
+      }
+    ]
   },
   {
     "primitive_id": "PS-017",
@@ -190,7 +355,18 @@
     "mitre_ttps": [
       "T1016"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command ipconfig /all"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "ipconfig /all"
+      }
+    ]
   },
   {
     "primitive_id": "PS-018",
@@ -201,7 +377,18 @@
     "mitre_ttps": [
       "T1018"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command arp -a"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "arp -a"
+      }
+    ]
   },
   {
     "primitive_id": "PS-019",
@@ -214,7 +401,18 @@
       "T1049",
       "T1046"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command netstat -an"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "netstat -an"
+      }
+    ]
   },
   {
     "primitive_id": "PS-020",
@@ -225,7 +423,18 @@
     "mitre_ttps": [
       "T1016.001"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command nslookup www.google.com"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "nslookup www.google.com"
+      }
+    ]
   },
   {
     "primitive_id": "PS-021",
@@ -236,7 +445,18 @@
     "mitre_ttps": [
       "T1135"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command net share"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "net share"
+      }
+    ]
   },
   {
     "primitive_id": "PS-022",
@@ -247,7 +467,18 @@
     "mitre_ttps": [
       "T1016"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command Get-NetIPAddress"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "function __cmdletization_BindCommonParameters\n{\n    param(\n        $__cmdletization_objectModelWrapper,\n        $myPSBoundParameters\n    )       \n                \n\n        if ($myPSBoundParameters.ContainsKey('CimSession')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['CimSession'].Value = $myPSBoundParameters['CimSession'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('ThrottleLimit')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['ThrottleLimit'].Value = $myPSBoundParameters['ThrottleLimit'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('AsJob')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['AsJob'].Value = $myPSBoundParameters['AsJob'] \n        }\n                    \n\n}"
+      }
+    ]
   },
   {
     "primitive_id": "PS-023",
@@ -258,7 +489,18 @@
     "mitre_ttps": [
       "T1016"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command Get-NetRoute"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "function __cmdletization_BindCommonParameters\n{\n    param(\n        $__cmdletization_objectModelWrapper,\n        $myPSBoundParameters\n    )       \n                \n\n        if ($myPSBoundParameters.ContainsKey('CimSession')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['CimSession'].Value = $myPSBoundParameters['CimSession'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('ThrottleLimit')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['ThrottleLimit'].Value = $myPSBoundParameters['ThrottleLimit'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('AsJob')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['AsJob'].Value = $myPSBoundParameters['AsJob'] \n        }\n                    \n\n}"
+      }
+    ]
   },
   {
     "primitive_id": "PS-024",
@@ -269,7 +511,18 @@
     "mitre_ttps": [
       "T1018"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command Get-NetNeighbor"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "function __cmdletization_BindCommonParameters\n{\n    param(\n        $__cmdletization_objectModelWrapper,\n        $myPSBoundParameters\n    )       \n                \n\n        if ($myPSBoundParameters.ContainsKey('CimSession')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['CimSession'].Value = $myPSBoundParameters['CimSession'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('ThrottleLimit')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['ThrottleLimit'].Value = $myPSBoundParameters['ThrottleLimit'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('AsJob')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['AsJob'].Value = $myPSBoundParameters['AsJob'] \n        }\n                    \n\n}"
+      }
+    ]
   },
   {
     "primitive_id": "PS-025",
@@ -280,7 +533,18 @@
     "mitre_ttps": [
       "T1007"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command Get-Service"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "Get-Service"
+      }
+    ]
   },
   {
     "primitive_id": "PS-026",
@@ -291,7 +555,18 @@
     "mitre_ttps": [
       "T1007"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command sc.exe query"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "sc.exe query"
+      }
+    ]
   },
   {
     "primitive_id": "PS-027",
@@ -302,7 +577,18 @@
     "mitre_ttps": [
       "T1007"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command net start"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "net start"
+      }
+    ]
   },
   {
     "primitive_id": "PS-028",
@@ -326,7 +612,18 @@
     "mitre_ttps": [
       "T1053.005"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command schtasks /query"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "schtasks /query"
+      }
+    ]
   },
   {
     "primitive_id": "PS-030",
@@ -337,7 +634,18 @@
     "mitre_ttps": [
       "T1012"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command REG QUERY HKLM\\Software\\Microsoft\\Windows\\CurrentVersion"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "REG QUERY HKLM\\Software\\Microsoft\\Windows\\CurrentVersion"
+      }
+    ]
   },
   {
     "primitive_id": "PS-031",
@@ -350,7 +658,18 @@
       "T1083",
       "T1016"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command findstr 127.0.0.1 C:\\Windows\\System32\\drivers\\etc\\hosts"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "findstr 127.0.0.1 C:\\Windows\\System32\\drivers\\etc\\hosts"
+      }
+    ]
   },
   {
     "primitive_id": "PS-032",
@@ -361,7 +680,18 @@
     "mitre_ttps": [
       "T1074.001"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command New-Item -Path C:\\Users\\Public\\Documents\\ -Name sentinel_test_file.txt -ItemType File"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "New-Item -Path C:\\Users\\Public\\Documents\\ -Name sentinel_test_file.txt -ItemType File"
+      }
+    ]
   },
   {
     "primitive_id": "PS-033",
@@ -372,6 +702,17 @@
     "mitre_ttps": [
       "T1074.001"
     ],
-    "telemetry_rules": []
+    "telemetry_rules": [
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4103,
+        "details": "powershell.exe -Command Add-Content -Path C:\\Users\\Public\\Documents\\sentinel_test_log.log -Value log entry 1"
+      },
+      {
+        "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+        "event_id": 4104,
+        "details": "{ Set-StrictMode -Version 1; $_.OriginInfo }"
+      }
+    ]
   }
 ]
