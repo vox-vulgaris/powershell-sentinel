@@ -714,5 +714,194 @@
         "details": "{ Set-StrictMode -Version 1; $_.OriginInfo }"
       }
     ]
+  },
+  {
+    "primitive_id": "PS-034",
+    "primitive_command": "systeminfo",
+    "intent": [
+      "System Information Discovery"
+    ],
+    "mitre_ttps": [
+      "T1082"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-035",
+    "primitive_command": "quser",
+    "intent": [
+      "System Owner/User Discovery"
+    ],
+    "mitre_ttps": [
+      "T1033"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-036",
+    "primitive_command": "qwinsta",
+    "intent": [
+      "System Owner/User Discovery"
+    ],
+    "mitre_ttps": [
+      "T1033"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-037",
+    "primitive_command": "nbtstat -A 10.211.55.11",
+    "intent": [
+      "Remote System Discovery"
+    ],
+    "mitre_ttps": [
+      "T1018"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-038",
+    "primitive_command": "netsh advfirewall show allprofiles",
+    "intent": [
+      "Security Software Discovery"
+    ],
+    "mitre_ttps": [
+      "T1518.001"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-039",
+    "primitive_command": "netsh wlan show all",
+    "intent": [
+      "Wi-Fi Discovery"
+    ],
+    "mitre_ttps": [
+      "T1016.002"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-040",
+    "primitive_command": "tasklist /V",
+    "intent": [
+      "Process Discovery"
+    ],
+    "mitre_ttps": [
+      "T1057"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-041",
+    "primitive_command": "tasklist /SVC",
+    "intent": [
+      "Process Discovery",
+      "System Service Discovery"
+    ],
+    "mitre_ttps": [
+      "T1057",
+      "T1007"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-042",
+    "primitive_command": "Get-HotFix",
+    "intent": [
+      "System Information Discovery"
+    ],
+    "mitre_ttps": [
+      "T1082"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-043",
+    "primitive_command": "Get-CimInstance -ClassName Win32_Product | Select-Object Name, Version",
+    "intent": [
+      "Software Discovery"
+    ],
+    "mitre_ttps": [
+      "T1518"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-044",
+    "primitive_command": "reg.exe save hklm\\sam C:\\sam.save",
+    "intent": [
+      "OS Credential Dumping: Security Account Manager"
+    ],
+    "mitre_ttps": [
+      "T1003.002"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-045",
+    "primitive_command": "reg.exe save hklm\\system C:\\system.save",
+    "intent": [
+      "OS Credential Dumping: Security Account Manager"
+    ],
+    "mitre_ttps": [
+      "T1003.002"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-046",
+    "primitive_command": "reg.exe save hklm\\security C:\\security.save",
+    "intent": [
+      "OS Credential Dumping: LSA Secrets"
+    ],
+    "mitre_ttps": [
+      "T1003.004"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-047",
+    "primitive_command": "findstr /si password *.txt",
+    "intent": [
+      "Unsecured Credentials: Credentials In Files"
+    ],
+    "mitre_ttps": [
+      "T1552.001"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-048",
+    "primitive_command": "reg add \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\" /v \"Backdoor\" /t REG_SZ /d \"C:\\Windows\\System32\\calc.exe\"",
+    "intent": [
+      "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder"
+    ],
+    "mitre_ttps": [
+      "T1547.001"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-049",
+    "primitive_command": "schtasks /create /sc minute /mo 1 /tn \"My Backdoor\" /tr \"C:\\Windows\\System32\\calc.exe\"",
+    "intent": [
+      "Scheduled Task/Job: Scheduled Task"
+    ],
+    "mitre_ttps": [
+      "T1053.005"
+    ],
+    "telemetry_rules": []
+  },
+  {
+    "primitive_id": "PS-050",
+    "primitive_command": "sc.exe create \"My Backdoor Service\" binPath= \"C:\\Windows\\System32\\calc.exe\"",
+    "intent": [
+      "Create or Modify System Process: Windows Service"
+    ],
+    "mitre_ttps": [
+      "T1543.003"
+    ],
+    "telemetry_rules": []
   }
 ]

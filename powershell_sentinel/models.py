@@ -45,6 +45,14 @@ class IntentEnum(str, Enum):
     SCHEDULED_TASK = "Scheduled Task/Job: Scheduled Task"
     QUERY_REGISTRY = "Query Registry"
     LOCAL_DATA_STAGING = "Local Data Staging"
+    # [NEW] Add the new, more specific intents from the HTB expansion pack.
+    SECURITY_SOFTWARE_DISCOVERY = "Security Software Discovery"
+    WIFI_DISCOVERY = "Wi-Fi Discovery"
+    OS_CREDENTIAL_DUMPING_SAM = "OS Credential Dumping: Security Account Manager"
+    OS_CREDENTIAL_DUMPING_LSA = "OS Credential Dumping: LSA Secrets"
+    UNSECURED_CREDENTIALS_FILES = "Unsecured Credentials: Credentials In Files"
+    BOOT_OR_LOGON_AUTOSTART_REGISTRY = "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder"
+    CREATE_OR_MODIFY_SYSTEM_PROCESS_SERVICE = "Create or Modify System Process: Windows Service"
 
 # --- Lab Connector & Raw Data Models ---
 

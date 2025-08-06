@@ -114,5 +114,49 @@
     "tactic": [
       "Collection"
     ]
+  },
+  "T1518.001": {
+    "name": "Security Software Discovery",
+    "tactic": [
+      "Discovery"
+    ]
+  },
+  "T1016.002": {
+    "name": "Wi-Fi Discovery",
+    "tactic": [
+      "Discovery"
+    ]
+  },
+  "T1003.002": {
+    "name": "OS Credential Dumping: Security Account Manager",
+    "tactic": [
+      "Credential Access"
+    ]
+  },
+  "T1003.004": {
+    "name": "OS Credential Dumping: LSA Secrets",
+    "tactic": [
+      "Credential Access"
+    ]
+  },
+  "T1552.001": {
+    "name": "Unsecured Credentials: Credentials In Files",
+    "tactic": [
+      "Credential Access"
+    ]
+  },
+  "T1547.001": {
+    "name": "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder",
+    "tactic": [
+      "Persistence",
+      "Privilege Escalation"
+    ]
+  },
+  "T1543.003": {
+    "name": "Create or Modify System Process: Windows Service",
+    "tactic": [
+      "Persistence",
+      "Privilege Escalation"
+    ]
   }
 }
