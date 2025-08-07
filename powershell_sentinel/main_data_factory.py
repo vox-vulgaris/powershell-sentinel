@@ -9,6 +9,7 @@ from typing import List
 from pydantic import ValidationError
 
 from rich.progress import Progress, BarColumn, TextColumn, TimeRemainingColumn
+from rich.console import Console # [NEW] Import Console for clean, styled printing
 
 from powershell_sentinel.models import Primitive, TrainingPair, LLMResponse, Analysis
 from powershell_sentinel.lab_connector import LabConnection
@@ -16,7 +17,6 @@ from powershell_sentinel.modules.obfuscator import generate_layered_obfuscation
 
 FAILURES_LOG_PATH = "data/generated/failures.log"
 
-# (log_failure function remains the same)
 def log_failure(primitive: Primitive, chain: List[str], broken_command: str, error_message: str):
     """Appends a structured failure record to the failures log."""
     os.makedirs(os.path.dirname(FAILURES_LOG_PATH), exist_ok=True)
@@ -35,9 +35,10 @@ def log_failure(primitive: Primitive, chain: List[str], broken_command: str, err
 
 def generate_dataset(target_pair_count: int, primitives_path: str, output_path: str):
     """Main function to generate the training dataset."""
-    print("Initializing lab connection and persistent shell...")
-    lab = LabConnection() # [FIX] Lab is initialized once here
-    print("Lab connection successful.")
+    console = Console() # [NEW] Create a console object
+    console.print("Initializing lab connection and persistent shell...")
+    lab = LabConnection()
+    console.print("Lab connection successful.")
     
     try:
         with open(primitives_path, 'r', encoding='utf-8') as f:
@@ -45,15 +46,15 @@ def generate_dataset(target_pair_count: int, primitives_path: str, output_path: 
         all_primitives = [Primitive.model_validate(p) for p in primitives_data]
         usable_primitives = [p for p in all_primitives if p.telemetry_rules]
         
-        print(f"Successfully loaded and validated {len(all_primitives)} primitives.")
-        print(f"Found {len(usable_primitives)} primitives with curated telemetry suitable for generation.")
+        console.print(f"Successfully loaded and validated {len(all_primitives)} primitives.")
+        console.print(f"Found {len(usable_primitives)} primitives with curated telemetry suitable for generation.")
         
         if not usable_primitives:
-            print("[bold red]Error: No usable primitives with telemetry rules found. Cannot generate data.[/bold red]")
+            console.print("[bold red]Error: No usable primitives with telemetry rules found. Cannot generate data.[/bold red]")
             return
             
     except (FileNotFoundError, ValidationError, json.JSONDecodeError) as e:
-        print(f"[bold red]Error loading or validating primitives: {e}[/bold red]")
+        console.print(f"[bold red]Error loading or validating primitives: {e}[/bold red]")
         return
 
     generated_pairs: List[TrainingPair] = []
@@ -67,9 +68,8 @@ def generate_dataset(target_pair_count: int, primitives_path: str, output_path: 
         TextColumn("[red]Fail: {task.fields[failures]}[/red]")
     ]
     
-    # [REFACTOR] Use a try...finally block to ensure lab.close() is always called
     try:
-        with Progress(*progress_columns) as progress:
+        with Progress(*progress_columns, console=console) as progress: # [MODIFIED] Pass console to Progress
             task = progress.add_task("[cyan]Generating data...", total=target_pair_count, successes=0, failures=0)
 
             primitive_index = 0
@@ -81,7 +81,6 @@ def generate_dataset(target_pair_count: int, primitives_path: str, output_path: 
                 
                 obfuscated_cmd, chain = generate_layered_obfuscation(current_primitive.primitive_command)
                 
-                # If the shell died for some reason, we must stop.
                 if not lab.shell_id:
                     progress.console.print("[bold red]FATAL: The persistent WinRM shell has died. Aborting generation.[/bold red]")
                     break
@@ -92,17 +91,23 @@ def generate_dataset(target_pair_count: int, primitives_path: str, output_path: 
                     consecutive_failures = 0
                     try:
                         analysis_obj = Analysis(
-                            intent=current_primitive.intent,
-                            mitre_ttps=current_primitive.mitre_ttps,
+                            intent=current_primitive.intent, mitre_ttps=current_primitive.mitre_ttps,
                             telemetry_signature=current_primitive.telemetry_rules
                         )
                         response_obj = LLMResponse(
-                            deobfuscated_command=current_primitive.primitive_command,
-                            analysis=analysis_obj
+                            deobfuscated_command=current_primitive.primitive_command, analysis=analysis_obj
                         )
                         pair_obj = TrainingPair(prompt=obfuscated_cmd, response=response_obj)
                         generated_pairs.append(pair_obj)
                         progress.update(task, advance=1, successes=len(generated_pairs))
+                        
+                        # --- [DEFINITIVE] Resilient Checkpoint Saving Logic ---
+                        if len(generated_pairs) % 100 == 0 and len(generated_pairs) > 0:
+                            console.print(f"\n[bold blue]Checkpoint: Saving {len(generated_pairs)} pairs to {output_path}...[/bold blue]")
+                            temp_output_data = [pair.model_dump(mode='json') for pair in generated_pairs]
+                            with open(output_path, 'w', encoding='utf-8') as f:
+                                json.dump(temp_output_data, f, indent=2)
+                        # --- End of checkpoint logic ---
                         
                         primitive_index = (primitive_index + 1) % len(usable_primitives)
 
@@ -122,16 +127,15 @@ def generate_dataset(target_pair_count: int, primitives_path: str, output_path: 
                         primitive_index = (primitive_index + 1) % len(usable_primitives)
                         consecutive_failures = 0
     finally:
-        # [DEFINITIVE FIX] This will run no matter what, ensuring the connection is closed.
         lab.close()
 
     # --- Final Serialization ---
-    print(f"\nGeneration complete. Saving {len(generated_pairs)} pairs to {output_path}...")
+    console.print(f"\nGeneration complete. Saving final {len(generated_pairs)} pairs to {output_path}...")
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     output_data = [pair.model_dump(mode='json') for pair in generated_pairs]
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(output_data, f, indent=2)
-    print(f"[green]Save successful.[/green] Total failures logged: {total_failures}")
+    console.print(f"[green]Save successful.[/green] Total failures logged: {total_failures}")
 
 
 if __name__ == '__main__':
