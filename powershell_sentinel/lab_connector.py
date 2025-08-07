@@ -26,43 +26,41 @@ SPLUNK_PORT = int(os.getenv("SPLUNK_PORT", 8089))
 SPLUNK_USER = os.getenv("SPLUNK_USER", "admin")
 SPLUNK_PASS = os.getenv("SPLUNK_PASS")
 
-# [DEFINITIVE WRAPPER] This robust wrapper uses try/catch and explicit error checking
-# to correctly report the success/failure of the script *inside* PowerShell.
-POWERSHELL_ROBUST_WRAPPER = """
+POWERSHELL_HYBRID_WRAPPER = """
 $commandToRun = @'
 {command}
 '@
-
+$timeoutSeconds = 25
 $result = @{{
     Stdout = ""
     Stderr = ""
-    ReturnCode = -1 # Default to failure
+    ReturnCode = -1
 }}
-
 try {{
-    # Execute the command and capture the output stream
-    $output = Invoke-Expression -Command $commandToRun 2>&1
-    $result.Stdout = ($output | Out-String).Trim()
-
-    # The '$?' variable is the most reliable way to check for non-terminating errors
-    if ($?) {{
-        $result.ReturnCode = 0
-    }} else {{
-        $result.ReturnCode = 1
-        # If stdout is empty but there was an error, populate stderr from the output stream
-        if (-not $result.Stdout.Trim()) {{
-            $result.Stderr = "A non-terminating error occurred."
+    $scriptBlock = [scriptblock]::Create($commandToRun)
+    $job = Start-Job -ScriptBlock $scriptBlock
+    if (Wait-Job -Job $job -Timeout $timeoutSeconds) {{
+        $output = Receive-Job -Job $job
+        $result.Stdout = ($output | Out-String).Trim()
+        if ($job.State -eq 'Failed') {{
+            $result.Stderr = $job.ChildJobs[0].JobStateInfo.Reason.Message
+            $result.ReturnCode = 1
         }} else {{
-            $result.Stderr = $result.Stdout # The error message is in the stdout stream
+            $result.ReturnCode = 0
         }}
+    }} else {{
+        $result.Stderr = "Command timed out on the server after $timeoutSeconds seconds."
+        $result.ReturnCode = 124
     }}
 }} catch {{
-    # This block catches script-terminating errors
-    $result.Stderr = "Terminating Error: $($_.Exception.Message)"
+    $result.Stderr = "Wrapper Script Error: $($_.Exception.Message)"
     $result.ReturnCode = 1
+}} finally {{
+    if ($job) {{
+        Stop-Job -Job $job -ErrorAction SilentlyContinue
+        Remove-Job -Job $job -ErrorAction SilentlyContinue -Force
+    }}
 }}
-
-# Return the result object as a compressed JSON string
 $result | ConvertTo-Json -Compress
 """
 
@@ -82,8 +80,8 @@ class LabConnection:
                 endpoint=f"http://{VICTIM_VM_IP}:5985/wsman",
                 transport='ntlm', username=VICTIM_VM_USER, password=VICTIM_VM_PASS,
                 server_cert_validation='ignore',
-                operation_timeout_sec=30,
-                read_timeout_sec=40
+                operation_timeout_sec=35,
+                read_timeout_sec=45
             )
             self.shell_id = self.winrm_protocol.open_shell()
         except (WinRMError, WinRMTransportError) as e:
@@ -107,36 +105,49 @@ class LabConnection:
                 pass
         self.shell_id = None
         self.winrm_protocol = None
+    
+    # [DEFINITIVE FIX] Add the reset_shell method back into the class.
+    def reset_shell(self):
+        """Performs a full teardown and rebuild of the WinRM connection."""
+        console.print("\n[bold yellow]Shell Resetting:[/bold yellow] Discarding and rebuilding full WinRM connection...", end="")
+        self.close()
+        time.sleep(1) # Give OS resources a moment to clear
+        try:
+            self._connect_winrm()
+            console.print("[bold green]...Reset Complete. New connection active.[/bold green]")
+            return True
+        except (WinRMError, WinRMTransportError) as e:
+            console.print(f"[bold red]...FATAL: Failed to re-establish connection after reset! Error: {e}[/bold red]")
+            return False
 
     def run_remote_powershell(self, command: str) -> CommandOutput:
         if not self.shell_id or not self.winrm_protocol:
-             return CommandOutput(stdout="", stderr="FATAL: WinRM connection is not active.", return_code=-1)
+             # If the connection is dead, try to reset it.
+             if not self.reset_shell():
+                 return CommandOutput(Stdout="", Stderr="FATAL: WinRM connection is dead and could not be recovered.", ReturnCode=-1)
 
         try:
-            # Escape single quotes in the user command to prevent breaking the here-string
             safe_command = command.replace("'", "''")
-            final_script = POWERSHELL_ROBUST_WRAPPER.format(command=safe_command)
-
+            final_script = POWERSHELL_HYBRID_WRAPPER.format(command=safe_command)
             encoded_script = base64.b64encode(final_script.encode('utf-16-le')).decode('ascii')
             command_id = self.winrm_protocol.run_command(self.shell_id, 'powershell.exe', ['-EncodedCommand', encoded_script])
             stdout, stderr, return_code = self.winrm_protocol.get_command_output(self.shell_id, command_id)
             self.winrm_protocol.cleanup_command(self.shell_id, command_id)
 
-            # The process exit code should be 0. We now parse our JSON for the *real* result.
             if return_code != 0:
-                return CommandOutput(stdout="", stderr=f"WinRM Transport Error: Process exited with code {return_code}. Stderr: {stderr.decode('utf-8')}", return_code=return_code)
+                return CommandOutput(Stdout="", Stderr=f"WinRM Transport Error: Process exited with code {return_code}. Stderr: {stderr.decode('utf-8')}", ReturnCode=return_code)
 
             try:
                 response_str = stdout.decode('utf-8', errors='ignore').strip()
-                response_json = json.loads(response_str)
-                return CommandOutput.model_validate(response_json)
+                return CommandOutput.model_validate_json(response_str)
             except (json.JSONDecodeError, ValidationError) as e:
-                return CommandOutput(stdout="", stderr=f"Failed to parse remote JSON response: {e}. Raw: {response_str}", return_code=-1)
-
+                return CommandOutput(Stdout="", Stderr=f"Failed to parse remote JSON response: {e}. Raw: {response_str}", ReturnCode=-1)
         except (WinRMError, WinRMTransportError, WinRMOperationTimeoutError) as e:
-            return CommandOutput(stdout="", stderr=f"Fatal WinRM Error: {e}", return_code=-1)
+            console.print(f"\n[bold red]Caught fatal transport error, triggering full reset. Error: {e}[/bold red]")
+            self.reset_shell()
+            return CommandOutput(Stdout="", Stderr=f"Fatal WinRM Error, connection was reset: {e}", ReturnCode=-1)
         except Exception as e:
-            return CommandOutput(stdout="", stderr=f"Unexpected Python error: {e}", return_code=-1)
+            return CommandOutput(Stdout="", Stderr=f"Unexpected Python error: {e}", ReturnCode=-1)
 
     def query_splunk(self, search_query: str) -> List[SplunkLogEvent]:
         kwargs_search = {"exec_mode": "blocking", "output_mode": "json"}
