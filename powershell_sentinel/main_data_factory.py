@@ -4,29 +4,16 @@
 # This script is the master controller for the entire data generation pipeline.
 # It brings together the curated primitives library, the obfuscation engine, and the
 # lab connector to produce the final, large-scale, and VALIDATED training dataset.
-#
-# REQUIREMENTS (Pydantic-aware):
-# 1. User Input: Must allow the user to specify a `target_pair_count`.
-# 2. Data Loading: Must load and validate the `primitives_library.json` into a list of `Primitive` models.
-# 3. Main Loop: Must loop until the target number of `TrainingPair` models is generated.
-#    - In each iteration, it should randomly select a `Primitive` object.
-# 4. Obfuscation: It must call `obfuscator.generate_layered_obfuscation`.
-# 5. Two-Stage QA (Execution Validation):
-#    - It must use `lab_connector.run_remote_powershell` to execute the *obfuscated* command.
-#    - It must check if the execution was successful (`return_code == 0`).
-#    - If execution fails, it must log the failure details to `failures.log` and discard the pair.
-# 6. Output Validation: For each successful pair, it must construct a `TrainingPair` Pydantic model.
-#    This serves as a final validation step ensuring the output data conforms to our schema.
-# 7. Serialization: The final list of `TrainingPair` models must be serialized to a JSON file.
 
 import json
 import random
 import argparse
+import os
 from datetime import datetime
 from typing import List
 from pydantic import ValidationError
 
-from rich.progress import Progress
+from rich.progress import Progress, BarColumn, TextColumn, TimeRemainingColumn
 
 from powershell_sentinel.models import Primitive, TrainingPair, LLMResponse, Analysis
 from powershell_sentinel.lab_connector import LabConnection
@@ -36,6 +23,8 @@ FAILURES_LOG_PATH = "data/generated/failures.log"
 
 def log_failure(primitive: Primitive, chain: List[str], broken_command: str, error_message: str):
     """Appends a structured failure record to the failures log."""
+    os.makedirs(os.path.dirname(FAILURES_LOG_PATH), exist_ok=True)
+    
     failure_record = {
         "timestamp": datetime.now().isoformat(),
         "primitive_id": primitive.primitive_id,
@@ -44,75 +33,103 @@ def log_failure(primitive: Primitive, chain: List[str], broken_command: str, err
         "broken_command": broken_command,
         "error_message": error_message.strip()
     }
-    with open(FAILURES_LOG_PATH, 'a') as f:
+    with open(FAILURES_LOG_PATH, 'a', encoding='utf-8') as f:
         f.write(json.dumps(failure_record) + "\n")
 
 def generate_dataset(target_pair_count: int, primitives_path: str, output_path: str):
     """Main function to generate the training dataset."""
-    # 1. Initialize lab connection and load/validate primitives
+    print("Initializing lab connection...")
     lab = LabConnection()
+    print("Lab connection successful.")
+    
     try:
-        with open(primitives_path, 'r') as f:
+        with open(primitives_path, 'r', encoding='utf-8') as f:
             primitives_data = json.load(f)
-        primitives = [Primitive.model_validate(p) for p in primitives_data]
-        print(f"Successfully loaded and validated {len(primitives)} primitives.")
+        all_primitives = [Primitive.model_validate(p) for p in primitives_data]
+        usable_primitives = [p for p in all_primitives if p.telemetry_rules]
+        
+        print(f"Successfully loaded and validated {len(all_primitives)} primitives.")
+        print(f"Found {len(usable_primitives)} primitives with curated telemetry suitable for generation.")
+        
+        if not usable_primitives:
+            print("[bold red]Error: No usable primitives with telemetry rules found. Cannot generate data.[/bold red]")
+            return
+            
     except (FileNotFoundError, ValidationError, json.JSONDecodeError) as e:
-        print(f"Error loading primitives: {e}")
+        print(f"[bold red]Error loading or validating primitives: {e}[/bold red]")
         return
 
     generated_pairs: List[TrainingPair] = []
+    total_failures = 0
     
-    # Use rich.progress for a nice progress bar
-    with Progress() as progress:
-        task = progress.add_task("[cyan]Generating data...", total=target_pair_count)
+    progress_columns = [
+        TextColumn("[progress.description]{task.description}"), BarColumn(),
+        TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
+        TextColumn("({task.completed} of {task.total})"), TimeRemainingColumn(),
+        TextColumn("[green]Success: {task.fields[successes]}[/green]"),
+        TextColumn("[red]Fail: {task.fields[failures]}[/red]")
+    ]
+    
+    with Progress(*progress_columns) as progress:
+        task = progress.add_task("[cyan]Generating data...", total=target_pair_count, successes=0, failures=0)
 
-        # 2. Main generation loop
+        # [DEFINITIVE FIX] This intelligent loop prevents getting stuck on one primitive.
+        primitive_index = 0
+        consecutive_failures = 0
+        MAX_CONSECUTIVE_FAILURES_PER_PRIMITIVE = 20 # A threshold to prevent infinite loops
+
         while len(generated_pairs) < target_pair_count:
-            # a. Select a random primitive
-            current_primitive = random.choice(primitives)
+            # Cycle through the primitives in a round-robin fashion
+            current_primitive = usable_primitives[primitive_index]
             
-            # b. Obfuscate the command
             obfuscated_cmd, chain = generate_layered_obfuscation(current_primitive.primitive_command)
-            
-            # c. Execute the obfuscated command
             execution_result = lab.run_remote_powershell(obfuscated_cmd)
             
-            # d. Two-Stage QA: Check for execution success
-            if execution_result.return_code != 0:
+            if execution_result.return_code == 0:
+                # Success!
+                consecutive_failures = 0 # Reset the failure counter for this primitive
+                try:
+                    analysis_obj = Analysis(
+                        intent=current_primitive.intent,
+                        mitre_ttps=current_primitive.mitre_ttps,
+                        telemetry_signature=current_primitive.telemetry_rules
+                    )
+                    response_obj = LLMResponse(
+                        deobfuscated_command=current_primitive.primitive_command,
+                        analysis=analysis_obj
+                    )
+                    pair_obj = TrainingPair(prompt=obfuscated_cmd, response=response_obj)
+                    generated_pairs.append(pair_obj)
+                    progress.update(task, advance=1, successes=len(generated_pairs))
+                    
+                    # Move to the next primitive for the next iteration
+                    primitive_index = (primitive_index + 1) % len(usable_primitives)
+
+                except ValidationError as e:
+                    error_msg = f"Pydantic validation failed for {current_primitive.primitive_id}. Error: {e}"
+                    log_failure(current_primitive, chain, obfuscated_cmd, error_msg)
+                    total_failures += 1
+                    progress.update(task, advance=0, failures=total_failures)
+            else:
+                # Failure
                 log_failure(current_primitive, chain, obfuscated_cmd, execution_result.stderr)
-                progress.console.print(f"[yellow]WARN: Execution failed for primitive {current_primitive.primitive_id}. See failures.log.[/yellow]")
-                continue # Skip to the next iteration
+                total_failures += 1
+                consecutive_failures += 1
+                progress.update(task, advance=0, failures=total_failures)
 
-            # e. Construct the final, validated TrainingPair model
-            try:
-                analysis_obj = Analysis(
-                    intent=current_primitive.intent,
-                    mitre_ttps=current_primitive.mitre_ttps,
-                    telemetry_signature=current_primitive.telemetry_rules
-                )
-                response_obj = LLMResponse(
-                    deobfuscated_command=current_primitive.primitive_command,
-                    analysis=analysis_obj
-                )
-                pair_obj = TrainingPair(
-                    prompt=obfuscated_cmd,
-                    response=response_obj
-                )
-                generated_pairs.append(pair_obj)
-                progress.update(task, advance=1)
-            except ValidationError as e:
-                progress.console.print(f"[bold red]FATAL: Pydantic validation failed while creating TrainingPair for {current_primitive.primitive_id}. This should not happen. Error: {e}[/bold red]")
-                # This indicates a bug in our own code, so we should be loud about it.
-                continue
-
-    # 5. Serialize the final list of Pydantic models and save to disk
+                # If one primitive fails too many times in a row, skip it and move on.
+                if consecutive_failures >= MAX_CONSECUTIVE_FAILURES_PER_PRIMITIVE:
+                    progress.console.print(f"[bold yellow]Warning: Skipped primitive {current_primitive.primitive_id} after {consecutive_failures} consecutive failures.[/bold yellow]")
+                    primitive_index = (primitive_index + 1) % len(usable_primitives)
+                    consecutive_failures = 0 # Reset for the next primitive
+                    
+    # --- Final Serialization ---
     print(f"\nGeneration complete. Saving {len(generated_pairs)} pairs to {output_path}...")
-    
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
     output_data = [pair.model_dump(mode='json') for pair in generated_pairs]
-    with open(output_path, 'w') as f:
+    with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(output_data, f, indent=2)
-        
-    print("Save successful.")
+    print(f"[green]Save successful.[/green] Total failures logged: {total_failures}")
 
 
 if __name__ == '__main__':

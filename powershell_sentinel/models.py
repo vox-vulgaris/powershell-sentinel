@@ -10,7 +10,7 @@
 
 import json
 from enum import Enum
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field, ValidationError, ConfigDict
 from typing import List, Dict, Any, Optional
 
 # --- Enums for Strict Validation ---
@@ -67,8 +67,10 @@ class SplunkLogEvent(BaseModel):
     time: str = Field(..., alias='_time')
     source: str
     sourcetype: str
-    class Config:
-        extra = 'allow'
+    
+    # [DEFINITIVE FIX] This tells Pydantic to ignore any extra fields that come back
+    # from the Splunk API, preventing validation errors.
+    model_config = ConfigDict(extra='ignore')
 
 
 # --- Primitive & Curation Models ---
@@ -81,8 +83,6 @@ class ExtractionMethodEnum(str, Enum):
 class ParsingRule(BaseModel):
     """
     A user-defined rule for parsing a specific type of raw log event.
-    These rules are created interactively by the analyst via the primitives_manager CLI
-    and stored in parsing_rules.json.
     """
     rule_name: str = Field(..., description="A unique, human-readable name for the rule.")
     event_id: int = Field(..., description="The Event ID this rule applies to.")
