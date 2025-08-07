@@ -9,7 +9,7 @@ from typing import List
 from pydantic import ValidationError
 
 from rich.progress import Progress, BarColumn, TextColumn, TimeRemainingColumn
-from rich.console import Console # [NEW] Import Console for clean, styled printing
+from rich.console import Console
 
 from powershell_sentinel.models import Primitive, TrainingPair, LLMResponse, Analysis
 from powershell_sentinel.lab_connector import LabConnection
@@ -35,7 +35,7 @@ def log_failure(primitive: Primitive, chain: List[str], broken_command: str, err
 
 def generate_dataset(target_pair_count: int, primitives_path: str, output_path: str):
     """Main function to generate the training dataset."""
-    console = Console() # [NEW] Create a console object
+    console = Console()
     console.print("Initializing lab connection and persistent shell...")
     lab = LabConnection()
     console.print("Lab connection successful.")
@@ -57,7 +57,26 @@ def generate_dataset(target_pair_count: int, primitives_path: str, output_path: 
         console.print(f"[bold red]Error loading or validating primitives: {e}[/bold red]")
         return
 
+    # --- [DEFINITIVE] Resumable Session Logic ---
     generated_pairs: List[TrainingPair] = []
+    if os.path.exists(output_path):
+        console.print(f"[bold blue]Found existing dataset at {output_path}. Attempting to resume...[/bold blue]")
+        try:
+            with open(output_path, 'r', encoding='utf-8') as f:
+                existing_data = json.load(f)
+            # Validate existing data to ensure it's not corrupted
+            generated_pairs = [TrainingPair.model_validate(p) for p in existing_data]
+            console.print(f"[bold green]Successfully loaded and validated {len(generated_pairs)} existing pairs.[/bold green]")
+        except (json.JSONDecodeError, ValidationError, TypeError) as e:
+            console.print(f"[bold yellow]Warning: Could not load or validate existing dataset. It may be corrupted. Starting fresh. Error: {e}[/bold yellow]")
+            generated_pairs = []
+    # ---------------------------------------------
+
+    if len(generated_pairs) >= target_pair_count:
+        console.print(f"[bold green]Target of {target_pair_count} pairs already met. Exiting.[/bold green]")
+        lab.close() # Close the lab connection if we are exiting early.
+        return
+        
     total_failures = 0
     
     progress_columns = [
@@ -69,8 +88,15 @@ def generate_dataset(target_pair_count: int, primitives_path: str, output_path: 
     ]
     
     try:
-        with Progress(*progress_columns, console=console) as progress: # [MODIFIED] Pass console to Progress
-            task = progress.add_task("[cyan]Generating data...", total=target_pair_count, successes=0, failures=0)
+        with Progress(*progress_columns, console=console) as progress:
+            initial_completed = len(generated_pairs)
+            task = progress.add_task(
+                "[cyan]Generating data...", 
+                total=target_pair_count, 
+                completed=initial_completed,
+                successes=initial_completed, 
+                failures=0
+            )
 
             primitive_index = 0
             consecutive_failures = 0
@@ -90,6 +116,7 @@ def generate_dataset(target_pair_count: int, primitives_path: str, output_path: 
                 if execution_result.return_code == 0:
                     consecutive_failures = 0
                     try:
+                        # This is the original, correct logic from your script
                         analysis_obj = Analysis(
                             intent=current_primitive.intent, mitre_ttps=current_primitive.mitre_ttps,
                             telemetry_signature=current_primitive.telemetry_rules
@@ -99,15 +126,16 @@ def generate_dataset(target_pair_count: int, primitives_path: str, output_path: 
                         )
                         pair_obj = TrainingPair(prompt=obfuscated_cmd, response=response_obj)
                         generated_pairs.append(pair_obj)
+                        
+                        # Update the progress bar, ensuring the 'successes' field is always current
                         progress.update(task, advance=1, successes=len(generated_pairs))
                         
-                        # --- [DEFINITIVE] Resilient Checkpoint Saving Logic ---
+                        # Checkpoint saving logic
                         if len(generated_pairs) % 100 == 0 and len(generated_pairs) > 0:
                             console.print(f"\n[bold blue]Checkpoint: Saving {len(generated_pairs)} pairs to {output_path}...[/bold blue]")
                             temp_output_data = [pair.model_dump(mode='json') for pair in generated_pairs]
                             with open(output_path, 'w', encoding='utf-8') as f:
                                 json.dump(temp_output_data, f, indent=2)
-                        # --- End of checkpoint logic ---
                         
                         primitive_index = (primitive_index + 1) % len(usable_primitives)
 
@@ -115,12 +143,12 @@ def generate_dataset(target_pair_count: int, primitives_path: str, output_path: 
                         error_msg = f"Pydantic validation failed for {current_primitive.primitive_id}. Error: {e}"
                         log_failure(current_primitive, chain, obfuscated_cmd, error_msg)
                         total_failures += 1
-                        progress.update(task, advance=0, failures=total_failures)
+                        progress.update(task, failures=total_failures) # Only update failures here
                 else:
                     log_failure(current_primitive, chain, obfuscated_cmd, execution_result.stderr)
                     total_failures += 1
                     consecutive_failures += 1
-                    progress.update(task, advance=0, failures=total_failures)
+                    progress.update(task, failures=total_failures) # Only update failures here
 
                     if consecutive_failures >= MAX_CONSECUTIVE_FAILURES_PER_PRIMITIVE:
                         progress.console.print(f"[bold yellow]Warning: Skipped primitive {current_primitive.primitive_id} after {consecutive_failures} consecutive failures.[/bold yellow]")

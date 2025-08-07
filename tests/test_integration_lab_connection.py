@@ -29,7 +29,7 @@ class TestLiveLabConnection(unittest.TestCase):
             print("[SUCCESS] LabConnection initialized successfully.")
         except Exception as e:
             raise unittest.SkipTest(f"Failed to initialize LabConnection, skipping all integration tests. Error: {e}")
-        
+
     @classmethod
     def tearDownClass(cls):
         """Close the connection after all tests in this class are done."""
@@ -42,9 +42,9 @@ class TestLiveLabConnection(unittest.TestCase):
         """
         canary_string = f"integration-test-canary-{uuid.uuid4()}"
         
-        # [DEFINITIVE FIX] Do not use Write-Host. Simply output the string to the
-        # success stream so it can be captured by Receive-Job in our wrapper.
-        command = f'"{canary_string}"'
+        # [DEFINITIVE FIX] We must explicitly call powershell.exe to interpret our command.
+        # The inner single quotes are crucial for correct parsing on the remote cmd.exe shell.
+        command = f'powershell.exe -Command \'{canary_string}\''
         print(f"\n[INFO] Executing canary command: {command}")
 
         exec_result = self.lab.run_remote_powershell(command)
@@ -54,7 +54,7 @@ class TestLiveLabConnection(unittest.TestCase):
         self.assertIn(canary_string, exec_result.stdout, "Canary string not found in command stdout.")
         print(f"[SUCCESS] Remote command executed successfully on host.")
 
-        # --- The Splunk polling section is correct and remains unchanged ---
+        # --- The Splunk polling section remains correct ---
         print(f"[INFO] Polling Splunk for log containing: '{canary_string}'")
         search_query = f'search index=main host=PS-VICTIM-01 "{canary_string}"'
         
@@ -85,7 +85,6 @@ class TestLiveLabConnection(unittest.TestCase):
         
         self.assertIsNotNone(found_log, f"TEST FAILED: Timed out after {timeout_seconds}s waiting for canary log.")
         self.assertIsInstance(found_log, self.SplunkLogEvent)
-        # We search the raw log, because Splunk will log the entire original command line
         self.assertIn(canary_string, found_log.raw, "Canary string not found in the raw log event.")
         print("[SUCCESS] Log content validated.")
         print("--- Full-Loop Integration Test PASSED ---")
