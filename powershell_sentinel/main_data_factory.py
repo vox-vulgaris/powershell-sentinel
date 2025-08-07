@@ -1,9 +1,4 @@
-# Phase 3: Data Factory - Generation & MLOps Prep
-# Index: [11]
-#
-# This script is the master controller for the entire data generation pipeline.
-# It brings together the curated primitives library, the obfuscation engine, and the
-# lab connector to produce the final, large-scale, and VALIDATED training dataset.
+# powershell_sentinel/main_data_factory.py
 
 import json
 import random
@@ -21,6 +16,7 @@ from powershell_sentinel.modules.obfuscator import generate_layered_obfuscation
 
 FAILURES_LOG_PATH = "data/generated/failures.log"
 
+# (log_failure function remains the same)
 def log_failure(primitive: Primitive, chain: List[str], broken_command: str, error_message: str):
     """Appends a structured failure record to the failures log."""
     os.makedirs(os.path.dirname(FAILURES_LOG_PATH), exist_ok=True)
@@ -36,10 +32,11 @@ def log_failure(primitive: Primitive, chain: List[str], broken_command: str, err
     with open(FAILURES_LOG_PATH, 'a', encoding='utf-8') as f:
         f.write(json.dumps(failure_record) + "\n")
 
+
 def generate_dataset(target_pair_count: int, primitives_path: str, output_path: str):
     """Main function to generate the training dataset."""
-    print("Initializing lab connection...")
-    lab = LabConnection()
+    print("Initializing lab connection and persistent shell...")
+    lab = LabConnection() # [FIX] Lab is initialized once here
     print("Lab connection successful.")
     
     try:
@@ -70,59 +67,64 @@ def generate_dataset(target_pair_count: int, primitives_path: str, output_path: 
         TextColumn("[red]Fail: {task.fields[failures]}[/red]")
     ]
     
-    with Progress(*progress_columns) as progress:
-        task = progress.add_task("[cyan]Generating data...", total=target_pair_count, successes=0, failures=0)
+    # [REFACTOR] Use a try...finally block to ensure lab.close() is always called
+    try:
+        with Progress(*progress_columns) as progress:
+            task = progress.add_task("[cyan]Generating data...", total=target_pair_count, successes=0, failures=0)
 
-        # [DEFINITIVE FIX] This intelligent loop prevents getting stuck on one primitive.
-        primitive_index = 0
-        consecutive_failures = 0
-        MAX_CONSECUTIVE_FAILURES_PER_PRIMITIVE = 20 # A threshold to prevent infinite loops
+            primitive_index = 0
+            consecutive_failures = 0
+            MAX_CONSECUTIVE_FAILURES_PER_PRIMITIVE = 20
 
-        while len(generated_pairs) < target_pair_count:
-            # Cycle through the primitives in a round-robin fashion
-            current_primitive = usable_primitives[primitive_index]
-            
-            obfuscated_cmd, chain = generate_layered_obfuscation(current_primitive.primitive_command)
-            execution_result = lab.run_remote_powershell(obfuscated_cmd)
-            
-            if execution_result.return_code == 0:
-                # Success!
-                consecutive_failures = 0 # Reset the failure counter for this primitive
-                try:
-                    analysis_obj = Analysis(
-                        intent=current_primitive.intent,
-                        mitre_ttps=current_primitive.mitre_ttps,
-                        telemetry_signature=current_primitive.telemetry_rules
-                    )
-                    response_obj = LLMResponse(
-                        deobfuscated_command=current_primitive.primitive_command,
-                        analysis=analysis_obj
-                    )
-                    pair_obj = TrainingPair(prompt=obfuscated_cmd, response=response_obj)
-                    generated_pairs.append(pair_obj)
-                    progress.update(task, advance=1, successes=len(generated_pairs))
-                    
-                    # Move to the next primitive for the next iteration
-                    primitive_index = (primitive_index + 1) % len(usable_primitives)
+            while len(generated_pairs) < target_pair_count:
+                current_primitive = usable_primitives[primitive_index]
+                
+                obfuscated_cmd, chain = generate_layered_obfuscation(current_primitive.primitive_command)
+                
+                # If the shell died for some reason, we must stop.
+                if not lab.shell_id:
+                    progress.console.print("[bold red]FATAL: The persistent WinRM shell has died. Aborting generation.[/bold red]")
+                    break
 
-                except ValidationError as e:
-                    error_msg = f"Pydantic validation failed for {current_primitive.primitive_id}. Error: {e}"
-                    log_failure(current_primitive, chain, obfuscated_cmd, error_msg)
+                execution_result = lab.run_remote_powershell(obfuscated_cmd)
+                
+                if execution_result.return_code == 0:
+                    consecutive_failures = 0
+                    try:
+                        analysis_obj = Analysis(
+                            intent=current_primitive.intent,
+                            mitre_ttps=current_primitive.mitre_ttps,
+                            telemetry_signature=current_primitive.telemetry_rules
+                        )
+                        response_obj = LLMResponse(
+                            deobfuscated_command=current_primitive.primitive_command,
+                            analysis=analysis_obj
+                        )
+                        pair_obj = TrainingPair(prompt=obfuscated_cmd, response=response_obj)
+                        generated_pairs.append(pair_obj)
+                        progress.update(task, advance=1, successes=len(generated_pairs))
+                        
+                        primitive_index = (primitive_index + 1) % len(usable_primitives)
+
+                    except ValidationError as e:
+                        error_msg = f"Pydantic validation failed for {current_primitive.primitive_id}. Error: {e}"
+                        log_failure(current_primitive, chain, obfuscated_cmd, error_msg)
+                        total_failures += 1
+                        progress.update(task, advance=0, failures=total_failures)
+                else:
+                    log_failure(current_primitive, chain, obfuscated_cmd, execution_result.stderr)
                     total_failures += 1
+                    consecutive_failures += 1
                     progress.update(task, advance=0, failures=total_failures)
-            else:
-                # Failure
-                log_failure(current_primitive, chain, obfuscated_cmd, execution_result.stderr)
-                total_failures += 1
-                consecutive_failures += 1
-                progress.update(task, advance=0, failures=total_failures)
 
-                # If one primitive fails too many times in a row, skip it and move on.
-                if consecutive_failures >= MAX_CONSECUTIVE_FAILURES_PER_PRIMITIVE:
-                    progress.console.print(f"[bold yellow]Warning: Skipped primitive {current_primitive.primitive_id} after {consecutive_failures} consecutive failures.[/bold yellow]")
-                    primitive_index = (primitive_index + 1) % len(usable_primitives)
-                    consecutive_failures = 0 # Reset for the next primitive
-                    
+                    if consecutive_failures >= MAX_CONSECUTIVE_FAILURES_PER_PRIMITIVE:
+                        progress.console.print(f"[bold yellow]Warning: Skipped primitive {current_primitive.primitive_id} after {consecutive_failures} consecutive failures.[/bold yellow]")
+                        primitive_index = (primitive_index + 1) % len(usable_primitives)
+                        consecutive_failures = 0
+    finally:
+        # [DEFINITIVE FIX] This will run no matter what, ensuring the connection is closed.
+        lab.close()
+
     # --- Final Serialization ---
     print(f"\nGeneration complete. Saving {len(generated_pairs)} pairs to {output_path}...")
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
