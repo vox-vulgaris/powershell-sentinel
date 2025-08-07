@@ -20,7 +20,7 @@ from typing import List, Dict, Any, Optional
 
 # Dynamically create MitreTTP Enum from the keys of the library file
 # This is an advanced but very robust way to ensure our TTPs are always valid.
-with open('data/source/mitre_ttp_library.json', 'r') as f:
+with open('data/source/mitre_ttp_library.json', 'r', encoding='utf-8') as f:
     mitre_data = json.load(f)
 MitreTTPEnum = Enum('MitreTTPEnum', {k.replace('.', '_'): k for k in mitre_data.keys()})
 
@@ -45,7 +45,6 @@ class IntentEnum(str, Enum):
     SCHEDULED_TASK = "Scheduled Task/Job: Scheduled Task"
     QUERY_REGISTRY = "Query Registry"
     LOCAL_DATA_STAGING = "Local Data Staging"
-    # [NEW] Add the new, more specific intents from the HTB expansion pack.
     SECURITY_SOFTWARE_DISCOVERY = "Security Software Discovery"
     WIFI_DISCOVERY = "Wi-Fi Discovery"
     OS_CREDENTIAL_DUMPING_SAM = "OS Credential Dumping: Security Account Manager"
@@ -89,7 +88,6 @@ class ParsingRule(BaseModel):
     event_id: int = Field(..., description="The Event ID this rule applies to.")
     source_match: Optional[str] = Field(None, description="A substring that must exist in the log's source field.")
     extraction_method: ExtractionMethodEnum
-    # The regex pattern or key name used to extract the 'details' field.
     detail_key_or_pattern: str
 
 class TelemetryRule(BaseModel):
