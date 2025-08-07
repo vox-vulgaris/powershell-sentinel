@@ -57,9 +57,11 @@ class IntentEnum(str, Enum):
 
 class CommandOutput(BaseModel):
     """Represents the standardized output of a remotely executed command."""
-    stdout: str
-    stderr: str
-    return_code: int
+    # [DEFINITIVE FIX] Add aliases to bridge the gap between PowerShell's
+    # PascalCase JSON and Python's snake_case attributes.
+    stdout: str = Field(..., alias='Stdout')
+    stderr: str = Field(..., alias='Stderr')
+    return_code: int = Field(..., alias='ReturnCode')
 
 class SplunkLogEvent(BaseModel):
     """Represents a single log event retrieved from Splunk."""
@@ -68,8 +70,6 @@ class SplunkLogEvent(BaseModel):
     source: str
     sourcetype: str
     
-    # [DEFINITIVE FIX] This tells Pydantic to ignore any extra fields that come back
-    # from the Splunk API, preventing validation errors.
     model_config = ConfigDict(extra='ignore')
 
 

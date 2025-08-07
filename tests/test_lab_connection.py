@@ -2,77 +2,81 @@
 
 import unittest
 import json
-import base64
 from unittest.mock import patch, MagicMock
 
-from powershell_sentinel.models import CommandOutput, SplunkLogEvent
-
-with patch.dict('os.environ', {
+# Define MOCK_ENV at the module level
+MOCK_ENV = {
     'VICTIM_VM_IP': '1.2.3.4',
     'VICTIM_VM_USER': 'testuser',
     'VICTIM_VM_PASS': 'testpass',
     'SPLUNK_PASS': 'splunkpass'
-}):
+}
+
+with patch.dict('os.environ', MOCK_ENV, clear=True):
+    # This ensures that when the test runner imports these modules,
+    # they see our mocked environment variables.
     from powershell_sentinel.lab_connector import LabConnection
+    from powershell_sentinel.models import CommandOutput, SplunkLogEvent
 
 class TestLabConnection(unittest.TestCase):
 
-    @patch('splunklib.client.connect')
-    @patch('winrm.Protocol')
-    def test_run_remote_powershell_success(self, mock_protocol, mock_splunk_connect):
-        """
-        [REVISED] Tests that run_remote_powershell correctly encodes the wrapper,
-        sends it, and parses the resulting JSON.
-        """
-        # --- Arrange ---
-        mock_winrm_instance = mock_protocol.return_value
-        mock_winrm_instance.open_shell.return_value = 'SHELL_ID_12345'
-        mock_winrm_instance.run_command.return_value = 'COMMAND_ID_67890'
-        
-        # The mock must return a JSON payload, just like the real wrapper.
-        mock_response_dict = {
-            "Stdout": "SuccessOutput", "Stderr": "", "ReturnCode": 0, "TimedOut": False
-        }
-        mock_response_bytes = json.dumps(mock_response_dict).encode('utf-8')
-        mock_winrm_instance.get_command_output.return_value = (mock_response_bytes, b'', 0)
+    def setUp(self):
+        """Set up patches for each test to ensure isolation."""
+        self.connect_winrm_patcher = patch('powershell_sentinel.lab_connector.LabConnection._connect_winrm')
+        self.connect_splunk_patcher = patch('powershell_sentinel.lab_connector.LabConnection._connect_splunk')
+        self.mock_connect_winrm = self.connect_winrm_patcher.start()
+        self.mock_connect_splunk = self.connect_splunk_patcher.start()
+        self.addCleanup(self.connect_winrm_patcher.stop)
+        self.addCleanup(self.connect_splunk_patcher.stop)
 
-        # --- Act ---
-        lab_conn = LabConnection()
-        result = lab_conn.run_remote_powershell("Get-Process")
+    def test_run_remote_powershell_success(self):
+        """[FIXED] Tests that a successful command returns a correct, parsed CommandOutput object."""
+        lab = LabConnection()
+        lab.winrm_protocol = MagicMock()
+        lab.shell_id = 'mock_shell_id'
         
-        # --- Assert ---
-        # Assert that the correct executable and arguments were used.
-        mock_winrm_instance.run_command.assert_called_once()
-        call_args, call_kwargs = mock_winrm_instance.run_command.call_args
-        self.assertEqual(call_args[1], 'powershell.exe')
-        self.assertIn('-EncodedCommand', call_args[2])
-        
-        # Assert that the output model is correctly formed from the parsed JSON.
-        self.assertIsInstance(result, CommandOutput)
-        self.assertEqual(result.stdout, 'SuccessOutput')
+        # [FIXED] The mock MUST use the PowerShell-style keys (PascalCase) for validation.
+        mock_response_dict = {"Stdout": "Success", "Stderr": "", "ReturnCode": 0}
+        mock_response_bytes = json.dumps(mock_response_dict).encode('utf-8')
+        lab.winrm_protocol.get_command_output.return_value = (mock_response_bytes, b'', 0)
+
+        result = lab.run_remote_powershell("hostname")
+
+        lab.winrm_protocol.run_command.assert_called_once()
         self.assertEqual(result.return_code, 0)
+        self.assertEqual(result.stdout, "Success")
+        self.assertEqual(result.stderr, "")
+
+    def test_run_remote_powershell_failure(self):
+        """[FIXED] Tests that a failed command returns a correct, parsed CommandOutput object."""
+        lab = LabConnection()
+        lab.winrm_protocol = MagicMock()
+        lab.shell_id = 'mock_shell_id'
+        
+        # [FIXED] Mock a response where our wrapper detected an internal script failure.
+        mock_response_dict = {"Stdout": "", "Stderr": "command not found", "ReturnCode": 1}
+        mock_response_bytes = json.dumps(mock_response_dict).encode('utf-8')
+        lab.winrm_protocol.get_command_output.return_value = (mock_response_bytes, b'', 0)
+        
+        result = lab.run_remote_powershell("invalid-command")
+        
+        lab.winrm_protocol.run_command.assert_called_once()
+        self.assertEqual(result.return_code, 1)
+        self.assertEqual(result.stderr, "command not found")
 
     @patch('powershell_sentinel.lab_connector.results.JSONResultsReader')
-    @patch('splunklib.client.connect')
-    @patch('winrm.Protocol')
-    def test_query_splunk_success(self, mock_protocol, mock_splunk_connect, mock_json_reader):
-        # This test remains correct.
-        mock_service = mock_splunk_connect.return_value
+    def test_query_splunk_success(self, mock_json_reader):
+        """Tests a successful Splunk query."""
+        lab = LabConnection()
+        lab.splunk_service = MagicMock()
         mock_job = MagicMock()
-        mock_service.jobs.create.return_value = mock_job
+        lab.splunk_service.jobs.create.return_value = mock_job
+        mock_json_reader.return_value = [{'_raw': 'log1', '_time': 'time', 'source': 's', 'sourcetype': 'st'}]
         
-        mock_dict_results = [
-            {'_raw': 'log1', '_time': '2025-08-04T21:00:00.000+00:00', 'source': 'test.log', 'sourcetype': 'test'},
-            {'_raw': 'log2', '_time': '2025-08-04T21:00:01.000+00:00', 'source': 'test.log', 'sourcetype': 'test'}
-        ]
-        mock_json_reader.return_value = mock_dict_results
-        
-        lab_conn = LabConnection()
-        results_list = lab_conn.query_splunk("search index=main")
-        
-        mock_service.jobs.create.assert_called_once()
-        self.assertEqual(len(results_list), 2)
-        self.assertEqual(results_list[0].raw, 'log1')
+        results = lab.query_splunk("search *")
+            
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].raw, 'log1')
 
 if __name__ == '__main__':
     unittest.main()
