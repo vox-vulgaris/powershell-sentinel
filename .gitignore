@@ -18,3 +18,6 @@ data/interim/delta_logs/*
 
 # Dissertation context files
 dissertation_context.txt
+chapter_3_context.txt
+commit_messages_chap3.txt
+full_commit_messages_no_diff.txt

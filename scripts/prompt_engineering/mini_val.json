@@ -1,0 +1,2638 @@
+[
+  {
+    "prompt": "powershell.exe -EncodedCommand JAB6AGYAdQBxAGcAPQAnAEEAZABkAC0AQwBvAG4AdABlAG4AdAAnADsAJAByAHQAdgBkAGEAPQAnAC0AUABhAHQAaAAnADsAJABoAG0AaQBjAHUAPQAnAEMAOgBcAFUAcwBlAHIAcwBcAFAAdQBiAGwAaQBjAFwARABvAGMAdQBtAGUAbgB0AHMAXABzAGUAbgB0AGkAbgBlAGwAXwB0AGUAcwB0AF8AbABvAGcALgBsAG8AZwAnADsAJABuAHgAawBpAGUAPQAnAC0AVgBhAGwAdQBlACcAOwAkAG0AdwB1AHUAZwA9ACcAIgBsAG8AZwAnADsAJABkAHIAZwBxAHgAPQAnAGUAbgB0AHIAeQAnADsAJAB5AG0AaABiAG4APQAnADEAIgAnADsASQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJAB6AGYAdQBxAGcAKwAnACAAJwArACQAcgB0AHYAZABhACsAJwAgACcAKwAkAGgAbQBpAGMAdQArACcAIAAnACsAJABuAHgAawBpAGUAKwAnACAAJwArACQAbQB3AHUAdQBnACsAJwAgACcAKwAkAGQAcgBnAHEAeAArACcAIAAnACsAJAB5AG0AaABiAG4AKQA=",
+    "response": {
+      "deobfuscated_command": "Add-Content -Path C:\\Users\\Public\\Documents\\sentinel_test_log.log -Value \"log entry 1\"",
+      "analysis": {
+        "intent": [
+          "Local Data Staging"
+        ],
+        "mitre_ttps": [
+          "T1074.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Add-Content -Path C:\\Users\\Public\\Documents\\sentinel_test_log.log -Value log entry 1"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "{ Set-StrictMode -Version 1; $_.OriginInfo }"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwAkAHMAcQBxAHMAcgA9ACcAJwBHACcAKwAnAGUAdAAtAE4AZQAnACsAJwB0AEkAUABBAGQAZAByACcAKwAnAGUAcwBzACcAKwAnACcAJwA7AEkAJwArACcAbgB2AG8AawBlAC0ARQAnACsAJwB4AHAAcgBlAHMAcwAnACsAJwBpAG8AbgAoACQAJwArACcAcwBxAHEAcwByACkAJwApAA==",
+    "response": {
+      "deobfuscated_command": "Get-NetIPAddress",
+      "analysis": {
+        "intent": [
+          "System Network Configuration Discovery"
+        ],
+        "mitre_ttps": [
+          "T1016"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-NetIPAddress"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "function __cmdletization_BindCommonParameters\n{\n    param(\n        $__cmdletization_objectModelWrapper,\n        $myPSBoundParameters\n    )       \n                \n\n        if ($myPSBoundParameters.ContainsKey('CimSession')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['CimSession'].Value = $myPSBoundParameters['CimSession'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('ThrottleLimit')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['ThrottleLimit'].Value = $myPSBoundParameters['ThrottleLimit'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('AsJob')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['AsJob'].Value = $myPSBoundParameters['AsJob'] \n        }\n                    \n\n}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwAkAHIAagAnACsAJwBuAHMAaAA9ACcAJwB0AHIAZQAnACsAJwBlACcAJwA7ACQAYQB4AHcAbAB5ACcAKwAnAD0AJwAnAC8ARgAnACcAOwAkACcAKwAnAGQAbABhAHoAZQA9ACcAJwBDACcAKwAnADoAXABXAGkAJwArACcAbgBkAG8AdwBzAFwAUwB5AHMAdAAnACsAJwBlAG0AMwAyAFwAJwArACcAZAByAGkAJwArACcAdgBlAHIAcwBcAGUAdABjACcAJwA7ACcAKwAnAEkAbgB2AG8AawBlAC0ARQAnACsAJwB4AHAAcgBlACcAKwAnAHMAcwBpAG8AbgAnACsAJwAoACQAcgAnACsAJwBqAG4AcwBoACcAKwAnACsAJwAnACAAJwAnACsAJABhACcAKwAnAHgAdwBsAHkAKwAnACcAIAAnACsAJwAnACcAKwAkAGQAbABhAHoAZQApACcAKQA=",
+    "response": {
+      "deobfuscated_command": "tree /F C:\\Windows\\System32\\drivers\\etc",
+      "analysis": {
+        "intent": [
+          "File and Directory Discovery"
+        ],
+        "mitre_ttps": [
+          "T1083"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command tree /F C:\\Windows\\System32\\drivers\\etc"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "tree /F C:\\Windows\\System32\\drivers\\etc"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JABuAGsAcwBnAHoAPQAnACYAKABbAHMAdAByAGkAbgBnAF0AOgA6AG4AZQB3ACgAJwAnAHcAJwAnACwAJwA7ACQAZAByAHkAcAB6AD0AJwAnACcAaAAnACcALAAnADsAJAB6AHgAaQBpAGoAPQAnACcAJwBvACcAJwAsACcAOwAkAGoAeQB2AHgAaQA9ACcAJwAnAGEAJwAnACwAJwA7ACQAbwBjAGYAbABxAD0AJwAnACcAbQAnACcALAAnADsAJABqAHcAcQBjAGEAPQAnACcAJwBpACcAJwApACkAJwA7ACQAcgBjAG0AbQB0AD0AJwAvAGcAcgBvAHUAcABzACcAOwBJAG4AdgBvAGsAZQAtAEUAeABwAHIAZQBzAHMAaQBvAG4AKAAkAG4AawBzAGcAegArACcAIAAnACsAJABkAHIAeQBwAHoAKwAnACAAJwArACQAegB4AGkAaQBqACsAJwAgACcAKwAkAGoAeQB2AHgAaQArACcAIAAnACsAJABvAGMAZgBsAHEAKwAnACAAJwArACQAagB3AHEAYwBhACsAJwAgACcAKwAkAHIAYwBtAG0AdAApAA==",
+    "response": {
+      "deobfuscated_command": "whoami /groups",
+      "analysis": {
+        "intent": [
+          "Permission Groups Discovery"
+        ],
+        "mitre_ttps": [
+          "T1069"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command whoami /groups"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "whoami /groups"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JABuAGYAYQByAHAAPQAnAGgAbwBzAHQAbgBhAG0AZQAnADsASQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJABuAGYAYQByAHAAKQA=",
+    "response": {
+      "deobfuscated_command": "hostname",
+      "analysis": {
+        "intent": [
+          "System Information Discovery"
+        ],
+        "mitre_ttps": [
+          "T1082"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command hostname"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "hostname"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JgAoAFsAcwB0AHIAaQBuAGcAXQA6ADoAbgBlAHcAKAAnAG4AJwAsACAAJwBiACcALAAgACcAdAAnACwAIAAnAHMAJwAsACAAJwB0ACcALAAgACcAYQAnACwAIAAnAHQAJwApACkAIAAtAEEAIAAxADAALgAyADEAMQAuADUANQAuADEAMQA=",
+    "response": {
+      "deobfuscated_command": "nbtstat -A 10.211.55.11",
+      "analysis": {
+        "intent": [
+          "Remote System Discovery"
+        ],
+        "mitre_ttps": [
+          "T1018"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command nbtstat -A 10.211.55.11"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "nbtstat -A 10.211.55.11"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwAmACgAWwAnACsAJwBzAHQAcgBpAG4AZwBdADoAJwArACcAOgBuAGUAdwAnACsAJwAoACcAJwBkACcAJwAsACAAJwAnAGkAJwArACcAJwAnACwAIAAnACsAJwAnACcAcgAnACcAKQApACAAQwA6AFwAVwAnACsAJwBpAG4AZAAnACsAJwBvAHcAcwAnACkA",
+    "response": {
+      "deobfuscated_command": "dir C:\\Windows",
+      "analysis": {
+        "intent": [
+          "File and Directory Discovery"
+        ],
+        "mitre_ttps": [
+          "T1083"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command dir C:\\Windows"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "dir C:\\Windows"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACcAJwBHAGUAdAAtAEMAbwBtAG0AYQAnACcAKwAnACcAbgBkACAARwBlAHQAJwAnACsAJwAnAC0AUAByAG8AYwBlACcAJwArACcAJwBzAHMAJwAnACkAJwApAA==",
+    "response": {
+      "deobfuscated_command": "Get-Command Get-Process",
+      "analysis": {
+        "intent": [
+          "System Information Discovery",
+          "Software Discovery"
+        ],
+        "mitre_ttps": [
+          "T1082",
+          "T1518"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-Command Get-Process"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-Command Get-Process"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwBJAG4AdgBvAGsAZQAtAEUAJwArACcAeABwAHIAZQBzAHMAaQBvAG4AJwArACcAIAAoACcAJwB7ADAAfQAnACcAIAAtACcAKwAnAGYAIAAnACcAZgBpAG4AZABzACcAKwAnAHQAcgAgAC8AcwAnACsAJwBpACAAcABhAHMAcwB3AG8AJwArACcAcgBkACAAKgAuAHQAeAAnACsAJwB0ACcAJwApACcAKQA=",
+    "response": {
+      "deobfuscated_command": "findstr /si password *.txt",
+      "analysis": {
+        "intent": [
+          "Unsecured Credentials: Credentials In Files"
+        ],
+        "mitre_ttps": [
+          "T1552.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command findstr /si password *.txt"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "findstr /si password *.txt"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAHIAZQBnAC4AZQB4AGUAIAAmACgAWwBzAHQAcgBpAG4AZwBdADoAOgBuAGUAdwAoACcAJwBzACcAJwAsACAAJwAnAGEAJwAnACwAIAAnACcAdgAnACcALAAgACcAJwBlACcAJwApACkAIABoAGsAbABtAFwAcwBlAGMAdQByAGkAdAB5ACAAQwA6AFwAcwBlAGMAdQByAGkAdAB5AC4AcwBhAHYAZQAnACkA",
+    "response": {
+      "deobfuscated_command": "reg.exe save hklm\\security C:\\security.save",
+      "analysis": {
+        "intent": [
+          "OS Credential Dumping: LSA Secrets"
+        ],
+        "mitre_ttps": [
+          "T1003.004"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command reg.exe save hklm\\security C:\\security.save"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "reg.exe save hklm\\security C:\\security.save"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnACQAaQByAGMAawBmAD0AJwAnAEcAZQB0AC0ATgBlAHQASQBQAEEAZABkAHIAZQBzAHMAJwAnADsASQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJABpAHIAYwBrAGYAKQAnACkA",
+    "response": {
+      "deobfuscated_command": "Get-NetIPAddress",
+      "analysis": {
+        "intent": [
+          "System Network Configuration Discovery"
+        ],
+        "mitre_ttps": [
+          "T1016"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-NetIPAddress"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "function __cmdletization_BindCommonParameters\n{\n    param(\n        $__cmdletization_objectModelWrapper,\n        $myPSBoundParameters\n    )       \n                \n\n        if ($myPSBoundParameters.ContainsKey('CimSession')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['CimSession'].Value = $myPSBoundParameters['CimSession'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('ThrottleLimit')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['ThrottleLimit'].Value = $myPSBoundParameters['ThrottleLimit'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('AsJob')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['AsJob'].Value = $myPSBoundParameters['AsJob'] \n        }\n                    \n\n}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "Get-NetNeighbor",
+    "response": {
+      "deobfuscated_command": "Get-NetNeighbor",
+      "analysis": {
+        "intent": [
+          "Remote System Discovery"
+        ],
+        "mitre_ttps": [
+          "T1018"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-NetNeighbor"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "function __cmdletization_BindCommonParameters\n{\n    param(\n        $__cmdletization_objectModelWrapper,\n        $myPSBoundParameters\n    )       \n                \n\n        if ($myPSBoundParameters.ContainsKey('CimSession')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['CimSession'].Value = $myPSBoundParameters['CimSession'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('ThrottleLimit')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['ThrottleLimit'].Value = $myPSBoundParameters['ThrottleLimit'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('AsJob')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['AsJob'].Value = $myPSBoundParameters['AsJob'] \n        }\n                    \n\n}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwAmACgAWwAnACsAJwBzAHQAcgBpAG4AZwBdADoAOgBuACcAKwAnAGUAdwAoACcAJwBuACcAJwAsACAAJwArACcAJwAnAGUAJwAnACwAIAAnACcAdAAnACsAJwAnACcAKQApACAAJgAnACsAJwAoAFsAcwB0AHIAaQBuAGcAXQAnACsAJwA6ADoAbgBlAHcAKAAnACcAJwArACcAdQAnACcALAAgACcAKwAnACcAJwBzACcAJwAsACAAJwAnAGUAJwArACcAJwAnACwAIAAnACsAJwAnACcAcgAnACcAKQApACcAKQA=",
+    "response": {
+      "deobfuscated_command": "net user",
+      "analysis": {
+        "intent": [
+          "Account Discovery"
+        ],
+        "mitre_ttps": [
+          "T1087"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command net user"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "net user"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JABmAGMAZwB4AGYAPQAnAHEAdQBzAGUAcgAnADsASQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJABmAGMAZwB4AGYAKQA=",
+    "response": {
+      "deobfuscated_command": "quser",
+      "analysis": {
+        "intent": [
+          "System Owner/User Discovery"
+        ],
+        "mitre_ttps": [
+          "T1033"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command quser"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "quser"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwBHAGUAdAAtAEMAJwArACcAbwBtAG0AYQAnACsAJwBuAGQAIABHAGUAdAAtACcAKwAnAFAAcgBvAGMAZQBzAHMAJwApAA==",
+    "response": {
+      "deobfuscated_command": "Get-Command Get-Process",
+      "analysis": {
+        "intent": [
+          "System Information Discovery",
+          "Software Discovery"
+        ],
+        "mitre_ttps": [
+          "T1082",
+          "T1518"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-Command Get-Process"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-Command Get-Process"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JABrAHkAcgBvAHgAPQAnAEEAZABkAC0AQwBvAG4AdABlAG4AdAAnADsAJAB2AGgAegB3AHMAPQAnAC0AUABhAHQAaAAnADsAJABzAGQAZQB5AGgAPQAnAEMAOgBcAFUAcwBlAHIAcwBcAFAAdQBiAGwAaQBjAFwARABvAGMAdQBtAGUAbgB0AHMAXABzAGUAbgB0AGkAbgBlAGwAXwB0AGUAcwB0AF8AbABvAGcALgBsAG8AZwAnADsAJABrAHIAeABhAG8APQAnAC0AVgBhAGwAdQBlACcAOwAkAGsAdgBqAHgAYwA9ACcAIgBsAG8AZwAnADsAJABvAHUAZQBvAG4APQAnAGUAbgB0AHIAeQAnADsAJAB1AHkAdQB6AG4APQAnADEAIgAnADsASQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJABrAHkAcgBvAHgAKwAnACAAJwArACQAdgBoAHoAdwBzACsAJwAgACcAKwAkAHMAZABlAHkAaAArACcAIAAnACsAJABrAHIAeABhAG8AKwAnACAAJwArACQAawB2AGoAeABjACsAJwAgACcAKwAkAG8AdQBlAG8AbgArACcAIAAnACsAJAB1AHkAdQB6AG4AKQA=",
+    "response": {
+      "deobfuscated_command": "Add-Content -Path C:\\Users\\Public\\Documents\\sentinel_test_log.log -Value \"log entry 1\"",
+      "analysis": {
+        "intent": [
+          "Local Data Staging"
+        ],
+        "mitre_ttps": [
+          "T1074.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Add-Content -Path C:\\Users\\Public\\Documents\\sentinel_test_log.log -Value log entry 1"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "{ Set-StrictMode -Version 1; $_.OriginInfo }"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnACQAagBxAHUAdgBvAD0AJwAnAHQAYQBzAGsAbABpAHMAdAAnACcAOwAkAGcAYwBkAHMAawA9ACcAJwAvAFMAVgBDACcAJwA7AEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACQAagBxAHUAdgBvACsAJwAnACAAJwAnACsAJABnAGMAZABzAGsAKQAnACkA",
+    "response": {
+      "deobfuscated_command": "tasklist /SVC",
+      "analysis": {
+        "intent": [
+          "Process Discovery",
+          "System Service Discovery"
+        ],
+        "mitre_ttps": [
+          "T1057",
+          "T1007"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command tasklist /SVC"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "tasklist /SVC"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwBuAGUAdAAnACsAJwAgAHUAcwBlAHIAJwApAA==",
+    "response": {
+      "deobfuscated_command": "net user",
+      "analysis": {
+        "intent": [
+          "Account Discovery"
+        ],
+        "mitre_ttps": [
+          "T1087"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command net user"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "net user"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JgAoAFsAcwB0AHIAaQBuAGcAXQA6ADoAbgBlAHcAKAAnAG4AJwAsACAAJwBlACcALAAgACcAdAAnACkAKQAgACYAKABbAHMAdAByAGkAbgBnAF0AOgA6AG4AZQB3ACgAJwBzACcALAAgACcAdAAnACwAIAAnAGEAJwAsACAAJwByACcALAAgACcAdAAnACkAKQA=",
+    "response": {
+      "deobfuscated_command": "net start",
+      "analysis": {
+        "intent": [
+          "System Service Discovery"
+        ],
+        "mitre_ttps": [
+          "T1007"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command net start"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "net start"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JAB4AGUAdgB0AGMAPQAnAEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAnADsAJABkAG0AeQBvAHIAPQAnACgAJwAnAHsAMAB9ACcAJwAnADsAJABiAHgAdQBuAHIAPQAnAC0AZgAnADsAJABzAHoAaAB5AGgAPQAnACcAJwBzAGMAaAB0AGEAcwBrAHMAJwA7ACQAeQBnAG0AaABvAD0AJwAvAGMAcgBlAGEAdABlACcAOwAkAGgAcABlAHUAbgA9ACcALwBzAGMAJwA7ACQAZwB5AGkAaQBpAD0AJwBtAGkAbgB1AHQAZQAnADsAJAB1AHIAYgBqAGEAPQAnAC8AbQBvACcAOwAkAGQAZwBpAGgAbgA9ACcAMQAnADsAJABjAGEAcABkAGUAPQAnAC8AdABuACcAOwAkAGcAagB2AHUAcAA9ACcAIgBNAHkAJwA7ACQAYQB3AHYAdQBuAD0AJwBCAGEAYwBrAGQAbwBvAHIAIgAnADsAJABnAGsAZwB0AG4APQAnAC8AdAByACcAOwAkAGwAaABpAGIAeQA9ACcAIgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAYwBhAGwAYwAuAGUAeABlACIAJwAnACkAJwA7AEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACQAeABlAHYAdABjACsAJwAgACcAKwAkAGQAbQB5AG8AcgArACcAIAAnACsAJABiAHgAdQBuAHIAKwAnACAAJwArACQAcwB6AGgAeQBoACsAJwAgACcAKwAkAHkAZwBtAGgAbwArACcAIAAnACsAJABoAHAAZQB1AG4AKwAnACAAJwArACQAZwB5AGkAaQBpACsAJwAgACcAKwAkAHUAcgBiAGoAYQArACcAIAAnACsAJABkAGcAaQBoAG4AKwAnACAAJwArACQAYwBhAHAAZABlACsAJwAgACcAKwAkAGcAagB2AHUAcAArACcAIAAnACsAJABhAHcAdgB1AG4AKwAnACAAJwArACQAZwBrAGcAdABuACsAJwAgACcAKwAkAGwAaABpAGIAeQApAA==",
+    "response": {
+      "deobfuscated_command": "schtasks /create /sc minute /mo 1 /tn \"My Backdoor\" /tr \"C:\\Windows\\System32\\calc.exe\"",
+      "analysis": {
+        "intent": [
+          "Scheduled Task/Job: Scheduled Task"
+        ],
+        "mitre_ttps": [
+          "T1053.005"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command schtasks /create /sc minute /mo 1 /tn My Backdoor /tr C:\\Windows\\System32\\calc.exe"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "schtasks /create /sc minute /mo 1 /tn My Backdoor /tr C:\\Windows\\System32\\calc.exe"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JABpAHIAbAB3AGUAPQAnAE4AZQB3AC0ASQB0AGUAbQAnADsAJAB6AGwAbwBqAGQAPQAnAC0AUABhAHQAaAAnADsAJABlAHgAbQBsAHEAPQAnAEMAOgBcAFUAcwBlAHIAcwBcAFAAdQBiAGwAaQBjAFwARABvAGMAdQBtAGUAbgB0AHMAXAAnADsAJABwAGwAagB5AGYAPQAnAC0ATgBhAG0AZQAnADsAJABhAGQAagBrAHkAPQAnACIAcwBlAG4AdABpAG4AZQBsAF8AdABlAHMAdABfAGYAaQBsAGUALgB0AHgAdAAiACcAOwAkAHgAYQBpAGoAawA9ACcALQBJAHQAZQBtAFQAeQBwAGUAJwA7ACQAbQBhAG0AZwBlAD0AJwBGAGkAbABlACcAOwBJAG4AdgBvAGsAZQAtAEUAeABwAHIAZQBzAHMAaQBvAG4AKAAkAGkAcgBsAHcAZQArACcAIAAnACsAJAB6AGwAbwBqAGQAKwAnACAAJwArACQAZQB4AG0AbABxACsAJwAgACcAKwAkAHAAbABqAHkAZgArACcAIAAnACsAJABhAGQAagBrAHkAKwAnACAAJwArACQAeABhAGkAagBrACsAJwAgACcAKwAkAG0AYQBtAGcAZQApAA==",
+    "response": {
+      "deobfuscated_command": "New-Item -Path C:\\Users\\Public\\Documents\\ -Name \"sentinel_test_file.txt\" -ItemType File",
+      "analysis": {
+        "intent": [
+          "Local Data Staging"
+        ],
+        "mitre_ttps": [
+          "T1074.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command New-Item -Path C:\\Users\\Public\\Documents\\ -Name sentinel_test_file.txt -ItemType File"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "New-Item -Path C:\\Users\\Public\\Documents\\ -Name sentinel_test_file.txt -ItemType File"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAEEAZABkAC0AQwBvAG4AdABlAG4AdAAgAC0AUABhAHQAaAAgAEMAOgBcAFUAcwBlAHIAcwBcAFAAdQBiAGwAaQBjAFwARABvAGMAdQBtAGUAbgB0AHMAXABzAGUAbgB0AGkAbgBlAGwAXwB0AGUAcwB0AF8AbABvAGcALgBsAG8AZwAgAC0AVgBhAGwAdQBlACAAIgBsAG8AZwAgAGUAbgB0AHIAeQAgADEAIgAnACkA",
+    "response": {
+      "deobfuscated_command": "Add-Content -Path C:\\Users\\Public\\Documents\\sentinel_test_log.log -Value \"log entry 1\"",
+      "analysis": {
+        "intent": [
+          "Local Data Staging"
+        ],
+        "mitre_ttps": [
+          "T1074.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Add-Content -Path C:\\Users\\Public\\Documents\\sentinel_test_log.log -Value log entry 1"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "{ Set-StrictMode -Version 1; $_.OriginInfo }"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAHQAYQBzAGsAbABpAHMAdAAgAC8AVgAnACkA",
+    "response": {
+      "deobfuscated_command": "tasklist /V",
+      "analysis": {
+        "intent": [
+          "Process Discovery"
+        ],
+        "mitre_ttps": [
+          "T1057"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command tasklist /V"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "tasklist /V"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnACYAKABbAHMAdAByAGkAbgBnAF0AOgA6AG4AZQB3ACgAJwAnAHMAJwAnACwAIAAnACcAeQAnACcALAAgACcAJwBzACcAJwAsACAAJwAnAHQAJwAnACwAIAAnACcAZQAnACcALAAgACcAJwBtACcAJwAsACAAJwAnAGkAJwAnACwAIAAnACcAbgAnACcALAAgACcAJwBmACcAJwAsACAAJwAnAG8AJwAnACkAKQAnACkA",
+    "response": {
+      "deobfuscated_command": "systeminfo",
+      "analysis": {
+        "intent": [
+          "System Information Discovery"
+        ],
+        "mitre_ttps": [
+          "T1082"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command systeminfo"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "systeminfo"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JABsAHUAYQBhAHEAPQAnAEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAnADsAJAB2AHYAcgBlAHYAPQAnACgAJwAnAHsAMAB9ACcAJwAnADsAJABsAHYAdwB2AGgAPQAnAC0AZgAnADsAJABhAGgAbQBkAHUAPQAnACcAJwBuAGUAdAAnADsAJAB1AHMAdABvAGIAPQAnAHMAaABhAHIAZQAnACcAKQAnADsASQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJABsAHUAYQBhAHEAKwAnACAAJwArACQAdgB2AHIAZQB2ACsAJwAgACcAKwAkAGwAdgB3AHYAaAArACcAIAAnACsAJABhAGgAbQBkAHUAKwAnACAAJwArACQAdQBzAHQAbwBiACkA",
+    "response": {
+      "deobfuscated_command": "net share",
+      "analysis": {
+        "intent": [
+          "Network Share Discovery"
+        ],
+        "mitre_ttps": [
+          "T1135"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command net share"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "net share"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JABiAHQAYwBmAHUAPQAnAG4AZQB0AHMAdABhAHQAJwA7ACQAYQBsAG0AdwBqAD0AJwAtAGEAbgAnADsASQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJABiAHQAYwBmAHUAKwAnACAAJwArACQAYQBsAG0AdwBqACkA",
+    "response": {
+      "deobfuscated_command": "netstat -an",
+      "analysis": {
+        "intent": [
+          "System Network Connections Discovery",
+          "Network Service Discovery"
+        ],
+        "mitre_ttps": [
+          "T1049",
+          "T1046"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command netstat -an"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "netstat -an"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JABhAHkAbgBwAGIAPQAnAGEAcgBwACcAOwAkAGwAdQBsAG0AeAA9ACcALQBhACcAOwBJAG4AdgBvAGsAZQAtAEUAeABwAHIAZQBzAHMAaQBvAG4AKAAkAGEAeQBuAHAAYgArACcAIAAnACsAJABsAHUAbABtAHgAKQA=",
+    "response": {
+      "deobfuscated_command": "arp -a",
+      "analysis": {
+        "intent": [
+          "Remote System Discovery"
+        ],
+        "mitre_ttps": [
+          "T1018"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command arp -a"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "arp -a"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JAB5AHgAaQBsAHYAPQAnAEcAZQB0AC0ATQBvAGQAdQBsAGUAJwA7AEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACQAeQB4AGkAbAB2ACkA",
+    "response": {
+      "deobfuscated_command": "Get-Module",
+      "analysis": {
+        "intent": [
+          "Software Discovery"
+        ],
+        "mitre_ttps": [
+          "T1518"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-Module"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-Module"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAG4AZQB0ACAAbABvAGMAYQBsAGcAcgBvAHUAcAAnACkA",
+    "response": {
+      "deobfuscated_command": "net localgroup",
+      "analysis": {
+        "intent": [
+          "Local Groups"
+        ],
+        "mitre_ttps": [
+          "T1069.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command net localgroup"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "net localgroup"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JABwAHoAYgBwAGsAPQAnAEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACcAJwBzAGMALgAnACcAKwAnACcAZQB4AGUAJwA7ACQAeABkAHEAagB5AD0AJwBxAHUAZQByACcAJwArACcAJwB5ACcAJwApACcAOwBJAG4AdgBvAGsAZQAtAEUAeABwAHIAZQBzAHMAaQBvAG4AKAAkAHAAegBiAHAAawArACcAIAAnACsAJAB4AGQAcQBqAHkAKQA=",
+    "response": {
+      "deobfuscated_command": "sc.exe query",
+      "analysis": {
+        "intent": [
+          "System Service Discovery"
+        ],
+        "mitre_ttps": [
+          "T1007"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command sc.exe query"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "sc.exe query"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JgAoAFsAcwB0AHIAaQBuAGcAXQA6ADoAbgBlAHcAKAAnAGQAJwAsACAAJwBpACcALAAgACcAcgAnACkAKQAgAEMAOgBcAFcAaQBuAGQAbwB3AHMA",
+    "response": {
+      "deobfuscated_command": "dir C:\\Windows",
+      "analysis": {
+        "intent": [
+          "File and Directory Discovery"
+        ],
+        "mitre_ttps": [
+          "T1083"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command dir C:\\Windows"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "dir C:\\Windows"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwBJAG4AdgBvAGsAJwArACcAZQAtAEUAeABwAHIAZQBzAHMAJwArACcAaQBvAG4AIAAnACsAJwAoACcAJwB7ADAAfQAnACcAJwArACcAIAAtAGYAIAAnACcARwBlAHQALQBOACcAKwAnAGUAdABOAGUAaQBnAGgAYgAnACsAJwBvAHIAJwAnACkAJwApAA==",
+    "response": {
+      "deobfuscated_command": "Get-NetNeighbor",
+      "analysis": {
+        "intent": [
+          "Remote System Discovery"
+        ],
+        "mitre_ttps": [
+          "T1018"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-NetNeighbor"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "function __cmdletization_BindCommonParameters\n{\n    param(\n        $__cmdletization_objectModelWrapper,\n        $myPSBoundParameters\n    )       \n                \n\n        if ($myPSBoundParameters.ContainsKey('CimSession')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['CimSession'].Value = $myPSBoundParameters['CimSession'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('ThrottleLimit')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['ThrottleLimit'].Value = $myPSBoundParameters['ThrottleLimit'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('AsJob')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['AsJob'].Value = $myPSBoundParameters['AsJob'] \n        }\n                    \n\n}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JABxAGwAdABoAHoAPQAnAG4AZQB0AHMAdABhAHQAJwA7ACQAawB3AGsAYwB0AD0AJwAtAGEAbgAnADsASQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJABxAGwAdABoAHoAKwAnACAAJwArACQAawB3AGsAYwB0ACkA",
+    "response": {
+      "deobfuscated_command": "netstat -an",
+      "analysis": {
+        "intent": [
+          "System Network Connections Discovery",
+          "Network Service Discovery"
+        ],
+        "mitre_ttps": [
+          "T1049",
+          "T1046"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command netstat -an"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "netstat -an"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnACQAdABtAGQAbwBlAD0AJwAnAE4AZQB3AC0ASQB0AGUAbQAnACcAOwAkAHcAcwBqAGUAZAA9ACcAJwAtAFAAYQB0AGgAJwAnADsAJABxAGoAYgBkAGsAPQAnACcAQwA6AFwAVQBzAGUAcgBzAFwAUAB1AGIAbABpAGMAXABEAG8AYwB1AG0AZQBuAHQAcwBcACcAJwA7ACQAegBxAGQAcgBqAD0AJwAnAC0ATgBhAG0AZQAnACcAOwAkAHcAdgB2AGMAbAA9ACcAJwAiAHMAZQBuAHQAaQBuAGUAbABfAHQAZQBzAHQAXwBmAGkAbABlAC4AdAB4AHQAIgAnACcAOwAkAHIAagBxAGkAcgA9ACcAJwAtAEkAdABlAG0AVAB5AHAAZQAnACcAOwAkAHgAegBmAHoAagA9ACcAJwBGAGkAbABlACcAJwA7AEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACQAdABtAGQAbwBlACsAJwAnACAAJwAnACsAJAB3AHMAagBlAGQAKwAnACcAIAAnACcAKwAkAHEAagBiAGQAawArACcAJwAgACcAJwArACQAegBxAGQAcgBqACsAJwAnACAAJwAnACsAJAB3AHYAdgBjAGwAKwAnACcAIAAnACcAKwAkAHIAagBxAGkAcgArACcAJwAgACcAJwArACQAeAB6AGYAegBqACkAJwApAA==",
+    "response": {
+      "deobfuscated_command": "New-Item -Path C:\\Users\\Public\\Documents\\ -Name \"sentinel_test_file.txt\" -ItemType File",
+      "analysis": {
+        "intent": [
+          "Local Data Staging"
+        ],
+        "mitre_ttps": [
+          "T1074.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command New-Item -Path C:\\Users\\Public\\Documents\\ -Name sentinel_test_file.txt -ItemType File"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "New-Item -Path C:\\Users\\Public\\Documents\\ -Name sentinel_test_file.txt -ItemType File"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwAmACgAWwBzAHQAcgBpAG4AZwAnACsAJwBdADoAOgBuAGUAJwArACcAdwAoACcAJwBzACcAJwAsACcAKwAnACAAJwAnAGMAJwAnACwAIAAnACcAJwArACcAaAAnACcALAAgACcAKwAnACcAJwB0ACcAJwAsACAAJwAnACcAKwAnAGEAJwAnACwAIAAnACcAcwAnACcAJwArACcALAAgACcAJwBrACcAJwAsACAAJwAnAHMAJwArACcAJwAnACkAKQAgAC8AcQB1ACcAKwAnAGUAcgB5ACcAKQA=",
+    "response": {
+      "deobfuscated_command": "schtasks /query",
+      "analysis": {
+        "intent": [
+          "Scheduled Task/Job: Scheduled Task"
+        ],
+        "mitre_ttps": [
+          "T1053.005"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command schtasks /query"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "schtasks /query"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACcAJwB0AGEAcwBrAGwAaQBzAHQAIAAnACcAKwAnACcALwBTAFYAQwAnACcAKQAnACkA",
+    "response": {
+      "deobfuscated_command": "tasklist /SVC",
+      "analysis": {
+        "intent": [
+          "Process Discovery",
+          "System Service Discovery"
+        ],
+        "mitre_ttps": [
+          "T1057",
+          "T1007"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command tasklist /SVC"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "tasklist /SVC"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAGYAaQBuAGQAcwB0AHIAIAAvAHMAaQAgAHAAYQBzAHMAdwBvAHIAZAAgACoALgB0AHgAdAAnACkA",
+    "response": {
+      "deobfuscated_command": "findstr /si password *.txt",
+      "analysis": {
+        "intent": [
+          "Unsecured Credentials: Credentials In Files"
+        ],
+        "mitre_ttps": [
+          "T1552.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command findstr /si password *.txt"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "findstr /si password *.txt"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACcAJwBHAGUAdAAtAEwAJwAnACsAJwAnAG8AYwBhAGwAVQBzAGUAcgAnACcAKQAnACkA",
+    "response": {
+      "deobfuscated_command": "Get-LocalUser",
+      "analysis": {
+        "intent": [
+          "Account Discovery: Local Account"
+        ],
+        "mitre_ttps": [
+          "T1087.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-LocalUser"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-LocalUser"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwBuAGUAdABzACcAKwAnAGgAIAB3AGwAJwArACcAYQBuACAAcwBoAG8AdwAgAGEAJwArACcAbABsACcAKQA=",
+    "response": {
+      "deobfuscated_command": "netsh wlan show all",
+      "analysis": {
+        "intent": [
+          "Wi-Fi Discovery"
+        ],
+        "mitre_ttps": [
+          "T1016.002"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command netsh wlan show all"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "netsh wlan show all"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JABkAHYAaQBzAGoAPQAnAGEAcgBwACcAOwAkAGIAaABmAHQAbwA9ACcALQBhACcAOwBJAG4AdgBvAGsAZQAtAEUAeABwAHIAZQBzAHMAaQBvAG4AKAAkAGQAdgBpAHMAagArACcAIAAnACsAJABiAGgAZgB0AG8AKQA=",
+    "response": {
+      "deobfuscated_command": "arp -a",
+      "analysis": {
+        "intent": [
+          "Remote System Discovery"
+        ],
+        "mitre_ttps": [
+          "T1018"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command arp -a"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "arp -a"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JAB0AGcAZwBoAHUAPQAnAEEAZABkAC0AQwBvAG4AdABlAG4AdAAnADsAJAB1AGQAbQBoAGIAPQAnAC0AUABhAHQAaAAnADsAJABrAHIAagBxAGEAPQAnAEMAOgBcAFUAcwBlAHIAcwBcAFAAdQBiAGwAaQBjAFwARABvAGMAdQBtAGUAbgB0AHMAXABzAGUAbgB0AGkAbgBlAGwAXwB0AGUAcwB0AF8AbABvAGcALgBsAG8AZwAnADsAJAB6AGgAeQB6AGwAPQAnAC0AVgBhAGwAdQBlACcAOwAkAHcAawBkAG4AbAA9ACcAIgBsAG8AZwAnADsAJABqAGMAZgBjAGUAPQAnAGUAbgB0AHIAeQAnADsAJABiAGcAcAB5AGcAPQAnADEAIgAnADsASQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJAB0AGcAZwBoAHUAKwAnACAAJwArACQAdQBkAG0AaABiACsAJwAgACcAKwAkAGsAcgBqAHEAYQArACcAIAAnACsAJAB6AGgAeQB6AGwAKwAnACAAJwArACQAdwBrAGQAbgBsACsAJwAgACcAKwAkAGoAYwBmAGMAZQArACcAIAAnACsAJABiAGcAcAB5AGcAKQA=",
+    "response": {
+      "deobfuscated_command": "Add-Content -Path C:\\Users\\Public\\Documents\\sentinel_test_log.log -Value \"log entry 1\"",
+      "analysis": {
+        "intent": [
+          "Local Data Staging"
+        ],
+        "mitre_ttps": [
+          "T1074.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Add-Content -Path C:\\Users\\Public\\Documents\\sentinel_test_log.log -Value log entry 1"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "{ Set-StrictMode -Version 1; $_.OriginInfo }"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwBHAGUAdAAtAEMAaABpAGwAZABJACcAKwAnAHQAZQBtACAAJwArACcARQBuAHYAOgAnACkA",
+    "response": {
+      "deobfuscated_command": "Get-ChildItem Env:",
+      "analysis": {
+        "intent": [
+          "System Information Discovery",
+          "System Owner/User Discovery"
+        ],
+        "mitre_ttps": [
+          "T1082",
+          "T1033"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-ChildItem Env:"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-ChildItem Env:"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAHQAcgBlAGUAIAAvAEYAIABDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAZAByAGkAdgBlAHIAcwBcAGUAdABjACcAKQA=",
+    "response": {
+      "deobfuscated_command": "tree /F C:\\Windows\\System32\\drivers\\etc",
+      "analysis": {
+        "intent": [
+          "File and Directory Discovery"
+        ],
+        "mitre_ttps": [
+          "T1083"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command tree /F C:\\Windows\\System32\\drivers\\etc"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "tree /F C:\\Windows\\System32\\drivers\\etc"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAEcAZQB0AC0ATABvAGMAYQBsAFUAcwBlAHIAJwApAA==",
+    "response": {
+      "deobfuscated_command": "Get-LocalUser",
+      "analysis": {
+        "intent": [
+          "Account Discovery: Local Account"
+        ],
+        "mitre_ttps": [
+          "T1087.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-LocalUser"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-LocalUser"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAEcAZQB0AC0AQwBoAGkAbABkAEkAdABlAG0AIABFAG4AdgA6ACcAKQA=",
+    "response": {
+      "deobfuscated_command": "Get-ChildItem Env:",
+      "analysis": {
+        "intent": [
+          "System Information Discovery",
+          "System Owner/User Discovery"
+        ],
+        "mitre_ttps": [
+          "T1082",
+          "T1033"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-ChildItem Env:"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-ChildItem Env:"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAHIAZQBnAC4AZQB4AGUAIAAmACgAWwBzAHQAcgBpAG4AZwBdADoAOgBuAGUAdwAoACcAJwBzACcAJwAsACAAJwAnAGEAJwAnACwAIAAnACcAdgAnACcALAAgACcAJwBlACcAJwApACkAIABoAGsAbABtAFwAcwBhAG0AIABDADoAXABzAGEAbQAuAHMAYQB2AGUAJwApAA==",
+    "response": {
+      "deobfuscated_command": "reg.exe save hklm\\sam C:\\sam.save",
+      "analysis": {
+        "intent": [
+          "OS Credential Dumping: Security Account Manager"
+        ],
+        "mitre_ttps": [
+          "T1003.002"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command reg.exe save hklm\\sam C:\\sam.save"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "reg.exe save hklm\\sam C:\\sam.save"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwBxAHUAcwBlAHIAJwApAA==",
+    "response": {
+      "deobfuscated_command": "quser",
+      "analysis": {
+        "intent": [
+          "System Owner/User Discovery"
+        ],
+        "mitre_ttps": [
+          "T1033"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command quser"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "quser"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwBzAGMALgBlAHgAZQAnACsAJwAgAGMAcgBlAGEAdABlACcAKwAnACAAIgBNAHkAJwArACcAIABCAGEAYwBrAGQAbwBvAHIAJwArACcAIABTAGUAcgB2AGkAYwBlACIAJwArACcAIABiAGkAbgBQAGEAdAAnACsAJwBoAD0AIAAiAEMAOgAnACsAJwBcAFcAaQBuAGQAbwB3ACcAKwAnAHMAXABTAHkAcwB0AGUAbQAnACsAJwAzADIAXABjAGEAbABjAC4AZQAnACsAJwB4AGUAIgAnACkA",
+    "response": {
+      "deobfuscated_command": "sc.exe create \"My Backdoor Service\" binPath= \"C:\\Windows\\System32\\calc.exe\"",
+      "analysis": {
+        "intent": [
+          "Create or Modify System Process: Windows Service"
+        ],
+        "mitre_ttps": [
+          "T1543.003"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command sc.exe create My Backdoor Service binPath= C:\\Windows\\System32\\calc.exe"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "sc.exe create My Backdoor Service binPath= C:\\Windows\\System32\\calc.exe"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JAB4AGUAYwBhAHcAPQAnAEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAnADsAJABpAHMAYwBpAGcAPQAnACgAJwAnAHsAMAB9ACcAJwAnADsAJABrAHEAbQByAHkAPQAnAC0AZgAnADsAJABqAGIAYgBzAHEAPQAnACcAJwBzAGMAaAB0AGEAcwBrAHMAJwA7ACQAagB5AG8AcgBwAD0AJwAvAGMAcgBlAGEAdABlACcAOwAkAHgAbwBhAHgAbwA9ACcALwBzAGMAJwA7ACQAaABiAGEAbABuAD0AJwBtAGkAbgB1AHQAZQAnADsAJAB2AG8AbgBqAGwAPQAnAC8AbQBvACcAOwAkAGgAcQBmAGsAYgA9ACcAMQAnADsAJABwAHUAdQBiAGoAPQAnAC8AdABuACcAOwAkAHgAbABnAGEAdAA9ACcAIgBNAHkAJwA7ACQAcABjAGQAaQBkAD0AJwBCAGEAYwBrAGQAbwBvAHIAIgAnADsAJAB6AGQAaQBoAGUAPQAnAC8AdAByACcAOwAkAHkAbABjAG8AaQA9ACcAIgBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAYwBhAGwAYwAuAGUAeABlACIAJwAnACkAJwA7AEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACQAeABlAGMAYQB3ACsAJwAgACcAKwAkAGkAcwBjAGkAZwArACcAIAAnACsAJABrAHEAbQByAHkAKwAnACAAJwArACQAagBiAGIAcwBxACsAJwAgACcAKwAkAGoAeQBvAHIAcAArACcAIAAnACsAJAB4AG8AYQB4AG8AKwAnACAAJwArACQAaABiAGEAbABuACsAJwAgACcAKwAkAHYAbwBuAGoAbAArACcAIAAnACsAJABoAHEAZgBrAGIAKwAnACAAJwArACQAcAB1AHUAYgBqACsAJwAgACcAKwAkAHgAbABnAGEAdAArACcAIAAnACsAJABwAGMAZABpAGQAKwAnACAAJwArACQAegBkAGkAaABlACsAJwAgACcAKwAkAHkAbABjAG8AaQApAA==",
+    "response": {
+      "deobfuscated_command": "schtasks /create /sc minute /mo 1 /tn \"My Backdoor\" /tr \"C:\\Windows\\System32\\calc.exe\"",
+      "analysis": {
+        "intent": [
+          "Scheduled Task/Job: Scheduled Task"
+        ],
+        "mitre_ttps": [
+          "T1053.005"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command schtasks /create /sc minute /mo 1 /tn My Backdoor /tr C:\\Windows\\System32\\calc.exe"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "schtasks /create /sc minute /mo 1 /tn My Backdoor /tr C:\\Windows\\System32\\calc.exe"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAEcAZQB0AC0AQwBvAG4AdABlAG4AdAAgAEMAOgBcAFcAaQBuAGQAbwB3AHMAXABTAHkAcwB0AGUAbQAzADIAXABkAHIAaQB2AGUAcgBzAFwAZQB0AGMAXABoAG8AcwB0AHMAJwApAA==",
+    "response": {
+      "deobfuscated_command": "Get-Content C:\\Windows\\System32\\drivers\\etc\\hosts",
+      "analysis": {
+        "intent": [
+          "File and Directory Discovery",
+          "System Network Configuration Discovery"
+        ],
+        "mitre_ttps": [
+          "T1083",
+          "T1016"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-Content C:\\Windows\\System32\\drivers\\etc\\hosts"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-Content C:\\Windows\\System32\\drivers\\etc\\hosts"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand cwBjAC4AZQB4AGUAIAAmACgAWwBzAHQAcgBpAG4AZwBdADoAOgBuAGUAdwAoACcAcQAnACwAIAAnAHUAJwAsACAAJwBlACcALAAgACcAcgAnACwAIAAnAHkAJwApACkA",
+    "response": {
+      "deobfuscated_command": "sc.exe query",
+      "analysis": {
+        "intent": [
+          "System Service Discovery"
+        ],
+        "mitre_ttps": [
+          "T1007"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command sc.exe query"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "sc.exe query"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JgAoAFsAcwB0AHIAaQBuAGcAXQA6ADoAbgBlAHcAKAAnAGYAJwAsACAAJwBpACcALAAgACcAbgAnACwAIAAnAGQAJwAsACAAJwBzACcALAAgACcAdAAnACwAIAAnAHIAJwApACkAIAAiADEAMgA3AC4AMAAuADAALgAxACIAIABDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAZAByAGkAdgBlAHIAcwBcAGUAdABjAFwAaABvAHMAdABzAA==",
+    "response": {
+      "deobfuscated_command": "findstr \"127.0.0.1\" C:\\Windows\\System32\\drivers\\etc\\hosts",
+      "analysis": {
+        "intent": [
+          "File and Directory Discovery",
+          "System Network Configuration Discovery"
+        ],
+        "mitre_ttps": [
+          "T1083",
+          "T1016"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command findstr 127.0.0.1 C:\\Windows\\System32\\drivers\\etc\\hosts"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "findstr 127.0.0.1 C:\\Windows\\System32\\drivers\\etc\\hosts"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JAB0AGEAYgBsAHEAPQAnAEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACcAJwBuAHMAbABvACcAJwArACcAJwBvAGsAdQBwACcAOwAkAGUAeAB2AHAAZgA9ACcAdwB3AHcAJwAnACsAJwAnAC4AZwBvAG8AJwAnACsAJwAnAGcAbABlAC4AYwAnACcAKwAnACcAbwBtACcAJwApACcAOwBJAG4AdgBvAGsAZQAtAEUAeABwAHIAZQBzAHMAaQBvAG4AKAAkAHQAYQBiAGwAcQArACcAIAAnACsAJABlAHgAdgBwAGYAKQA=",
+    "response": {
+      "deobfuscated_command": "nslookup www.google.com",
+      "analysis": {
+        "intent": [
+          "Internet Connection Discovery"
+        ],
+        "mitre_ttps": [
+          "T1016.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command nslookup www.google.com"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "nslookup www.google.com"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JABsAGMAcABiAGsAPQAnAEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACcAJwBzAGMAaAB0AGEAcwAnACcAKwAnACcAawBzACcAOwAkAHIAZgBzAGsAdAA9ACcALwBxAHUAZQByAHkAJwAnACkAJwA7AEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACQAbABjAHAAYgBrACsAJwAgACcAKwAkAHIAZgBzAGsAdAApAA==",
+    "response": {
+      "deobfuscated_command": "schtasks /query",
+      "analysis": {
+        "intent": [
+          "Scheduled Task/Job: Scheduled Task"
+        ],
+        "mitre_ttps": [
+          "T1053.005"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command schtasks /query"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "schtasks /query"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwBHAGUAdAAtACcAKwAnAE4AZQB0AFIAbwB1AHQAJwArACcAZQAnACkA",
+    "response": {
+      "deobfuscated_command": "Get-NetRoute",
+      "analysis": {
+        "intent": [
+          "System Network Configuration Discovery"
+        ],
+        "mitre_ttps": [
+          "T1016"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-NetRoute"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "function __cmdletization_BindCommonParameters\n{\n    param(\n        $__cmdletization_objectModelWrapper,\n        $myPSBoundParameters\n    )       \n                \n\n        if ($myPSBoundParameters.ContainsKey('CimSession')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['CimSession'].Value = $myPSBoundParameters['CimSession'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('ThrottleLimit')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['ThrottleLimit'].Value = $myPSBoundParameters['ThrottleLimit'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('AsJob')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['AsJob'].Value = $myPSBoundParameters['AsJob'] \n        }\n                    \n\n}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwByAGUAZwAuAGUAeABlACAAJwArACcAJgAoAFsAcwB0AHIAaQBuAGcAXQAnACsAJwA6ADoAbgBlAHcAKAAnACcAcwAnACcALAAnACsAJwAgACcAJwBhACcAJwAsACAAJwAnACcAKwAnAHYAJwAnACwAIAAnACcAZQAnACcAKQAnACsAJwApACAAaABrAGwAbQBcACcAKwAnAHMAYQBtACAAQwA6ACcAKwAnAFwAcwBhAG0ALgBzACcAKwAnAGEAdgBlACcAKQA=",
+    "response": {
+      "deobfuscated_command": "reg.exe save hklm\\sam C:\\sam.save",
+      "analysis": {
+        "intent": [
+          "OS Credential Dumping: Security Account Manager"
+        ],
+        "mitre_ttps": [
+          "T1003.002"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command reg.exe save hklm\\sam C:\\sam.save"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "reg.exe save hklm\\sam C:\\sam.save"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACcAJwBuAGIAdABzAHQAJwAnACsAJwAnAGEAdAAgAC0AQQAgADEAMAAuACcAJwArACcAJwAyADEAMQAuADUANQAuADEAMQAnACcAKQAnACkA",
+    "response": {
+      "deobfuscated_command": "nbtstat -A 10.211.55.11",
+      "analysis": {
+        "intent": [
+          "Remote System Discovery"
+        ],
+        "mitre_ttps": [
+          "T1018"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command nbtstat -A 10.211.55.11"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "nbtstat -A 10.211.55.11"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAEcAZQB0AC0ATABvAGMAYQBsAEcAcgBvAHUAcAAnACkA",
+    "response": {
+      "deobfuscated_command": "Get-LocalGroup",
+      "analysis": {
+        "intent": [
+          "Local Groups"
+        ],
+        "mitre_ttps": [
+          "T1069.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-LocalGroup"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-LocalGroup"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwAkAGkAZwBjAGYAdgA9ACcAJwAnACsAJwBHAGUAdAAtAEgAbwAnACsAJwB0AEYAaQB4ACcAJwA7AEkAbgAnACsAJwB2AG8AawBlAC0ARQB4ACcAKwAnAHAAcgBlAHMAcwBpAG8AbgAnACsAJwAoACQAaQBnAGMAZgB2ACkAJwApAA==",
+    "response": {
+      "deobfuscated_command": "Get-HotFix",
+      "analysis": {
+        "intent": [
+          "System Information Discovery"
+        ],
+        "mitre_ttps": [
+          "T1082"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-HotFix"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-HotFix"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACcAJwBoAG8AcwB0AG4AYQBtAGUAJwAnACkAJwApAA==",
+    "response": {
+      "deobfuscated_command": "hostname",
+      "analysis": {
+        "intent": [
+          "System Information Discovery"
+        ],
+        "mitre_ttps": [
+          "T1082"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command hostname"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "hostname"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAEcAZQB0AC0ATgBlAHQAUgBvAHUAdABlACcAKQA=",
+    "response": {
+      "deobfuscated_command": "Get-NetRoute",
+      "analysis": {
+        "intent": [
+          "System Network Configuration Discovery"
+        ],
+        "mitre_ttps": [
+          "T1016"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-NetRoute"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "function __cmdletization_BindCommonParameters\n{\n    param(\n        $__cmdletization_objectModelWrapper,\n        $myPSBoundParameters\n    )       \n                \n\n        if ($myPSBoundParameters.ContainsKey('CimSession')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['CimSession'].Value = $myPSBoundParameters['CimSession'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('ThrottleLimit')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['ThrottleLimit'].Value = $myPSBoundParameters['ThrottleLimit'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('AsJob')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['AsJob'].Value = $myPSBoundParameters['AsJob'] \n        }\n                    \n\n}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JAB2AGYAdABmAHYAPQAnAHMAYwBoAHQAYQBzAGsAcwAnADsAJABoAHgAdgBpAGQAPQAnAC8AcQB1AGUAcgB5ACcAOwBJAG4AdgBvAGsAZQAtAEUAeABwAHIAZQBzAHMAaQBvAG4AKAAkAHYAZgB0AGYAdgArACcAIAAnACsAJABoAHgAdgBpAGQAKQA=",
+    "response": {
+      "deobfuscated_command": "schtasks /query",
+      "analysis": {
+        "intent": [
+          "Scheduled Task/Job: Scheduled Task"
+        ],
+        "mitre_ttps": [
+          "T1053.005"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command schtasks /query"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "schtasks /query"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwAmACgAWwBzAHQAcgBpAG4AJwArACcAZwBdADoAOgBuACcAKwAnAGUAdwAoACcAJwBuACcAJwAsACAAJwAnACcAKwAnAGUAJwAnACwAIAAnACcAJwArACcAdAAnACcALAAgACcAKwAnACcAJwBzACcAJwAsACcAKwAnACAAJwAnAGgAJwAnACkAKQAgACYAJwArACcAKABbAHMAdAByACcAKwAnAGkAbgBnAF0AOgAnACsAJwA6AG4AZQB3ACgAJwAnAHcAJwAnACcAKwAnACwAIAAnACcAbAAnACcALAAgACcAKwAnACcAJwBhACcAJwAsACAAJwAnACcAKwAnAG4AJwAnACkAKQAgACYAJwArACcAKABbAHMAJwArACcAdAByAGkAbgBnAF0AOgA6ACcAKwAnAG4AZQB3ACgAJwArACcAJwAnAHMAJwAnACwAJwArACcAIAAnACcAaAAnACcALAAgACcAJwBvACcAJwAsACcAKwAnACAAJwAnAHcAJwAnACkAJwArACcAKQAgACYAKABbAHMAdAByACcAKwAnAGkAbgBnAF0AOgA6AG4AZQB3ACgAJwArACcAJwAnAGEAJwAnACwAJwArACcAIAAnACcAbAAnACcALAAgACcAKwAnACcAJwBsACcAJwApACkAJwApAA==",
+    "response": {
+      "deobfuscated_command": "netsh wlan show all",
+      "analysis": {
+        "intent": [
+          "Wi-Fi Discovery"
+        ],
+        "mitre_ttps": [
+          "T1016.002"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command netsh wlan show all"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "netsh wlan show all"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JABiAGEAbgBsAHgAPQAnAHQAcgBlAGUAJwA7ACQAdAB6AGkAawBzAD0AJwAvAEYAJwA7ACQAegBpAG8AdgBmAD0AJwBDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAZAByAGkAdgBlAHIAcwBcAGUAdABjACcAOwBJAG4AdgBvAGsAZQAtAEUAeABwAHIAZQBzAHMAaQBvAG4AKAAkAGIAYQBuAGwAeAArACcAIAAnACsAJAB0AHoAaQBrAHMAKwAnACAAJwArACQAegBpAG8AdgBmACkA",
+    "response": {
+      "deobfuscated_command": "tree /F C:\\Windows\\System32\\drivers\\etc",
+      "analysis": {
+        "intent": [
+          "File and Directory Discovery"
+        ],
+        "mitre_ttps": [
+          "T1083"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command tree /F C:\\Windows\\System32\\drivers\\etc"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "tree /F C:\\Windows\\System32\\drivers\\etc"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAEEAZABkAC0AQwBvAG4AdABlAG4AdAAgAC0AUABhAHQAaAAgAEMAOgBcAFUAcwBlAHIAcwBcAFAAdQBiAGwAaQBjAFwARABvAGMAdQBtAGUAbgB0AHMAXABzAGUAbgB0AGkAbgBlAGwAXwB0AGUAcwB0AF8AbABvAGcALgBsAG8AZwAgAC0AVgBhAGwAdQBlACAAIgBsAG8AZwAgAGUAbgB0AHIAeQAgADEAIgAnACkA",
+    "response": {
+      "deobfuscated_command": "Add-Content -Path C:\\Users\\Public\\Documents\\sentinel_test_log.log -Value \"log entry 1\"",
+      "analysis": {
+        "intent": [
+          "Local Data Staging"
+        ],
+        "mitre_ttps": [
+          "T1074.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Add-Content -Path C:\\Users\\Public\\Documents\\sentinel_test_log.log -Value log entry 1"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "{ Set-StrictMode -Version 1; $_.OriginInfo }"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnACYAKABbAHMAdAByAGkAbgBnAF0AOgA6AG4AZQB3ACgAJwAnAG4AJwAnACwAIAAnACcAZQAnACcALAAgACcAJwB0ACcAJwAsACAAJwAnAHMAJwAnACwAIAAnACcAaAAnACcAKQApACAAJgAoAFsAcwB0AHIAaQBuAGcAXQA6ADoAbgBlAHcAKAAnACcAYQAnACcALAAgACcAJwBkACcAJwAsACAAJwAnAHYAJwAnACwAIAAnACcAZgAnACcALAAgACcAJwBpACcAJwAsACAAJwAnAHIAJwAnACwAIAAnACcAZQAnACcALAAgACcAJwB3ACcAJwAsACAAJwAnAGEAJwAnACwAIAAnACcAbAAnACcALAAgACcAJwBsACcAJwApACkAIAAmACgAWwBzAHQAcgBpAG4AZwBdADoAOgBuAGUAdwAoACcAJwBzACcAJwAsACAAJwAnAGgAJwAnACwAIAAnACcAbwAnACcALAAgACcAJwB3ACcAJwApACkAIAAmACgAWwBzAHQAcgBpAG4AZwBdADoAOgBuAGUAdwAoACcAJwBhACcAJwAsACAAJwAnAGwAJwAnACwAIAAnACcAbAAnACcALAAgACcAJwBwACcAJwAsACAAJwAnAHIAJwAnACwAIAAnACcAbwAnACcALAAgACcAJwBmACcAJwAsACAAJwAnAGkAJwAnACwAIAAnACcAbAAnACcALAAgACcAJwBlACcAJwAsACAAJwAnAHMAJwAnACkAKQAnACkA",
+    "response": {
+      "deobfuscated_command": "netsh advfirewall show allprofiles",
+      "analysis": {
+        "intent": [
+          "Security Software Discovery"
+        ],
+        "mitre_ttps": [
+          "T1518.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command netsh advfirewall show allprofiles"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "netsh advfirewall show allprofiles"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwAkAHcAeQBkAHMAYgA9ACcAJwAnACsAJwBuAGUAdABzAGgAJwAnACcAKwAnADsAJAB4AGYAdAB5AGMAPQAnACcAJwArACcAYQBkAHYAZgBpACcAKwAnAHIAZQB3AGEAbABsACcAJwAnACsAJwA7ACQAZQBrAG8AdQB1ACcAKwAnAD0AJwAnAHMAaABvAHcAJwAnADsAJAB4ACcAKwAnAG8AbQB6AG0APQAnACcAYQAnACsAJwBsAGwAcAAnACsAJwByAG8AZgBpACcAKwAnAGwAZQBzACcAJwA7AEkAbgB2AG8AJwArACcAawBlAC0ARQB4AHAAcgBlAHMAJwArACcAcwBpAG8AbgAoACQAdwAnACsAJwB5AGQAcwAnACsAJwBiACsAJwAnACAAJwArACcAJwAnACsAJAB4AGYAdAB5ACcAKwAnAGMAKwAnACcAIAAnACcAKwAnACsAJwAkAGUAawBvAHUAdQArACcAJwAgACcAJwAnACsAJwArACQAeABvACcAKwAnAG0AegBtACkAJwApAA==",
+    "response": {
+      "deobfuscated_command": "netsh advfirewall show allprofiles",
+      "analysis": {
+        "intent": [
+          "Security Software Discovery"
+        ],
+        "mitre_ttps": [
+          "T1518.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command netsh advfirewall show allprofiles"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "netsh advfirewall show allprofiles"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JABrAHMAaABpAHYAPQAnAEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACcAJwBzAHkAcwB0AGUAbQBpAG4AZgBvACcAJwApACcAOwBJAG4AdgBvAGsAZQAtAEUAeABwAHIAZQBzAHMAaQBvAG4AKAAkAGsAcwBoAGkAdgApAA==",
+    "response": {
+      "deobfuscated_command": "systeminfo",
+      "analysis": {
+        "intent": [
+          "System Information Discovery"
+        ],
+        "mitre_ttps": [
+          "T1082"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command systeminfo"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "systeminfo"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JABtAGMAcQBmAGoAPQAnAG4AZQB0AHMAaAAnADsAJAB2AG4AbwBhAHYAPQAnAGEAZAB2AGYAaQByAGUAdwBhAGwAbAAnADsAJABrAGsAegB5AG4APQAnAHMAaABvAHcAJwA7ACQAZwBtAGsAeQBsAD0AJwBhAGwAbABwAHIAbwBmAGkAbABlAHMAJwA7AEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACQAbQBjAHEAZgBqACsAJwAgACcAKwAkAHYAbgBvAGEAdgArACcAIAAnACsAJABrAGsAegB5AG4AKwAnACAAJwArACQAZwBtAGsAeQBsACkA",
+    "response": {
+      "deobfuscated_command": "netsh advfirewall show allprofiles",
+      "analysis": {
+        "intent": [
+          "Security Software Discovery"
+        ],
+        "mitre_ttps": [
+          "T1518.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command netsh advfirewall show allprofiles"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "netsh advfirewall show allprofiles"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwBHAGUAdAAtAEMAbwAnACsAJwBtAG0AYQBuAGQAIABHAGUAdAAtACcAKwAnAFAAcgBvAGMAZQBzAHMAJwApAA==",
+    "response": {
+      "deobfuscated_command": "Get-Command Get-Process",
+      "analysis": {
+        "intent": [
+          "System Information Discovery",
+          "Software Discovery"
+        ],
+        "mitre_ttps": [
+          "T1082",
+          "T1518"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-Command Get-Process"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-Command Get-Process"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JgAoAFsAcwB0AHIAaQBuAGcAXQA6ADoAbgBlAHcAKAAnAHQAJwAsACAAJwBhACcALAAgACcAcwAnACwAIAAnAGsAJwAsACAAJwBsACcALAAgACcAaQAnACwAIAAnAHMAJwAsACAAJwB0ACcAKQApACAALwBTAFYAQwA=",
+    "response": {
+      "deobfuscated_command": "tasklist /SVC",
+      "analysis": {
+        "intent": [
+          "Process Discovery",
+          "System Service Discovery"
+        ],
+        "mitre_ttps": [
+          "T1057",
+          "T1007"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command tasklist /SVC"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "tasklist /SVC"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JAB0AHoAYQBzAHcAPQAnAEcAZQB0AC0ATABvAGMAYQBsAFUAcwBlAHIAJwA7AEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACQAdAB6AGEAcwB3ACkA",
+    "response": {
+      "deobfuscated_command": "Get-LocalUser",
+      "analysis": {
+        "intent": [
+          "Account Discovery: Local Account"
+        ],
+        "mitre_ttps": [
+          "T1087.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-LocalUser"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-LocalUser"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnACYAKABbAHMAdAByAGkAbgBnAF0AOgA6AG4AZQB3ACgAJwAnAHcAJwAnACwAIAAnACcAaAAnACcALAAgACcAJwBvACcAJwAsACAAJwAnAGEAJwAnACwAIAAnACcAbQAnACcALAAgACcAJwBpACcAJwApACkAIAAvAGcAcgBvAHUAcABzACcAKQA=",
+    "response": {
+      "deobfuscated_command": "whoami /groups",
+      "analysis": {
+        "intent": [
+          "Permission Groups Discovery"
+        ],
+        "mitre_ttps": [
+          "T1069"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command whoami /groups"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "whoami /groups"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwBJAG4AdgBvAGsAZQAtAEUAeABwACcAKwAnAHIAZQBzAHMAaQBvAG4AIAAoACcAJwAnACsAJwB7ADAAfQAnACcAIAAtAGYAIAAnACcAJwArACcARwBlAHQALQBOACcAKwAnAGUAdABJAFAAJwArACcAQQBkAGQAcgBlAHMAcwAnACcAKQAnACkA",
+    "response": {
+      "deobfuscated_command": "Get-NetIPAddress",
+      "analysis": {
+        "intent": [
+          "System Network Configuration Discovery"
+        ],
+        "mitre_ttps": [
+          "T1016"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-NetIPAddress"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "function __cmdletization_BindCommonParameters\n{\n    param(\n        $__cmdletization_objectModelWrapper,\n        $myPSBoundParameters\n    )       \n                \n\n        if ($myPSBoundParameters.ContainsKey('CimSession')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['CimSession'].Value = $myPSBoundParameters['CimSession'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('ThrottleLimit')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['ThrottleLimit'].Value = $myPSBoundParameters['ThrottleLimit'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('AsJob')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['AsJob'].Value = $myPSBoundParameters['AsJob'] \n        }\n                    \n\n}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwAmACgAWwBzAHQAJwArACcAcgBpAG4AJwArACcAZwBdADoAOgBuACcAKwAnAGUAdwAoACcAKwAnACcAJwBhACcAJwAsACAAJwAnAHIAJwAnACwAIAAnACsAJwAnACcAcAAnACcAKQApACAALQBhACcAKQA=",
+    "response": {
+      "deobfuscated_command": "arp -a",
+      "analysis": {
+        "intent": [
+          "Remote System Discovery"
+        ],
+        "mitre_ttps": [
+          "T1018"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command arp -a"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "arp -a"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwBJAG4AdgAnACsAJwBvAGsAZQAtACcAKwAnAEUAeABwAHIAZQBzAHMAJwArACcAaQBvAG4AIAAoACcAJwB7ADAAfQAnACcAJwArACcAIAAtAGYAIAAnACcAbgBlACcAKwAnAHQAIABzAGgAYQByAGUAJwAnACkAJwApAA==",
+    "response": {
+      "deobfuscated_command": "net share",
+      "analysis": {
+        "intent": [
+          "Network Share Discovery"
+        ],
+        "mitre_ttps": [
+          "T1135"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command net share"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "net share"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwBHAGUAdAAtAEMAbwBtAG0AJwArACcAYQBuAGQAIABHAGUAdAAnACsAJwAtAFAAcgBvACcAKwAnAGMAZQBzAHMAJwApAA==",
+    "response": {
+      "deobfuscated_command": "Get-Command Get-Process",
+      "analysis": {
+        "intent": [
+          "System Information Discovery",
+          "Software Discovery"
+        ],
+        "mitre_ttps": [
+          "T1082",
+          "T1518"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-Command Get-Process"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-Command Get-Process"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnACQAegBuAHoAdABqAD0AJwAnAG4AZQB0ACcAJwA7ACQAdgBiAHYAdAB2AD0AJwAnAHMAdABhAHIAdAAnACcAOwBJAG4AdgBvAGsAZQAtAEUAeABwAHIAZQBzAHMAaQBvAG4AKAAkAHoAbgB6AHQAagArACcAJwAgACcAJwArACQAdgBiAHYAdAB2ACkAJwApAA==",
+    "response": {
+      "deobfuscated_command": "net start",
+      "analysis": {
+        "intent": [
+          "System Service Discovery"
+        ],
+        "mitre_ttps": [
+          "T1007"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command net start"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "net start"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAGYAaQBuAGQAcwB0AHIAIAAiADEAMgA3AC4AMAAuADAALgAxACIAIABDADoAXABXAGkAbgBkAG8AdwBzAFwAUwB5AHMAdABlAG0AMwAyAFwAZAByAGkAdgBlAHIAcwBcAGUAdABjAFwAaABvAHMAdABzACcAKQA=",
+    "response": {
+      "deobfuscated_command": "findstr \"127.0.0.1\" C:\\Windows\\System32\\drivers\\etc\\hosts",
+      "analysis": {
+        "intent": [
+          "File and Directory Discovery",
+          "System Network Configuration Discovery"
+        ],
+        "mitre_ttps": [
+          "T1083",
+          "T1016"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command findstr 127.0.0.1 C:\\Windows\\System32\\drivers\\etc\\hosts"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "findstr 127.0.0.1 C:\\Windows\\System32\\drivers\\etc\\hosts"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JABrAGQAbQBhAG0APQAnAEcAZQB0AC0AUwBlAHIAdgBpAGMAZQAnADsASQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJABrAGQAbQBhAG0AKQA=",
+    "response": {
+      "deobfuscated_command": "Get-Service",
+      "analysis": {
+        "intent": [
+          "System Service Discovery"
+        ],
+        "mitre_ttps": [
+          "T1007"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-Service"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-Service"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwBuAGUAdABzAGgAIAB3AGwAJwArACcAYQBuACAAcwBoAG8AdwAgACcAKwAnAGEAbABsACcAKQA=",
+    "response": {
+      "deobfuscated_command": "netsh wlan show all",
+      "analysis": {
+        "intent": [
+          "Wi-Fi Discovery"
+        ],
+        "mitre_ttps": [
+          "T1016.002"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command netsh wlan show all"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "netsh wlan show all"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JABxAGIAcwByAHkAPQAnAEcAZQB0AC0ATgBlAHQASQBQAEEAZABkAHIAZQBzAHMAJwA7AEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACQAcQBiAHMAcgB5ACkA",
+    "response": {
+      "deobfuscated_command": "Get-NetIPAddress",
+      "analysis": {
+        "intent": [
+          "System Network Configuration Discovery"
+        ],
+        "mitre_ttps": [
+          "T1016"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-NetIPAddress"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "function __cmdletization_BindCommonParameters\n{\n    param(\n        $__cmdletization_objectModelWrapper,\n        $myPSBoundParameters\n    )       \n                \n\n        if ($myPSBoundParameters.ContainsKey('CimSession')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['CimSession'].Value = $myPSBoundParameters['CimSession'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('ThrottleLimit')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['ThrottleLimit'].Value = $myPSBoundParameters['ThrottleLimit'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('AsJob')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['AsJob'].Value = $myPSBoundParameters['AsJob'] \n        }\n                    \n\n}"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand RwBlAHQALQBMAG8AYwBhAGwAVQBzAGUAcgA=",
+    "response": {
+      "deobfuscated_command": "Get-LocalUser",
+      "analysis": {
+        "intent": [
+          "Account Discovery: Local Account"
+        ],
+        "mitre_ttps": [
+          "T1087.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-LocalUser"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-LocalUser"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwBkAGkAcgAgAEMAOgAnACsAJwBcAFcAaQAnACsAJwBuAGQAbwB3AHMAJwApAA==",
+    "response": {
+      "deobfuscated_command": "dir C:\\Windows",
+      "analysis": {
+        "intent": [
+          "File and Directory Discovery"
+        ],
+        "mitre_ttps": [
+          "T1083"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command dir C:\\Windows"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "dir C:\\Windows"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "Get-ChildItem Env:",
+    "response": {
+      "deobfuscated_command": "Get-ChildItem Env:",
+      "analysis": {
+        "intent": [
+          "System Information Discovery",
+          "System Owner/User Discovery"
+        ],
+        "mitre_ttps": [
+          "T1082",
+          "T1033"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-ChildItem Env:"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-ChildItem Env:"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAHQAYQBzAGsAbABpAHMAdAAgAC8AUwBWAEMAJwApAA==",
+    "response": {
+      "deobfuscated_command": "tasklist /SVC",
+      "analysis": {
+        "intent": [
+          "Process Discovery",
+          "System Service Discovery"
+        ],
+        "mitre_ttps": [
+          "T1057",
+          "T1007"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command tasklist /SVC"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "tasklist /SVC"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwAkAHIAZgB3ACcAKwAnAGoAegA9ACcAJwBzAGMAaAAnACsAJwB0AGEAcwBrAHMAJwAnADsAJABqACcAKwAnAGYAYwB4ACcAKwAnAHcAPQAnACcALwBjACcAKwAnAHIAZQBhAHQAZQAnACcAOwAkACcAKwAnAGcAdgBsAHgAawAnACsAJwA9ACcAJwAvAHMAYwAnACcAJwArACcAOwAkAGIAdgBpAHIAZwAnACsAJwA9ACcAJwBtAGkAbgB1ACcAKwAnAHQAZQAnACcAOwAkAGoAbwB5AHoAJwArACcAdAA9ACcAJwAvAG0AbwAnACsAJwAnACcAOwAkAHMAbgB1AHQAJwArACcAZAA9ACcAJwAxACcAJwA7ACQAJwArACcAbwBsAHMAbAB4AD0AJwAnAC8AJwArACcAdABuACcAJwA7ACQAeAB5AGIAdQAnACsAJwB6AD0AJwAnACIATQB5ACcAJwA7ACQAYQAnACsAJwB2AGkAdQB3AD0AJwAnAEIAYQAnACsAJwBjAGsAZABvAG8AcgAiACcAJwAnACsAJwA7ACQAcgBqAGwAdwBlAD0AJwArACcAJwAnAC8AdAByACcAJwA7ACQAJwArACcAaQBjAGMAcABxAD0AJwAnACIAQwA6ACcAKwAnAFwAVwBpAG4AZABvAHcAcwBcACcAKwAnAFMAeQBzAHQAJwArACcAZQBtADMAMgBcACcAKwAnAGMAYQBsAGMALgBlAHgAZQAnACsAJwAiACcAJwA7AEkAbgB2AG8AawAnACsAJwBlAC0ARQAnACsAJwB4AHAAcgBlAHMAJwArACcAcwBpAG8AbgAoACQAcgAnACsAJwBmAHcAagB6ACsAJwAnACcAKwAnACAAJwAnACsAJABqAGYAYwAnACsAJwB4AHcAKwAnACcAIAAnACsAJwAnACcAKwAkAGcAdgBsAHgAawArACcAKwAnACcAJwAgACcAJwArACQAYgB2AGkAcgBnACcAKwAnACsAJwAnACAAJwAnACsAJABqACcAKwAnAG8AeQB6AHQAKwAnACcAIAAnACsAJwAnACcAKwAkAHMAbgAnACsAJwB1AHQAZAArACcAJwAgACcAJwAnACsAJwArACQAbwBsAHMAbAB4ACsAJwAnACAAJwArACcAJwAnACsAJAAnACsAJwB4AHkAYgB1AHoAKwAnACcAIAAnACsAJwAnACcAKwAkAGEAdgBpAHUAdwAnACsAJwArACcAJwAgACcAKwAnACcAJwArACQAcgBqAGwAdwAnACsAJwBlACsAJwAnACAAJwAnACsAJAAnACsAJwBpAGMAYwBwAHEAJwArACcAKQAnACkA",
+    "response": {
+      "deobfuscated_command": "schtasks /create /sc minute /mo 1 /tn \"My Backdoor\" /tr \"C:\\Windows\\System32\\calc.exe\"",
+      "analysis": {
+        "intent": [
+          "Scheduled Task/Job: Scheduled Task"
+        ],
+        "mitre_ttps": [
+          "T1053.005"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command schtasks /create /sc minute /mo 1 /tn My Backdoor /tr C:\\Windows\\System32\\calc.exe"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "schtasks /create /sc minute /mo 1 /tn My Backdoor /tr C:\\Windows\\System32\\calc.exe"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAEcAZQB0AC0ASABvAHQARgBpAHgAJwApAA==",
+    "response": {
+      "deobfuscated_command": "Get-HotFix",
+      "analysis": {
+        "intent": [
+          "System Information Discovery"
+        ],
+        "mitre_ttps": [
+          "T1082"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-HotFix"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-HotFix"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JABiAGgAcQBsAHgAPQAnAG4AZQB0ACcAOwAkAGoAdABvAGIAcQA9ACcAcwB0AGEAcgB0ACcAOwBJAG4AdgBvAGsAZQAtAEUAeABwAHIAZQBzAHMAaQBvAG4AKAAkAGIAaABxAGwAeAArACcAIAAnACsAJABqAHQAbwBiAHEAKQA=",
+    "response": {
+      "deobfuscated_command": "net start",
+      "analysis": {
+        "intent": [
+          "System Service Discovery"
+        ],
+        "mitre_ttps": [
+          "T1007"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command net start"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "net start"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwBHAGUAdAAtAEMAbwBuAHQAZQBuACcAKwAnAHQAIABDACcAKwAnADoAXABXAGkAbgBkAG8AdwBzACcAKwAnAFwAUwB5AHMAdABlAG0AJwArACcAMwAyAFwAZAByAGkAdgBlAHIAJwArACcAcwBcAGUAdABjAFwAaABvAHMAdAAnACsAJwBzACcAKQA=",
+    "response": {
+      "deobfuscated_command": "Get-Content C:\\Windows\\System32\\drivers\\etc\\hosts",
+      "analysis": {
+        "intent": [
+          "File and Directory Discovery",
+          "System Network Configuration Discovery"
+        ],
+        "mitre_ttps": [
+          "T1083",
+          "T1016"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-Content C:\\Windows\\System32\\drivers\\etc\\hosts"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-Content C:\\Windows\\System32\\drivers\\etc\\hosts"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwBzAGMAaAB0AGEAcwBrACcAKwAnAHMAIAAvAGMAcgAnACsAJwBlAGEAdABlACAALwBzACcAKwAnAGMAIABtAGkAbgB1AHQAZQAgAC8AJwArACcAbQBvACAAJwArACcAMQAgAC8AdABuACAAIgBNAHkAJwArACcAIABCAGEAYwBrAGQAbwBvAHIAIgAnACsAJwAgAC8AdAByACcAKwAnACAAIgBDADoAXABXAGkAbgBkAG8AJwArACcAdwBzAFwAUwB5AHMAdABlACcAKwAnAG0AMwAyAFwAJwArACcAYwBhAGwAYwAuAGUAeABlACcAKwAnACIAJwApAA==",
+    "response": {
+      "deobfuscated_command": "schtasks /create /sc minute /mo 1 /tn \"My Backdoor\" /tr \"C:\\Windows\\System32\\calc.exe\"",
+      "analysis": {
+        "intent": [
+          "Scheduled Task/Job: Scheduled Task"
+        ],
+        "mitre_ttps": [
+          "T1053.005"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command schtasks /create /sc minute /mo 1 /tn My Backdoor /tr C:\\Windows\\System32\\calc.exe"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "schtasks /create /sc minute /mo 1 /tn My Backdoor /tr C:\\Windows\\System32\\calc.exe"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAEcAZQB0AC0AUwBlAHIAdgBpAGMAZQAnACkA",
+    "response": {
+      "deobfuscated_command": "Get-Service",
+      "analysis": {
+        "intent": [
+          "System Service Discovery"
+        ],
+        "mitre_ttps": [
+          "T1007"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-Service"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-Service"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJwBhAHIAcAAgAC0AYQAnACkA",
+    "response": {
+      "deobfuscated_command": "arp -a",
+      "analysis": {
+        "intent": [
+          "Remote System Discovery"
+        ],
+        "mitre_ttps": [
+          "T1018"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command arp -a"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "arp -a"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAGYAaQBuAGQAcwB0AHIAIAAvAHMAaQAgAHAAYQBzAHMAdwBvAHIAZAAgACoALgB0AHgAdAAnACkA",
+    "response": {
+      "deobfuscated_command": "findstr /si password *.txt",
+      "analysis": {
+        "intent": [
+          "Unsecured Credentials: Credentials In Files"
+        ],
+        "mitre_ttps": [
+          "T1552.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command findstr /si password *.txt"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "findstr /si password *.txt"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JAB3AGEAYwBwAHEAPQAnAEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACcAJwB3AGgAbwBhAG0AaQAnACcAKQAnADsASQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJAB3AGEAYwBwAHEAKQA=",
+    "response": {
+      "deobfuscated_command": "whoami",
+      "analysis": {
+        "intent": [
+          "System Owner/User Discovery"
+        ],
+        "mitre_ttps": [
+          "T1033"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command whoami"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "whoami"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnAHMAYwBoAHQAYQBzAGsAcwAgAC8AYwByAGUAYQB0AGUAIAAvAHMAYwAgAG0AaQBuAHUAdABlACAALwBtAG8AIAAxACAALwB0AG4AIAAiAE0AeQAgAEIAYQBjAGsAZABvAG8AcgAiACAALwB0AHIAIAAiAEMAOgBcAFcAaQBuAGQAbwB3AHMAXABTAHkAcwB0AGUAbQAzADIAXABjAGEAbABjAC4AZQB4AGUAIgAnACkA",
+    "response": {
+      "deobfuscated_command": "schtasks /create /sc minute /mo 1 /tn \"My Backdoor\" /tr \"C:\\Windows\\System32\\calc.exe\"",
+      "analysis": {
+        "intent": [
+          "Scheduled Task/Job: Scheduled Task"
+        ],
+        "mitre_ttps": [
+          "T1053.005"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command schtasks /create /sc minute /mo 1 /tn My Backdoor /tr C:\\Windows\\System32\\calc.exe"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "schtasks /create /sc minute /mo 1 /tn My Backdoor /tr C:\\Windows\\System32\\calc.exe"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JgAoAFsAcwB0AHIAaQBuAGcAXQA6ADoAbgBlAHcAKAAnAHcAJwAsACAAJwBoACcALAAgACcAbwAnACwAIAAnAGEAJwAsACAAJwBtACcALAAgACcAaQAnACkAKQAgAC8AZwByAG8AdQBwAHMA",
+    "response": {
+      "deobfuscated_command": "whoami /groups",
+      "analysis": {
+        "intent": [
+          "Permission Groups Discovery"
+        ],
+        "mitre_ttps": [
+          "T1069"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command whoami /groups"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "whoami /groups"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand JABuAGMAeQBnAHQAPQAnAEcAZQB0AC0AQwBvAG4AdABlAG4AdAAnADsAJABtAHEAegBsAHAAPQAnAEMAOgBcAFcAaQBuAGQAbwB3AHMAXABTAHkAcwB0AGUAbQAzADIAXABkAHIAaQB2AGUAcgBzAFwAZQB0AGMAXABoAG8AcwB0AHMAJwA7AEkAbgB2AG8AawBlAC0ARQB4AHAAcgBlAHMAcwBpAG8AbgAoACQAbgBjAHkAZwB0ACsAJwAgACcAKwAkAG0AcQB6AGwAcAApAA==",
+    "response": {
+      "deobfuscated_command": "Get-Content C:\\Windows\\System32\\drivers\\etc\\hosts",
+      "analysis": {
+        "intent": [
+          "File and Directory Discovery",
+          "System Network Configuration Discovery"
+        ],
+        "mitre_ttps": [
+          "T1083",
+          "T1016"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-Content C:\\Windows\\System32\\drivers\\etc\\hosts"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-Content C:\\Windows\\System32\\drivers\\etc\\hosts"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "powershell.exe -EncodedCommand SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAAKAAnAHsAMAB9ACcAIAAtAGYAIAAnACQAdwB2AG0AZQB3AD0AJwAnAEcAZQB0AC0ATABvAGMAYQBsAFUAcwBlAHIAJwAnADsASQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACgAJAB3AHYAbQBlAHcAKQAnACkA",
+    "response": {
+      "deobfuscated_command": "Get-LocalUser",
+      "analysis": {
+        "intent": [
+          "Account Discovery: Local Account"
+        ],
+        "mitre_ttps": [
+          "T1087.001"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-LocalUser"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "Get-LocalUser"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "prompt": "Get-NetNeighbor",
+    "response": {
+      "deobfuscated_command": "Get-NetNeighbor",
+      "analysis": {
+        "intent": [
+          "Remote System Discovery"
+        ],
+        "mitre_ttps": [
+          "T1018"
+        ],
+        "telemetry_signature": [
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4103,
+            "details": "powershell.exe -Command Get-NetNeighbor"
+          },
+          {
+            "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+            "event_id": 4104,
+            "details": "function __cmdletization_BindCommonParameters\n{\n    param(\n        $__cmdletization_objectModelWrapper,\n        $myPSBoundParameters\n    )       \n                \n\n        if ($myPSBoundParameters.ContainsKey('CimSession')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['CimSession'].Value = $myPSBoundParameters['CimSession'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('ThrottleLimit')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['ThrottleLimit'].Value = $myPSBoundParameters['ThrottleLimit'] \n        }\n                    \n\n        if ($myPSBoundParameters.ContainsKey('AsJob')) { \n            $__cmdletization_objectModelWrapper.PSObject.Properties['AsJob'].Value = $myPSBoundParameters['AsJob'] \n        }\n                    \n\n}"
+          }
+        ]
+      }
+    }
+  }
+]
