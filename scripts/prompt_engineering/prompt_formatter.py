@@ -7,6 +7,7 @@
 
 import json
 import argparse
+import os
 
 # Define the candidate prompt templates
 PROMPT_CANDIDATES = {
@@ -20,6 +21,9 @@ def format_for_prompts(input_path, output_dir):
     with open(input_path, 'r') as f:
         dataset = json.load(f)
 
+    # Ensure the output directory exists
+    os.makedirs(output_dir, exist_ok=True)
+
     for key, template in PROMPT_CANDIDATES.items():
         formatted_data = []
         for pair in dataset:
@@ -28,12 +32,16 @@ def format_for_prompts(input_path, output_dir):
             full_text = template.format(input_command=pair['prompt']) + response_str
             formatted_data.append({"text": full_text})
         
-        output_path = f"{output_dir}/dataset_prompt_{key}.json"
+        output_path = os.path.join(output_dir, f"dataset_prompt_{key}.json")
         with open(output_path, 'w') as f:
             json.dump(formatted_data, f, indent=2)
         print(f"Created {output_path}")
 
 if __name__ == '__main__':
-    # Usage: python prompt_formatter.py --input data/sets/test_set_v0.json --output scripts/prompt_engineering/
-    # (Use a small subset like the test set for this experiment)
-    pass
+    parser = argparse.ArgumentParser(description="Format a dataset with multiple prompt templates.")
+    parser.add_argument("--input", type=str, required=True, help="Path to the input JSON dataset.")
+    # This line has been corrected
+    parser.add_argument("--output_dir", type=str, required=True, help="Directory to save the formatted files.")
+    
+    args = parser.parse_args()
+    format_for_prompts(args.input, args.output_dir)

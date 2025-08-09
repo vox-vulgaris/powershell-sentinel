@@ -11,80 +11,73 @@
 # 3. Must shuffle the dataset randomly before splitting.
 # 4. Must serialize the Pydantic models back to JSON and save the two new datasets.
 
+# scripts/partition_dataset.py (Consolidated Version)
 import json
 import random
-import argparse
 import os
-from typing import List
-from pydantic import ValidationError
+import argparse
 
-from rich.console import Console
-
-from powershell_sentinel.models import TrainingPair
-
-def partition(input_path: str, output_dir: str, train_ratio: float):
+def partition_and_create_subsets(input_path: str, output_dir_sets: str, output_dir_mini: str):
     """
-    Shuffles and splits a dataset into training and test sets after validating its schema.
-
-    Args:
-        input_path: Path to the full generated dataset JSON file.
-        output_dir: Directory to save the train and test files.
-        train_ratio: The proportion of the data to allocate to the training set (e.g., 0.9 for 90%).
+    Loads, shuffles, and partitions the full dataset into train/test sets.
+    Also creates mini-train/mini-val subsets from the clean training data.
     """
-    console = Console()
-    
-    # 1. Load and Validate the full dataset
-    try:
-        console.print(f"Loading and validating full dataset from [cyan]{input_path}[/]...")
-        with open(input_path, 'r') as f:
-            full_dataset_raw = json.load(f)
-        
-        full_dataset: List[TrainingPair] = [TrainingPair.model_validate(item) for item in full_dataset_raw]
-        console.print(f"[green]Successfully validated {len(full_dataset)} training pairs.[/green]")
+    print("--- Starting Master Data Partitioning ---")
 
-    except (FileNotFoundError, json.JSONDecodeError, ValidationError) as e:
-        console.print(f"[bold red]FATAL: Could not load or validate the dataset: {e}[/bold red]")
-        return
+    # --- Create Directories ---
+    os.makedirs(output_dir_sets, exist_ok=True)
+    os.makedirs(output_dir_mini, exist_ok=True)
 
-    # 2. Shuffle the dataset
-    console.print("Shuffling dataset...")
+    # --- Load and Shuffle the Full Dataset ---
+    print(f"Loading full dataset from {input_path}...")
+    with open(input_path, 'r', encoding='utf-8') as f:
+        full_dataset = json.load(f)
+
+    print("Shuffling the dataset thoroughly...")
     random.shuffle(full_dataset)
 
-    # 3. Split the data
-    split_index = int(len(full_dataset) * train_ratio)
-    
-    training_set: List[TrainingPair] = full_dataset[:split_index]
-    test_set: List[TrainingPair] = full_dataset[split_index:]
+    # --- Perform the 90/10 Split ---
+    split_index = int(len(full_dataset) * 0.9)
+    train_data = full_dataset[:split_index]
+    test_data = full_dataset[split_index:]
+    print(f"Split complete: {len(train_data)} training samples, {len(test_data)} test samples.")
 
-    console.print(f"Dataset split: [blue]{len(training_set)}[/blue] training samples, [yellow]{len(test_set)}[/yellow] test samples.")
+    # --- Save the Main Train/Test Sets ---
+    train_set_path = os.path.join(output_dir_sets, 'training_set_v0.json')
+    test_set_path = os.path.join(output_dir_sets, 'test_set_v0.json')
 
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    print(f"Saving full training set to {train_set_path}...")
+    with open(train_set_path, 'w', encoding='utf-8') as f:
+        json.dump(train_data, f)
 
-    train_path = os.path.join(output_dir, "training_set_v0.json")
-    test_path = os.path.join(output_dir, "test_set_v0.json")
+    print(f"Saving test set to {test_set_path}...")
+    with open(test_set_path, 'w', encoding='utf-8') as f:
+        json.dump(test_data, f)
 
-    # 4. Serialize and Save the partitioned datasets
-    try:
-        console.print(f"Saving training set to [cyan]{train_path}[/]...")
-        with open(train_path, 'w') as f:
-            # `model_dump` converts Pydantic models back to dictionaries for JSON serialization
-            json.dump([pair.model_dump(mode='json') for pair in training_set], f, indent=2)
+    # --- Create the Mini Datasets from the NEW Training Data ---
+    print("Creating mini datasets from the new, clean training data...")
+    mini_train_data = train_data[:900]
+    mini_val_data = train_data[900:1000]
+    print(f"Mini-split complete: {len(mini_train_data)} mini-train samples, {len(mini_val_data)} validation samples.")
 
-        console.print(f"Saving test set to [cyan]{test_path}[/]...")
-        with open(test_path, 'w') as f:
-            json.dump([pair.model_dump(mode='json') for pair in test_set], f, indent=2)
-        
-        console.print("\n[bold green]Partitioning complete.[/bold green]")
-    except IOError as e:
-        console.print(f"[bold red]FATAL: Failed to write output files: {e}[/bold red]")
+    # --- Save the Mini Datasets ---
+    mini_train_path = os.path.join(output_dir_mini, 'mini_train.json')
+    mini_val_path = os.path.join(output_dir_mini, 'mini_val.json')
 
+    print(f"Saving mini training set to {mini_train_path}...")
+    with open(mini_train_path, 'w', encoding='utf-8') as f:
+        json.dump(mini_train_data, f, indent=2)
+
+    print(f"Saving mini validation set to {mini_val_path}...")
+    with open(mini_val_path, 'w', encoding='utf-8') as f:
+        json.dump(mini_val_data, f, indent=2)
+
+    print("\n--- Master Partitioning Complete. All datasets are now clean. ---")
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Split dataset into training and test sets.")
+    parser = argparse.ArgumentParser(description="Partition dataset and create subsets for experiments.")
     parser.add_argument("--input", default="data/generated/training_data_v0.json", help="Path to the full dataset.")
-    parser.add_argument("--output_dir", default="data/sets", help="Directory to save the split files.")
-    parser.add_argument("--ratio", type=float, default=0.9, help="Training set ratio (e.g., 0.9 for 90%).")
+    parser.add_argument("--output_dir_sets", default="data/sets", help="Directory to save the main train/test files.")
+    parser.add_argument("--output_dir_mini", default="scripts/prompt_engineering", help="Directory to save the mini train/val files.")
     args = parser.parse_args()
-
-    partition(args.input, args.output_dir, args.ratio)
+    partition_and_create_subsets(args.input, args.output_dir_sets, args.output_dir_mini)
