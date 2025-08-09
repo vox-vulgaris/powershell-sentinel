@@ -11,6 +11,7 @@ powershell_sentinel/train.py
 powershell_sentinel.egg-info/PKG-INFO
 powershell_sentinel.egg-info/SOURCES.txt
 powershell_sentinel.egg-info/dependency_links.txt
+powershell_sentinel.egg-info/entry_points.txt
 powershell_sentinel.egg-info/top_level.txt
 powershell_sentinel/modules/__init__.py
 powershell_sentinel/modules/obfuscator.py
@@ -18,8 +19,19 @@ powershell_sentinel/modules/recommendation_engine.py
 powershell_sentinel/modules/rule_formatter.py
 powershell_sentinel/modules/snapshot_differ.py
 powershell_sentinel/modules/statistics_calculator.py
+powershell_sentinel/utils/__init__.py
+powershell_sentinel/utils/metrics.py
+scripts/__init__.py
+scripts/analyze_dataset_uniqueness.py
+scripts/deduplicate_dataset.py
+scripts/evaluate_pipeline.py
+scripts/generate_dissertation_visuals.py
+scripts/partition_dataset.py
+scripts/verify_lab_config.py
 tests/__init__.py
 tests/test_cli_logic.py
+tests/test_data_preparation_scripts.py
+tests/test_evaluate_pipeline.py
 tests/test_integration_blackhole.py
 tests/test_integration_high_volume.py
 tests/test_integration_lab_connection.py
@@ -30,7 +42,6 @@ tests/test_metadata_accuracy.py
 tests/test_mlops_metrics.py
 tests/test_primitives_manager_workflow.py
 tests/test_recommender_accuracy.py
-tests/test_verify_lab_config.py
 tests/modules/__init__.py
 tests/modules/test_obfuscator.py
 tests/modules/test_recommendation_engine.py

@@ -1,0 +1,3 @@
+[console_scripts]
+sentinel-manager = powershell_sentinel.primitives_manager:main
+sentinel-toolkit = powershell_sentinel.sentinel_toolkit:app

@@ -24,8 +24,8 @@ from collections import Counter
 # randomized obfuscation engine when filtered by the strict Execution Validation
 # quality gate. This script provides the empirical evidence for that discussion.
 #
-# LLM RE-CONTEXTUALIZATION NOTES:
-# If you are re-contextualizing an LLM, explain that this script's output
+# NOTES:
+# This script's output
 # proves that the raw generated dataset is contaminated with duplicates. This
 # contamination necessitates a separate, deliberate cleaning step before the
 # data can be used for model training in Chapter 5. This script is the "problem
