@@ -1,51 +1,43 @@
-# scripts/analyze_dataset_uniqueness.py
+# scripts/deduplicate_dataset.py
 import json
 import argparse
-from collections import Counter
+import os
 
 # ======================================================================================
 # DISSERTATION CONTEXT & ANNOTATIONS
 #
-# This script is a standalone analysis tool, designed to be run as part of the
-# "Experimental Evaluation of the Pipeline" (Chapter 4) of the dissertation.
-# Its sole purpose is to diagnose and quantify the level of prompt duplication
-# within the raw output of the PowerShell-Sentinel Data Factory.
+# This script is a standalone data preparation tool. Its purpose is to take the
+# raw, contaminated output from the data factory and produce a clean, de-duplicated
+# dataset suitable for use in the MLOps pipeline.
 #
 # NARRATIVE PLACEMENT:
-# This script is executed *after* the main data generation run is complete
-# (i.e., after `main_data_factory.py` produces `training_data_v0.json`).
-# The metrics produced by this script (total pairs, unique prompts, duplicate count)
-# are the exact figures that will be used to populate the analysis tables in
-# Section 4.3 and to inform the discussion in Section 4.4.2 ("Limitations").
+# This script is executed *after* the analysis of the duplication issue in Chapter 4.
+# It represents the practical solution to the problem identified by
+# `analyze_dataset_uniqueness.py`. The output of this script, a file like
+# `training_data_v0_clean.json`, becomes the definitive, trusted source dataset
+# that is handed off to the next phase of the project.
 #
-# KEY FINDING:
-# The discovery of significant duplication (from 10,000 pairs down to ~5,600 unique
-# prompts) is a critical finding. It reveals the "convergence effect" of the
-# randomized obfuscation engine when filtered by the strict Execution Validation
-# quality gate. This script provides the empirical evidence for that discussion.
-#
-# NOTES:
-# This script's output
-# proves that the raw generated dataset is contaminated with duplicates. This
-# contamination necessitates a separate, deliberate cleaning step before the
-# data can be used for model training in Chapter 5. This script is the "problem
-# discovery" tool.
+# METHODOLOGY:
+# The script preserves the *first* occurrence of each unique prompt it encounters,
+# ensuring that the final dataset is both unique and maintains the original data
+# order as much as possible before shuffling in the next step.
 # ======================================================================================
 
-def analyze_uniqueness(input_path: str):
+def deduplicate_dataset(input_path: str, output_path: str):
     """
-    Loads a generated dataset and calculates the number of total, unique,
-    and duplicate prompts.
+    Loads a dataset, removes entries with duplicate prompts, and saves the
+    clean dataset to a new file.
 
     Args:
-        input_path (str): The path to the generated JSON dataset file.
+        input_path (str): The path to the raw, potentially duplicated dataset.
+        output_path (str): The path to save the clean, de-duplicated dataset.
     """
-    print(f"--- Analyzing Dataset for Prompt Uniqueness ---")
-    print(f"Loading data from: {input_path}")
+    print(f"--- De-duplicating Dataset ---")
+    print(f"Loading raw data from: {input_path}")
 
     try:
         with open(input_path, 'r', encoding='utf-8') as f:
-            dataset = json.load(f)
+            original_dataset = json.load(f)
     except FileNotFoundError:
         print(f"\n[ERROR] File not found at '{input_path}'. Please check the path.")
         return
@@ -53,33 +45,33 @@ def analyze_uniqueness(input_path: str):
         print(f"\n[ERROR] Could not decode JSON from '{input_path}'. The file may be corrupt.")
         return
 
-    if not dataset:
-        print("\n[WARNING] The dataset is empty. No analysis to perform.")
+    if not original_dataset:
+        print("\n[WARNING] The dataset is empty. No action taken.")
         return
 
-    # Extract all prompts and count their occurrences
-    prompts = [item['prompt'] for item in dataset]
-    prompt_counts = Counter(prompts)
-    duplicates = {prompt: count for prompt, count in prompt_counts.items() if count > 1}
+    seen_prompts = set()
+    deduped_data = []
+    for item in original_dataset:
+        if item['prompt'] not in seen_prompts:
+            deduped_data.append(item)
+            seen_prompts.add(item['prompt'])
 
-    # --- Generate Report ---
-    print("\n--- Uniqueness Analysis Report ---")
-    print(f"Total Pairs in Dataset:      {len(dataset):,}")
-    print(f"Unique Prompts Found:        {len(prompt_counts):,}")
-    print("-" * 34)
-    print(f"Number of Duplicated Prompts:  {len(duplicates):,}")
-    print(f"Total Redundant Pairs:       {sum(duplicates.values()) - len(duplicates):,}")
-    print("------------------------------------")
+    # Ensure the output directory exists
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-    if duplicates:
-        print("\n[CONCLUSION] The source data contains significant duplication and requires cleaning.")
-    else:
-        print("\n[CONCLUSION] No duplicate prompts were found in the dataset.")
+    print(f"Saving clean, de-duplicated data to: {output_path}")
+    with open(output_path, 'w', encoding='utf-8') as f:
+        json.dump(deduped_data, f) # Save without indent for smaller file size
 
+    print("\n--- De-duplication Report ---")
+    print(f"Original Pair Count: {len(original_dataset):,}")
+    print(f"Clean (Unique) Pair Count: {len(deduped_data):,}")
+    print(f"Removed Redundant Pairs: {len(original_dataset) - len(deduped_data):,}")
+    print("-------------------------------")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description="Analyze a generated dataset for prompt duplication.",
+        description="Remove duplicate prompts from a generated dataset.",
         formatter_class=argparse.RawTextHelpFormatter
     )
     parser.add_argument(
@@ -87,5 +79,10 @@ if __name__ == '__main__':
         default="data/generated/training_data_v0.json",
         help="Path to the raw generated dataset file (default: data/generated/training_data_v0.json)."
     )
+    parser.add_argument(
+        "--output",
+        default="data/generated/training_data_v0_clean.json",
+        help="Path to save the clean, de-duplicated dataset file (default: data/generated/training_data_v0_clean.json)."
+    )
     args = parser.parse_args()
-    analyze_uniqueness(args.input)
+    deduplicate_dataset(args.input, args.output)

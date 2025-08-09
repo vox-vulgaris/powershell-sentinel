@@ -1,91 +1,110 @@
-# scripts/analyze_dataset_uniqueness.py
+# Phase 3: Data Factory - Generation & MLOps Prep
+# Index: [13]
+#
+# This is a one-time utility script used after the main dataset has been generated.
+# Its purpose is to split the full dataset into a training set and a "locked" test set,
+# which will be held out for final model evaluation.
+#
+# REQUIREMENTS (Pydantic-aware):
+# 1. Must load and VALIDATE the full generated dataset using the `TrainingPair` model.
+# 2. Must accept a split ratio (e.g., 90/10) as a parameter.
+# 3. Must shuffle the dataset randomly before splitting.
+# 4. Must serialize the Pydantic models back to JSON and save the two new datasets.
+
+# scripts/partition_dataset.py
 import json
+import random
+import os
 import argparse
-from collections import Counter
+from pydantic import ValidationError
+
+# This import is now needed for schema validation
+from powershell_sentinel.models import TrainingPair
 
 # ======================================================================================
 # DISSERTATION CONTEXT & ANNOTATIONS
 #
-# This script is a standalone analysis tool, designed to be run as part of the
-# "Experimental Evaluation of the Pipeline" (Chapter 4) of the dissertation.
-# Its sole purpose is to diagnose and quantify the level of prompt duplication
-# within the raw output of the PowerShell-Sentinel Data Factory.
+# This is the primary MLOps script for data partitioning, as described in
+# Chapter 5. It is intentionally simple and focused.
 #
 # NARRATIVE PLACEMENT:
-# This script is executed *after* the main data generation run is complete
-# (i.e., after `main_data_factory.py` produces `training_data_v0.json`).
-# The metrics produced by this script (total pairs, unique prompts, duplicate count)
-# are the exact figures that will be used to populate the analysis tables in
-# Section 4.3 and to inform the discussion in Section 4.4.2 ("Limitations").
+# This script is executed at the beginning of the MLOps workflow (Chapter 5).
+# Its input is the CLEAN, DE-DUPLICATED dataset produced in Chapter 4 by
+# `deduplicate_dataset.py`.
 #
-# KEY FINDING:
-# The discovery of significant duplication (from 10,000 pairs down to ~5,600 unique
-# prompts) is a critical finding. It reveals the "convergence effect" of the
-# randomized obfuscation engine when filtered by the strict Execution Validation
-# quality gate. This script provides the empirical evidence for that discussion.
-#
-# LLM RE-CONTEXTUALIZATION NOTES:
-# If you are re-contextualizing an LLM, explain that this script's output
-# proves that the raw generated dataset is contaminated with duplicates. This
-# contamination necessitates a separate, deliberate cleaning step before the
-# data can be used for model training in Chapter 5. This script is the "problem
-# discovery" tool.
+# KEY ASSUMPTION:
+# This script operates under the critical assumption that its input file is
+# already free of duplicates. Its responsibilities are strictly:
+# 1. Validate the schema of the clean data.
+# 2. Shuffle the data.
+# 3. Split it into training and test sets.
+# 4. Create the mini-subsets for experimentation.
 # ======================================================================================
 
-def analyze_uniqueness(input_path: str):
+def partition_and_create_subsets(input_path: str, output_dir_sets: str, output_dir_mini: str):
     """
-    Loads a generated dataset and calculates the number of total, unique,
-    and duplicate prompts.
-
-    Args:
-        input_path (str): The path to the generated JSON dataset file.
+    Loads a clean dataset, validates its schema, shuffles it, partitions it into
+    train/test sets, and creates mini-train/mini-val subsets.
     """
-    print(f"--- Analyzing Dataset for Prompt Uniqueness ---")
-    print(f"Loading data from: {input_path}")
+    print("--- Starting MLOps Data Partitioning ---")
 
+    # --- 1. Load and Validate the Clean Dataset ---
+    print(f"Loading and validating clean dataset from: {input_path}")
     try:
         with open(input_path, 'r', encoding='utf-8') as f:
-            dataset = json.load(f)
-    except FileNotFoundError:
-        print(f"\n[ERROR] File not found at '{input_path}'. Please check the path.")
-        return
-    except json.JSONDecodeError:
-        print(f"\n[ERROR] Could not decode JSON from '{input_path}'. The file may be corrupt.")
-        return
+            clean_dataset_raw = json.load(f)
+        
+        # Validate every record against the Pydantic model
+        clean_dataset = [TrainingPair.model_validate(item) for item in clean_dataset_raw]
+        print(f"Successfully validated {len(clean_dataset)} clean training pairs.")
 
-    if not dataset:
-        print("\n[WARNING] The dataset is empty. No analysis to perform.")
+    except (FileNotFoundError, json.JSONDecodeError, ValidationError) as e:
+        print(f"\n[FATAL ERROR] Could not load or validate the clean dataset: {e}")
         return
 
-    # Extract all prompts and count their occurrences
-    prompts = [item['prompt'] for item in dataset]
-    prompt_counts = Counter(prompts)
-    duplicates = {prompt: count for prompt, count in prompt_counts.items() if count > 1}
+    # --- 2. Shuffle and Partition ---
+    print("Shuffling the dataset...")
+    # Convert Pydantic models back to dicts for JSON serialization
+    clean_dataset_dicts = [pair.model_dump(mode='json') for pair in clean_dataset]
+    random.shuffle(clean_dataset_dicts)
 
-    # --- Generate Report ---
-    print("\n--- Uniqueness Analysis Report ---")
-    print(f"Total Pairs in Dataset:      {len(dataset):,}")
-    print(f"Unique Prompts Found:        {len(prompt_counts):,}")
-    print("-" * 34)
-    print(f"Number of Duplicated Prompts:  {len(duplicates):,}")
-    print(f"Total Redundant Pairs:       {sum(duplicates.values()) - len(duplicates):,}")
-    print("------------------------------------")
+    split_index = int(len(clean_dataset_dicts) * 0.9)
+    train_data = clean_dataset_dicts[:split_index]
+    test_data = clean_dataset_dicts[split_index:]
+    print(f"Split complete: {len(train_data)} training samples, {len(test_data)} test samples.")
 
-    if duplicates:
-        print("\n[CONCLUSION] The source data contains significant duplication and requires cleaning.")
-    else:
-        print("\n[CONCLUSION] No duplicate prompts were found in the dataset.")
+    # --- 3. Create Mini Datasets ---
+    print("Creating mini datasets...")
+    mini_val_end_index = min(1000, len(train_data))
+    mini_train_end_index = min(900, mini_val_end_index)
+    mini_train_data = train_data[:mini_train_end_index]
+    mini_val_data = train_data[mini_train_end_index:mini_val_end_index]
+    print(f"Mini-split complete: {len(mini_train_data)} mini-train samples, {len(mini_val_data)} validation samples.")
 
+    # --- 4. Save All Datasets ---
+    os.makedirs(output_dir_sets, exist_ok=True)
+    os.makedirs(output_dir_mini, exist_ok=True)
+    
+    with open(os.path.join(output_dir_sets, 'training_set_v0.json'), 'w') as f:
+        json.dump(train_data, f)
+    with open(os.path.join(output_dir_sets, 'test_set_v0.json'), 'w') as f:
+        json.dump(test_data, f)
+    with open(os.path.join(output_dir_mini, 'mini_train.json'), 'w') as f:
+        json.dump(mini_train_data, f, indent=2)
+    with open(os.path.join(output_dir_mini, 'mini_val.json'), 'w') as f:
+        json.dump(mini_val_data, f, indent=2)
+
+    print("\n--- MLOps Partitioning Complete. ---")
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-        description="Analyze a generated dataset for prompt duplication.",
-        formatter_class=argparse.RawTextHelpFormatter
-    )
+    parser = argparse.ArgumentParser(description="Partition a clean dataset and create subsets for experiments.")
     parser.add_argument(
         "--input",
-        default="data/generated/training_data_v0.json",
-        help="Path to the raw generated dataset file (default: data/generated/training_data_v0.json)."
+        default="data/generated/training_data_v0_clean.json",
+        help="Path to the CLEAN, DE-DUPLICATED dataset."
     )
+    parser.add_argument("--output_dir_sets", default="data/sets", help="Directory to save the main train/test files.")
+    parser.add_argument("--output_dir_mini", default="scripts/prompt_engineering", help="Directory to save the mini train/val files.")
     args = parser.parse_args()
-    analyze_uniqueness(args.input)
+    partition_and_create_subsets(args.input, args.output_dir_sets, args.output_dir_mini)
+
