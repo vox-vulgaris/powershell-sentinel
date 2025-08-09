@@ -1,0 +1,135 @@
+[
+  {
+    "_raw": "08/06/2025 05:19:06 PM\nLogName=Microsoft-Windows-PowerShell/Operational\nEventCode=4104\nEventType=5\nComputerName=PS-VICTIM-01.powershellsentinel.local\nUser=NOT_TRANSLATED\nSid=S-1-5-21-3587967245-3585281529-945259784-500\nSidType=0\nSourceName=Microsoft-Windows-PowerShell\nType=Verbose\nRecordNumber=296\nKeywords=None\nTaskCategory=Execute a Remote Command\nOpCode=On create calls\nMessage=Creating Scriptblock text (1 of 1):\n$global:?\n\nScriptBlock ID: 833c2997-6a7d-433c-99ea-1287b4232de0\nPath:",
+    "_time": "2025-08-06T17:19:06.000+00:00",
+    "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "_bkt": "main~3~D9137144-2BA4-49FB-A605-EB695929BB1A",
+    "_cd": "3:2614",
+    "_indextime": "1754500748",
+    "_serial": "0",
+    "_si": [
+      "PS-DEV-01",
+      "main"
+    ],
+    "_sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "host": "PS-VICTIM-01",
+    "index": "main",
+    "linecount": "19",
+    "splunk_server": "PS-DEV-01"
+  },
+  {
+    "_raw": "08/06/2025 05:19:06 PM\nLogName=Microsoft-Windows-PowerShell/Operational\nEventCode=4103\nEventType=4\nComputerName=PS-VICTIM-01.powershellsentinel.local\nUser=NOT_TRANSLATED\nSid=S-1-5-21-3587967245-3585281529-945259784-500\nSidType=0\nSourceName=Microsoft-Windows-PowerShell\nType=Information\nRecordNumber=295\nKeywords=None\nTaskCategory=Executing Pipeline\nOpCode=To be used when operation is just executing a method\nMessage=CommandInvocation(Out-Default): \"Out-Default\"\n\n\nContext:\n        Severity = Informational\n        Host Name = ConsoleHost\n        Host Version = 5.1.20348.3932\n        Host ID = b00a19d1-ead0-4158-bcb8-93552f662de2\n        Host Application = powershell.exe -Command Get-Module\n        Engine Version = 5.1.20348.3932\n        Runspace ID = 9e00bf07-432a-4428-b398-0836acd7050a\n        Pipeline ID = 1\n        Command Name = \n        Command Type = Script\n        Script Name = \n        Command Path = \n        Sequence Number = 18\n        User = POWERSHELLSENTI\\lab_admin\n        Connected User = \n        Shell ID = Microsoft.PowerShell\n\n\nUser Data:",
+    "_time": "2025-08-06T17:19:06.000+00:00",
+    "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "_bkt": "main~3~D9137144-2BA4-49FB-A605-EB695929BB1A",
+    "_cd": "3:2579",
+    "_indextime": "1754500748",
+    "_serial": "1",
+    "_si": [
+      "PS-DEV-01",
+      "main"
+    ],
+    "_sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "host": "PS-VICTIM-01",
+    "index": "main",
+    "linecount": "37",
+    "splunk_server": "PS-DEV-01"
+  },
+  {
+    "_raw": "08/06/2025 05:19:06 PM\nLogName=Microsoft-Windows-PowerShell/Operational\nEventCode=4103\nEventType=4\nComputerName=PS-VICTIM-01.powershellsentinel.local\nUser=NOT_TRANSLATED\nSid=S-1-5-21-3587967245-3585281529-945259784-500\nSidType=0\nSourceName=Microsoft-Windows-PowerShell\nType=Information\nRecordNumber=294\nKeywords=None\nTaskCategory=Executing Pipeline\nOpCode=To be used when operation is just executing a method\nMessage=CommandInvocation(Get-Module): \"Get-Module\"\n\n\nContext:\n        Severity = Informational\n        Host Name = ConsoleHost\n        Host Version = 5.1.20348.3932\n        Host ID = b00a19d1-ead0-4158-bcb8-93552f662de2\n        Host Application = powershell.exe -Command Get-Module\n        Engine Version = 5.1.20348.3932\n        Runspace ID = 9e00bf07-432a-4428-b398-0836acd7050a\n        Pipeline ID = 1\n        Command Name = Get-Module\n        Command Type = Cmdlet\n        Script Name = \n        Command Path = \n        Sequence Number = 16\n        User = POWERSHELLSENTI\\lab_admin\n        Connected User = \n        Shell ID = Microsoft.PowerShell\n\n\nUser Data:",
+    "_time": "2025-08-06T17:19:06.000+00:00",
+    "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "_bkt": "main~3~D9137144-2BA4-49FB-A605-EB695929BB1A",
+    "_cd": "3:2544",
+    "_indextime": "1754500748",
+    "_serial": "2",
+    "_si": [
+      "PS-DEV-01",
+      "main"
+    ],
+    "_sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "host": "PS-VICTIM-01",
+    "index": "main",
+    "linecount": "37",
+    "splunk_server": "PS-DEV-01"
+  },
+  {
+    "_raw": "08/06/2025 05:19:06 PM\nLogName=Microsoft-Windows-PowerShell/Operational\nEventCode=4104\nEventType=5\nComputerName=PS-VICTIM-01.powershellsentinel.local\nUser=NOT_TRANSLATED\nSid=S-1-5-21-3587967245-3585281529-945259784-500\nSidType=0\nSourceName=Microsoft-Windows-PowerShell\nType=Verbose\nRecordNumber=293\nKeywords=None\nTaskCategory=Execute a Remote Command\nOpCode=On create calls\nMessage=Creating Scriptblock text (1 of 1):\nGet-Module\n\nScriptBlock ID: 079e03e8-c23d-4186-bcde-dc1fe064d6b6\nPath:",
+    "_time": "2025-08-06T17:19:06.000+00:00",
+    "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "_bkt": "main~3~D9137144-2BA4-49FB-A605-EB695929BB1A",
+    "_cd": "3:2528",
+    "_indextime": "1754500748",
+    "_serial": "3",
+    "_si": [
+      "PS-DEV-01",
+      "main"
+    ],
+    "_sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "host": "PS-VICTIM-01",
+    "index": "main",
+    "linecount": "19",
+    "splunk_server": "PS-DEV-01"
+  },
+  {
+    "_raw": "08/06/2025 05:19:06 PM\nLogName=Microsoft-Windows-PowerShell/Operational\nEventCode=40962\nEventType=4\nComputerName=PS-VICTIM-01.powershellsentinel.local\nUser=NOT_TRANSLATED\nSid=S-1-5-21-3587967245-3585281529-945259784-500\nSidType=0\nSourceName=Microsoft-Windows-PowerShell\nType=Information\nRecordNumber=292\nKeywords=None\nTaskCategory=PowerShell Console Startup\nOpCode=Stop\nMessage=PowerShell console is ready for user input",
+    "_time": "2025-08-06T17:19:06.000+00:00",
+    "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "_bkt": "main~3~D9137144-2BA4-49FB-A605-EB695929BB1A",
+    "_cd": "3:2514",
+    "_indextime": "1754500748",
+    "_serial": "4",
+    "_si": [
+      "PS-DEV-01",
+      "main"
+    ],
+    "_sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "host": "PS-VICTIM-01",
+    "index": "main",
+    "linecount": "15",
+    "splunk_server": "PS-DEV-01"
+  },
+  {
+    "_raw": "08/06/2025 05:19:06 PM\nLogName=Microsoft-Windows-PowerShell/Operational\nEventCode=53504\nEventType=4\nComputerName=PS-VICTIM-01.powershellsentinel.local\nUser=NOT_TRANSLATED\nSid=S-1-5-21-3587967245-3585281529-945259784-500\nSidType=0\nSourceName=Microsoft-Windows-PowerShell\nType=Information\nRecordNumber=291\nKeywords=None\nTaskCategory=PowerShell Named Pipe IPC\nOpCode=Open (async)\nMessage=Windows PowerShell has started an IPC listening thread on process: 2472 in AppDomain: DefaultAppDomain.",
+    "_time": "2025-08-06T17:19:06.000+00:00",
+    "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "_bkt": "main~3~D9137144-2BA4-49FB-A605-EB695929BB1A",
+    "_cd": "3:2498",
+    "_indextime": "1754500748",
+    "_serial": "5",
+    "_si": [
+      "PS-DEV-01",
+      "main"
+    ],
+    "_sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "host": "PS-VICTIM-01",
+    "index": "main",
+    "linecount": "15",
+    "splunk_server": "PS-DEV-01"
+  },
+  {
+    "_raw": "08/06/2025 05:19:06 PM\nLogName=Microsoft-Windows-PowerShell/Operational\nEventCode=40961\nEventType=4\nComputerName=PS-VICTIM-01.powershellsentinel.local\nUser=NOT_TRANSLATED\nSid=S-1-5-21-3587967245-3585281529-945259784-500\nSidType=0\nSourceName=Microsoft-Windows-PowerShell\nType=Information\nRecordNumber=290\nKeywords=None\nTaskCategory=PowerShell Console Startup\nOpCode=Start\nMessage=PowerShell console is starting up",
+    "_time": "2025-08-06T17:19:06.000+00:00",
+    "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "_bkt": "main~3~D9137144-2BA4-49FB-A605-EB695929BB1A",
+    "_cd": "3:2484",
+    "_indextime": "1754500748",
+    "_serial": "6",
+    "_si": [
+      "PS-DEV-01",
+      "main"
+    ],
+    "_sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "host": "PS-VICTIM-01",
+    "index": "main",
+    "linecount": "15",
+    "splunk_server": "PS-DEV-01"
+  }
+]

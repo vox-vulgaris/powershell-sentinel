@@ -1,0 +1,135 @@
+[
+  {
+    "_raw": "08/06/2025 05:25:25 PM\nLogName=Microsoft-Windows-PowerShell/Operational\nEventCode=4104\nEventType=5\nComputerName=PS-VICTIM-01.powershellsentinel.local\nUser=NOT_TRANSLATED\nSid=S-1-5-21-3587967245-3585281529-945259784-500\nSidType=0\nSourceName=Microsoft-Windows-PowerShell\nType=Verbose\nRecordNumber=753\nKeywords=None\nTaskCategory=Execute a Remote Command\nOpCode=On create calls\nMessage=Creating Scriptblock text (1 of 1):\n$global:?\n\nScriptBlock ID: 3383afce-be8c-4dcc-aea0-21a1f32ec021\nPath:",
+    "_time": "2025-08-06T17:25:25.000+00:00",
+    "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "_bkt": "main~3~D9137144-2BA4-49FB-A605-EB695929BB1A",
+    "_cd": "3:58854",
+    "_indextime": "1754501126",
+    "_serial": "0",
+    "_si": [
+      "PS-DEV-01",
+      "main"
+    ],
+    "_sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "host": "PS-VICTIM-01",
+    "index": "main",
+    "linecount": "19",
+    "splunk_server": "PS-DEV-01"
+  },
+  {
+    "_raw": "08/06/2025 05:25:25 PM\nLogName=Microsoft-Windows-PowerShell/Operational\nEventCode=4103\nEventType=4\nComputerName=PS-VICTIM-01.powershellsentinel.local\nUser=NOT_TRANSLATED\nSid=S-1-5-21-3587967245-3585281529-945259784-500\nSidType=0\nSourceName=Microsoft-Windows-PowerShell\nType=Information\nRecordNumber=752\nKeywords=None\nTaskCategory=Executing Pipeline\nOpCode=To be used when operation is just executing a method\nMessage=Splunk could not get the description for this event. Either the component that raises this event is not installed on your local computer or the installation is corrupt.\n\nFormatMessage error:\n\nGot the following information from this event: \n\n        Severity = Informational\n        Host Name = ConsoleHost\n        Host Version = 5.1.20348.3932\n        Host ID = 01514211-57d8-42ff-b2fb-8ee42196a05b\n        Host Application = powershell.exe -Command Get-Service\n        Engine Version = 5.1.20348.3932\n        Runspace ID = b1c558db-bf06-4810-a0a5-25a8fc12eeb6\n        Pipeline ID = 1\n        Command Name = \n        Command Type = Script\n        Script Name = \n        Command Path = \n        Sequence Number = 18\n        User = POWERSHELLSENTI\\lab_admin\n        Connected User = \n        Shell ID = Microsoft.PowerShell\n\nCommandInvocation(Out-Default): \"Out-Default\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"AJRouter\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"ALG\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"AppIDSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"Appinfo\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"AppMgmt\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"AppReadiness\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"AppVClient\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"AppXSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"AudioEndpointBuilder\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"Audiosrv\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"AxInstSV\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"BDESVC\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"BFE\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"BITS\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"BrokerInfrastructure\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"bthserv\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"camsvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"CaptureService_9a530\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"cbdhsvc_9a530\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"CDPSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"CDPUserSvc_9a530\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"CertPropSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"ClipSVC\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"COMSysApp\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"ConsentUxUserSvc_9a530\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"CoreMessagingRegistrar\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"CredentialEnrollmentManagerUserSvc_9a530\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"CryptSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"CscService\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"DcomLaunch\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"dcsvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"defragsvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"DeviceAssociationBrokerSvc_9a530\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"DeviceAssociationService\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"DeviceInstall\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"DevicePickerUserSvc_9a530\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"DevicesFlowUserSvc_9a530\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"DevQueryBroker\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"Dhcp\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"diagnosticshub.standardcollector.service\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"DiagTrack\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"DispBrokerDesktopSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"DmEnrollmentSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"dmwappushservice\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"Dnscache\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"DoSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"dot3svc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"DPS\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"DsmSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"DsSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"EapHost\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"edgeupdate\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"edgeupdatem\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"EFS\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"embeddedmode\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"EntAppSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"EventLog\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"EventSystem\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"fdPHost\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"FDResPub\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"FontCache\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"FrameServer\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"FrameServerMonitor\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"gpsvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"GraphicsPerfSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"hidserv\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"HvHost\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"IKEEXT\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"InstallService\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"iphlpsvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"KeyIso\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"KPSSVC\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"KtmRm\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"LanmanServer\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"LanmanWorkstation\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"lfsvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"LicenseManager\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"lltdsvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"lmhosts\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"LSM\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"MapsBroker\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"McpManagementService\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"MicrosoftEdgeElevationService\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"mpssvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"MSDTC\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"MSiSCSI\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"msiserver\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"NcaSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"NcbService\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"Netlogon\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"Netman\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"netprofm\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"NetSetupSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"NetTcpPortSharing\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"NgcCtnrSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"NgcSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"NlaSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"nsi\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"PcaSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"PerfHost\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"PimIndexMaintenanceSvc_9a530\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"pla\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"PlugPlay\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"PolicyAgent\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"Power\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"PrintNotify\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"PrintWorkflowUserSvc_9a530\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"ProfSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"PushToInstall\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"QWAVE\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"RasAuto\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"RasMan\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"RdAgent\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"RemoteAccess\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"RemoteRegistry\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"RmSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"RpcEptMapper\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"RpcLocator\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"RpcSs\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"RSoPProv\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"sacsvr\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"SamSs\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"SCardSvr\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"ScDeviceEnum\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"Schedule\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"SCPolicySvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"seclogon\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"SecurityHealthService\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"SEMgrSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"SENS\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"Sense\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"SensorDataService\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"SensorService\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"SensrSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"SessionEnv\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"SharedAccess\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"ShellHWDetection\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"shpamsvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"smphost\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"SNMPTRAP\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"SplunkForwarder\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"Spooler\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"sppsvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"SSDPSRV\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"ssh-agent\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"SstpSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"StateRepository\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"StiSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"StorSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"svsvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"swprv\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"SysMain\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"Sysmon\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"SystemEventsBroker\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"TabletInputService\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"tapisrv\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"TermService\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"Themes\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"TieringEngineService\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"TimeBrokerSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"TokenBroker\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"TrkWks\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"TrustedInstaller\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"tzautoupdate\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"UALSVC\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"UdkUserSvc_9a530\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"UevAgentService\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"UmRdpService\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"UnistoreSvc_9a530\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"upnphost\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"UserDataSvc_9a530\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"UserManager\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"UsoSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"VaultSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"vds\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"vmicguestinterface\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"vmicheartbeat\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"vmickvpexchange\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"vmicshutdown\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"vmictimesync\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"vmicvmsession\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"vmicvss\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"VSS\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"W32Time\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"WaaSMedicSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"WalletService\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"WarpJITSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"WbioSrvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"Wcmsvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"WdiServiceHost\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"WdiSystemHost\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"WdNisSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"Wecsvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"WEPHOSTSVC\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"wercplsupport\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"WerSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"WiaRpc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"WinDefend\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"WindowsAzureGuestAgent\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"WinHttpAutoProxySvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"Winmgmt\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"WinRM\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"wisvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"wlidsvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"wmiApSrv\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"WMPNetworkSvc\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"WPDBusEnum\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"WpnService\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"WpnUserService_9a530\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"WSearch\"\nParameterBinding(Out-Default): name=\"InputObject\"; value=\"wuauserv\"",
+    "_time": "2025-08-06T17:25:25.000+00:00",
+    "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "_bkt": "main~3~D9137144-2BA4-49FB-A605-EB695929BB1A",
+    "_cd": "3:58341",
+    "_indextime": "1754501126",
+    "_serial": "1",
+    "_si": [
+      "PS-DEV-01",
+      "main"
+    ],
+    "_sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "host": "PS-VICTIM-01",
+    "index": "main",
+    "linecount": "249",
+    "splunk_server": "PS-DEV-01"
+  },
+  {
+    "_raw": "08/06/2025 05:25:25 PM\nLogName=Microsoft-Windows-PowerShell/Operational\nEventCode=4103\nEventType=4\nComputerName=PS-VICTIM-01.powershellsentinel.local\nUser=NOT_TRANSLATED\nSid=S-1-5-21-3587967245-3585281529-945259784-500\nSidType=0\nSourceName=Microsoft-Windows-PowerShell\nType=Information\nRecordNumber=751\nKeywords=None\nTaskCategory=Executing Pipeline\nOpCode=To be used when operation is just executing a method\nMessage=CommandInvocation(Get-Service): \"Get-Service\"\n\n\nContext:\n        Severity = Informational\n        Host Name = ConsoleHost\n        Host Version = 5.1.20348.3932\n        Host ID = 01514211-57d8-42ff-b2fb-8ee42196a05b\n        Host Application = powershell.exe -Command Get-Service\n        Engine Version = 5.1.20348.3932\n        Runspace ID = b1c558db-bf06-4810-a0a5-25a8fc12eeb6\n        Pipeline ID = 1\n        Command Name = Get-Service\n        Command Type = Cmdlet\n        Script Name = \n        Command Path = \n        Sequence Number = 16\n        User = POWERSHELLSENTI\\lab_admin\n        Connected User = \n        Shell ID = Microsoft.PowerShell\n\n\nUser Data:",
+    "_time": "2025-08-06T17:25:25.000+00:00",
+    "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "_bkt": "main~3~D9137144-2BA4-49FB-A605-EB695929BB1A",
+    "_cd": "3:58306",
+    "_indextime": "1754501126",
+    "_serial": "2",
+    "_si": [
+      "PS-DEV-01",
+      "main"
+    ],
+    "_sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "host": "PS-VICTIM-01",
+    "index": "main",
+    "linecount": "37",
+    "splunk_server": "PS-DEV-01"
+  },
+  {
+    "_raw": "08/06/2025 05:25:25 PM\nLogName=Microsoft-Windows-PowerShell/Operational\nEventCode=4104\nEventType=5\nComputerName=PS-VICTIM-01.powershellsentinel.local\nUser=NOT_TRANSLATED\nSid=S-1-5-21-3587967245-3585281529-945259784-500\nSidType=0\nSourceName=Microsoft-Windows-PowerShell\nType=Verbose\nRecordNumber=750\nKeywords=None\nTaskCategory=Execute a Remote Command\nOpCode=On create calls\nMessage=Creating Scriptblock text (1 of 1):\nGet-Service\n\nScriptBlock ID: f4c301f9-d021-4698-a4be-b20e600a301b\nPath:",
+    "_time": "2025-08-06T17:25:25.000+00:00",
+    "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "_bkt": "main~3~D9137144-2BA4-49FB-A605-EB695929BB1A",
+    "_cd": "3:58290",
+    "_indextime": "1754501126",
+    "_serial": "3",
+    "_si": [
+      "PS-DEV-01",
+      "main"
+    ],
+    "_sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "host": "PS-VICTIM-01",
+    "index": "main",
+    "linecount": "19",
+    "splunk_server": "PS-DEV-01"
+  },
+  {
+    "_raw": "08/06/2025 05:25:25 PM\nLogName=Microsoft-Windows-PowerShell/Operational\nEventCode=40962\nEventType=4\nComputerName=PS-VICTIM-01.powershellsentinel.local\nUser=NOT_TRANSLATED\nSid=S-1-5-21-3587967245-3585281529-945259784-500\nSidType=0\nSourceName=Microsoft-Windows-PowerShell\nType=Information\nRecordNumber=749\nKeywords=None\nTaskCategory=PowerShell Console Startup\nOpCode=Stop\nMessage=PowerShell console is ready for user input",
+    "_time": "2025-08-06T17:25:25.000+00:00",
+    "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "_bkt": "main~3~D9137144-2BA4-49FB-A605-EB695929BB1A",
+    "_cd": "3:58276",
+    "_indextime": "1754501126",
+    "_serial": "4",
+    "_si": [
+      "PS-DEV-01",
+      "main"
+    ],
+    "_sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "host": "PS-VICTIM-01",
+    "index": "main",
+    "linecount": "15",
+    "splunk_server": "PS-DEV-01"
+  },
+  {
+    "_raw": "08/06/2025 05:25:25 PM\nLogName=Microsoft-Windows-PowerShell/Operational\nEventCode=53504\nEventType=4\nComputerName=PS-VICTIM-01.powershellsentinel.local\nUser=NOT_TRANSLATED\nSid=S-1-5-21-3587967245-3585281529-945259784-500\nSidType=0\nSourceName=Microsoft-Windows-PowerShell\nType=Information\nRecordNumber=748\nKeywords=None\nTaskCategory=PowerShell Named Pipe IPC\nOpCode=Open (async)\nMessage=Windows PowerShell has started an IPC listening thread on process: 4776 in AppDomain: DefaultAppDomain.",
+    "_time": "2025-08-06T17:25:25.000+00:00",
+    "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "_bkt": "main~3~D9137144-2BA4-49FB-A605-EB695929BB1A",
+    "_cd": "3:58260",
+    "_indextime": "1754501126",
+    "_serial": "5",
+    "_si": [
+      "PS-DEV-01",
+      "main"
+    ],
+    "_sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "host": "PS-VICTIM-01",
+    "index": "main",
+    "linecount": "15",
+    "splunk_server": "PS-DEV-01"
+  },
+  {
+    "_raw": "08/06/2025 05:25:25 PM\nLogName=Microsoft-Windows-PowerShell/Operational\nEventCode=40961\nEventType=4\nComputerName=PS-VICTIM-01.powershellsentinel.local\nUser=NOT_TRANSLATED\nSid=S-1-5-21-3587967245-3585281529-945259784-500\nSidType=0\nSourceName=Microsoft-Windows-PowerShell\nType=Information\nRecordNumber=747\nKeywords=None\nTaskCategory=PowerShell Console Startup\nOpCode=Start\nMessage=PowerShell console is starting up",
+    "_time": "2025-08-06T17:25:25.000+00:00",
+    "source": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "_bkt": "main~3~D9137144-2BA4-49FB-A605-EB695929BB1A",
+    "_cd": "3:58246",
+    "_indextime": "1754501126",
+    "_serial": "6",
+    "_si": [
+      "PS-DEV-01",
+      "main"
+    ],
+    "_sourcetype": "WinEventLog:Microsoft-Windows-PowerShell/Operational",
+    "host": "PS-VICTIM-01",
+    "index": "main",
+    "linecount": "15",
+    "splunk_server": "PS-DEV-01"
+  }
+]
