@@ -15,3 +15,6 @@ data/interim/delta_logs/*
 # IDE files
 .idea/
 .vscode/
+
+# Dissertation context files
+dissertation_context.txt
