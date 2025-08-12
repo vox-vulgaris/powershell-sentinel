@@ -21,110 +21,126 @@
 # 4. About/Performance Feature:
 #    - Must display the static performance metrics from the final evaluation report.
 
+# powershell_sentinel/sentinel_toolkit.py
+
 import json
 import time
 import argparse
 from typing import List, Dict, Union
-from pydantic import ValidationError
 
-# TODO: Add all necessary imports from Hugging Face for model loading
-# from peft import PeftModel
-# from transformers import AutoModelForCausalLM, AutoTokenizer
+# Use llama_cpp for GGUF model inference
+from llama_cpp import Llama
+from pydantic import ValidationError
 
 from rich.console import Console
 from rich.table import Table
 from rich.prompt import Prompt
 
-from powershell_sentinel.models import Primitive, LLMResponse, TelemetryRule
-# Import the prompt template from train.py to ensure 100% consistency
-from powershell_sentinel.train import WINNING_PROMPT_TEMPLATE
+# Import the Pydantic models that define the data structures
+from powershell_sentinel.models import Primitive, LLMResponse, Analysis, TelemetryRule
+
+# The prompt template is the exact format the model was fine-tuned on.
+# Consistency is critical for reliable performance.
+WINNING_PROMPT_TEMPLATE = """### INSTRUCTION:
+You are a specialized cybersecurity assistant focused on PowerShell deobfuscation and analysis.
+Your task is to analyze the provided obfuscated PowerShell command and return a structured JSON object.
+The JSON object must conform to the following schema:
+- `deobfuscated_command`: A string containing the cleaned, deobfuscated version of the original command.
+- `analysis`: An object containing:
+  - `intent`: A list of strings describing the command's purpose (e.g., "Process Discovery").
+  - `mitre_ttps`: A list of strings with the corresponding MITRE ATT&CK Technique IDs (e.g., "T1057").
+  - `telemetry_signature`: A list of objects, where each object represents a predicted log event with `source`, `event_id`, and `details`.
+
+Analyze the following PowerShell command:
+{prompt}
+
+### RESPONSE:
+"""
 
 # --- Constants ---
 MAX_RETRIES = 3
 RETRY_DELAY_SECONDS = 0.5
 PRIMITIVES_DB_PATH = "data/source/primitives_library.json"
 
+
 class SentinelToolkit:
     """The main user-facing CLI application."""
 
-    def __init__(self, model_path: str, base_model_path: str):
+    def __init__(self, model_path: str):
         self.console = Console()
         self.model = None
-        self.tokenizer = None
-        
-        with self.console.status("Initializing toolkit...", spinner="dots"):
-            # TODO: Implement the full model loading logic here
-            # self.tokenizer = AutoTokenizer.from_pretrained(base_model_path)
-            # base_model = AutoModelForCausalLM.from_pretrained(...)
-            # self.model = PeftModel.from_pretrained(base_model, model_path)
-            
+
+        with self.console.status("Initializing toolkit... Loading model...", spinner="dots"):
+            try:
+                # Load the GGUF model using llama-cpp-python for efficient CPU inference
+                self.model = Llama(model_path=model_path, verbose=False, n_ctx=2048)
+            except Exception as e:
+                self.console.print(f"[bold red]Fatal Error: Could not load the model from path: {model_path}[/bold red]")
+                self.console.print(f"[red]Details: {e}[/red]")
+                exit(1)
+
             self.primitives_db: List[Primitive] = self._load_primitives_db()
-        
-        self.console.print("[green]Sentinel Toolkit Initialized. Model loaded.[/green]")
+
+        self.console.print(f"[green]Sentinel Toolkit Initialized. Model '{model_path}' loaded.[/green]")
 
     def _load_primitives_db(self) -> List[Primitive]:
-        """Loads and validates the primitives library for the lookup feature."""
+        """Loads and validates the primitives library for the Threat Intel Lookup feature."""
         try:
-            with open(PRIMITIVES_DB_PATH, 'r') as f:
+            with open(PRIMITIVES_DB_PATH, 'r', encoding='utf-8') as f:
                 data = json.load(f)
+            # Use Pydantic to validate every entry, ensuring data integrity
             return [Primitive.model_validate(p) for p in data]
+        except FileNotFoundError:
+            self.console.print(f"[bold red]Error: Primitives DB not found at '{PRIMITIVES_DB_PATH}'. Lookup will not work.[/bold red]")
+            return []
         except Exception as e:
-            self.console.print(f"[bold red]Could not load primitives DB: {e}[/bold red]")
+            self.console.print(f"[bold red]Could not load or validate primitives DB: {e}[/bold red]")
             return []
 
     def _run_inference(self, prompt: str) -> str:
-        """Helper function to run model inference. THIS IS A PLACEHOLDER."""
-        # TODO: This is the only place the actual model call happens.
-        # inputs = self.tokenizer(prompt, return_tensors="pt").to(self.model.device)
-        # outputs = self.model.generate(**inputs, max_new_tokens=1024)
-        # raw_output_string = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
-        # json_part = raw_output_string.split("### RESPONSE:")[1].strip()
-        # return json_part
+        """Helper function to run model inference using llama-cpp-python."""
+        if not self.model:
+            raise RuntimeError("Model is not loaded.")
 
-        # For testing without a real model, we simulate a response
-        dummy_response = LLMResponse(
-            deobfuscated_command="Get-Process",
-            analysis={
-                "intent": ["Process Discovery"],
-                "mitre_ttps": ["T1057"],
-                "telemetry_signature": [{"source": "Security", "event_id": 4688, "details": "Process created: Get-Process"}]
-            }
-        )
-        return dummy_response.model_dump_json()
+        # Generate text using the loaded GGUF model
+        output = self.model(prompt, max_tokens=1024, temperature=0.1, stop=["### RESPONSE:"])
+        raw_output_string = output['choices'][0]['text']
 
+        return raw_output_string.strip()
 
     def _get_structured_analysis(self, user_prompt: str) -> Dict[str, Union[LLMResponse, str]]:
         """Calls the LLM with a retry loop, validating the output against the LLMResponse model."""
         full_prompt = WINNING_PROMPT_TEMPLATE.format(prompt=user_prompt)
         raw_llm_output_json = ""
-        
+
         for attempt in range(MAX_RETRIES):
             self.console.print(f"Attempting analysis... (Attempt {attempt + 1}/{MAX_RETRIES})")
             raw_llm_output_json = self._run_inference(full_prompt)
-            
+
             try:
-                # The core of the retry loop: Pydantic validation
+                # The core of the retry loop: attempt to parse and validate the model's output.
+                # If this fails, it raises a ValidationError, triggering the retry.
                 response_model = LLMResponse.model_validate_json(raw_llm_output_json)
                 self.console.print("[green]Successfully parsed and validated model output.[/green]")
                 return {"success": True, "data": response_model}
-            except ValidationError:
-                self.console.print(f"[yellow]WARN: Failed to validate LLM output on attempt {attempt + 1}. Retrying...[/yellow]")
+            except ValidationError as e:
+                self.console.print(f"[yellow]WARN: Failed to validate LLM output on attempt {attempt + 1}.[/yellow]")
                 if attempt < MAX_RETRIES - 1:
                     time.sleep(RETRY_DELAY_SECONDS)
-        
+
         self.console.print("[bold red]ERROR: Failed to get a valid structured response after all retries.[/bold red]")
         return {"success": False, "raw_output": raw_llm_output_json}
 
     def _display_analysis_report(self, response: LLMResponse):
-        """Formats and prints the analysis result in clean tables."""
-        main_table = Table(title="PowerShell Command Analysis")
+        """Formats and prints the analysis result in clean rich tables."""
+        main_table = Table(title="PowerShell Command Analysis", show_header=False)
         main_table.add_column("Field", style="cyan", no_wrap=True)
-        main_table.add_column("Value", style="magenta")
+        main_table.add_column("Value", style="white")
 
-        main_table.add_row("Deobfuscated Command", response.deobfuscated_command)
+        main_table.add_row("Deobfuscated Command", f"[bold green]{response.deobfuscated_command}[/bold green]")
         main_table.add_row("Intent", "\n".join(f"- {i.value}" for i in response.analysis.intent))
         main_table.add_row("MITRE ATT&CK TTPs", "\n".join(f"- {t.value}" for t in response.analysis.mitre_ttps))
-        
+
         self.console.print(main_table)
 
         if response.analysis.telemetry_signature:
@@ -138,8 +154,9 @@ class SentinelToolkit:
             self.console.print(telemetry_table)
 
     def _display_primitive_report(self, primitive: Primitive):
-        """Formats and prints the details for a known primitive."""
-        # This is a near-identical display function, showing the power of a consistent data model.
+        """Formats and prints the details for a known primitive from the database."""
+        # This reuses the same display logic by constructing the same Pydantic objects,
+        # ensuring a consistent user experience for both LLM analysis and DB lookups.
         analysis = Analysis(
             intent=primitive.intent,
             mitre_ttps=primitive.mitre_ttps,
@@ -151,6 +168,10 @@ class SentinelToolkit:
     def feature_analyze_command(self):
         """Handler for the 'Analyze Obfuscated Command' feature."""
         command = Prompt.ask("\n[bold cyan]Enter obfuscated PowerShell command[/bold cyan]")
+        if not command.strip():
+            self.console.print("[yellow]No command entered.[/yellow]")
+            return
+
         with self.console.status("Analyzing command...", spinner="dots"):
             result = self._get_structured_analysis(command)
 
@@ -163,15 +184,18 @@ class SentinelToolkit:
             self.console.print(result.get('raw_output', 'No output received.'))
 
     def feature_threat_intel_lookup(self):
-        """Handler for the 'Threat Intel Lookup' feature."""
+        """Handler for the 'Threat Intel Lookup' feature (non-LLM)."""
+        if not self.primitives_db:
+            self.console.print("[bold red]Threat Intel DB is not loaded. Cannot perform lookup.[/bold red]")
+            return
+
         command = Prompt.ask("\n[bold cyan]Enter clean primitive command for lookup[/bold cyan]").strip()
-        
         found_primitive = None
         for primitive in self.primitives_db:
             if primitive.primitive_command.lower() == command.lower():
                 found_primitive = primitive
                 break
-        
+
         if found_primitive:
             self.console.print(f"\n[green]Found entry for '{command}':[/green]")
             self._display_primitive_report(found_primitive)
@@ -184,28 +208,30 @@ class SentinelToolkit:
         self.console.print("This tool uses a fine-tuned LLM to analyze obfuscated PowerShell commands.")
         self.console.print("It is the final deliverable of a data-centric AI engineering project.")
 
-        table = Table(title="v0 Model Performance Metrics")
+        table = Table(title="v0 Final Model Performance Evaluation")
         table.add_column("Metric", justify="right", style="cyan", no_wrap=True)
         table.add_column("Score", style="magenta")
 
-        # These values should be updated with the final results from evaluate.py
-        table.add_row("JSON Parse Success Rate", "99.50%")
-        table.add_row("Deobfuscation Accuracy", "97.50%")
-        table.add_row("Intent F1-Score", "0.96")
-        table.add_row("MITRE TTP F1-Score", "0.94")
+        # These are the final performance metrics from the dissertation.
+        table.add_row("JSON Parse Success Rate", "93.32%")
+        table.add_row("Deobfuscation Accuracy", "72.50%")
+        table.add_row("Intent F1-Score (Macro)", "70.08%")
+        table.add_row("MITRE TTP F1-Score (Macro)", "70.08%")
 
         self.console.print(table)
         self.console.print("\n[italic]Always verify results with manual analysis.[/italic]")
 
     def start(self):
-        """The main application loop."""
+        """The main application menu loop."""
         while True:
-            self.console.print("\n--- PowerShell Sentinel Toolkit ---", style="bold magenta")
+            self.console.print("\n" + "─" * 50, style="bold magenta")
+            self.console.print("  PowerShell Sentinel Toolkit Menu", style="bold magenta")
+            self.console.print("─" * 50, style="bold magenta")
             choice = Prompt.ask(
                 "Choose an option",
                 choices=["1", "2", "3", "q"],
                 show_choices=False,
-                description="[1] Analyze Obfuscated Command\n[2] Threat Intel Lookup\n[3] About/Performance\n[q] Quit"
+                description="\n[1] Analyze Obfuscated Command\n[2] Threat Intel Lookup\n[3] About/Performance\n[q] Quit\n"
             )
             if choice == '1':
                 self.feature_analyze_command()
@@ -213,15 +239,20 @@ class SentinelToolkit:
                 self.feature_threat_intel_lookup()
             elif choice == '3':
                 self.feature_about()
-            elif choice == 'q':
+            elif choice.lower() == 'q':
                 self.console.print("Exiting.")
                 break
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="PowerShell Sentinel Analysis Toolkit.")
-    parser.add_argument("--model", required=True, help="Path to the fine-tuned model adapters.")
-    parser.add_argument("--base", required=True, help="Path or name of the base model (e.g., 'google/gemma-2b').")
+    parser = argparse.ArgumentParser(
+        description="PowerShell Sentinel Analysis Toolkit. An LLM-driven tool for deobfuscating PowerShell commands.",
+    )
+    parser.add_argument(
+        "--model",
+        required=True,
+        help="Path to the GGUF-formatted fine-tuned model file."
+    )
     args = parser.parse_args()
 
-    toolkit = SentinelToolkit(model_path=args.model, base_model_path=args.base)
+    toolkit = SentinelToolkit(model_path=args.model)
     toolkit.start()
