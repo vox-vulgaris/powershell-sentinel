@@ -1,5 +1,5 @@
 # powershell_sentinel/train.py
-# FINAL, CORRECTED SCRIPT (VERSION: 2025-08-10, Step-Finding)
+# FINAL, CORRECTED SCRIPT WITH DATA FORMATTING RESTORED
 import json
 import argparse
 import os
@@ -19,6 +19,18 @@ Analyze the following obfuscated PowerShell command. Your response must be a JSO
 {prompt}
 ### RESPONSE:
 """
+
+# --- THIS FUNCTION IS CRITICAL AND HAS BEEN RESTORED ---
+def format_dataset_for_trainer(training_pairs: List[dict]) -> List[dict]:
+    """Formats the list of Pydantic models into the required {'text': ...} format."""
+    formatted_texts = []
+    for pair in training_pairs:
+        # Re-serialize the response part to a JSON string
+        response_str = json.dumps(pair['response'])
+        full_text = WINNING_PROMPT_TEMPLATE.format(prompt=pair['prompt']) + response_str
+        formatted_texts.append({"text": full_text})
+    return formatted_texts
+# --- END OF RESTORED FUNCTION ---
 
 def run_preflight_checks(console: Console, train_dataset_path: str, test_dataset_path: str) -> bool:
     console.print("--- Running Pre-flight Checks ---", style="bold blue")
@@ -53,9 +65,15 @@ def train_model(console: Console, model_name: str, dataset_path: str, output_dir
     console.print(f"--- Starting training for model [yellow]{model_name}[/] ---", style="bold blue")
     
     with open(dataset_path, 'r', encoding='utf-8') as f:
-        trainer_data = json.load(f)
-    hf_dataset = Dataset.from_list(trainer_data)
-    console.print(f"Loaded [magenta]{len(hf_dataset)}[/magenta] formatted samples.")
+        raw_data = json.load(f)
+    
+    # --- THIS IS THE CRITICAL FIX ---
+    # Apply the formatting before creating the Hugging Face Dataset
+    formatted_data = format_dataset_for_trainer(raw_data)
+    hf_dataset = Dataset.from_list(formatted_data)
+    # --- END OF CRITICAL FIX ---
+    
+    console.print(f"Loaded and formatted [magenta]{len(hf_dataset)}[/magenta] samples.")
 
     compute_dtype = getattr(torch, "bfloat16")
     quant_config = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=compute_dtype, bnb_4bit_use_double_quant=True)
@@ -80,7 +98,7 @@ def train_model(console: Console, model_name: str, dataset_path: str, output_dir
     
     training_args = TrainingArguments(
         output_dir=output_dir,
-        per_device_train_batch_size=1, # Kept at 1 to prevent OOM errors
+        per_device_train_batch_size=1,
         gradient_accumulation_steps=4,
         optim="paged_adamw_8bit",
         logging_steps=10,
@@ -114,7 +132,7 @@ def train_model(console: Console, model_name: str, dataset_path: str, output_dir
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Fine-tune a model for PowerShell analysis.")
     parser.add_argument("--model_name", type=str, required=True, help="Base model from Hugging Face.")
-    parser.add_argument("--train_dataset", type=str, required=True, help="Path to the TRAINER-FORMATTED training set.")
+    parser.add_argument("--train_dataset", type=str, required=True, help="Path to the ORIGINAL (unformatted) training set.")
     parser.add_argument("--preflight_train_dataset", type=str, required=True, help="Path to the ORIGINAL training set for validation.")
     parser.add_argument("--test_dataset", type=str, required=True, help="Path to the test set for leakage check.")
     parser.add_argument("--output_dir", type=str, required=True, help="Directory to save the fine-tuned model adapters.")

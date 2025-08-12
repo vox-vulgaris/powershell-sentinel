@@ -5,9 +5,9 @@ venv/
 .env
 
 # Generated Data - never commit large generated files
-# data/generated/*
-# data/sets/*
-# data/interim/delta_logs/*
+data/generated/*
+data/sets/*
+data/interim/delta_logs/*
 
 # Logs
 *.log
@@ -21,3 +21,9 @@ dissertation_context.txt
 chapter_3_context.txt
 commit_messages_chap3.txt
 full_commit_messages_no_diff.txt
+
+# GGUF
+*.gguf 
+
+# zip
+*.zip
