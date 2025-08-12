@@ -2,6 +2,7 @@
 
 | Metric | Score |
 | --- | --- |
-| JSON Parse Success Rate | XX.XX% (Placeholder) |
-| F1-Score (Intent) | 0.XX (Placeholder) |
-| F1-Score (MITRE TTPs) | 0.XX (Placeholder) |
+| JSON Parse Success Rate | 93.32% |
+| Deobfuscation Accuracy | 72.50% |
+| Intent F1-Score (Macro) | 70.08% |
+| MITRE TTP F1-Score (Macro) | 70.08% |

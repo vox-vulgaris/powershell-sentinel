@@ -3,7 +3,8 @@
 | Metric | Value |
 | --- | --- |
 | Target Pair Count | 10,000 |
-| Successful Pairs Generated | 10000 |
-| Failed Pairs (Execution Errors) | 14380 |
-| Total Generation Attempts | 24380 |
-| Generation Success Rate (%) | 41.02% |
+| Total Raw Pairs Generated | 10,000 |
+| Unique (De-duplicated) Pairs Generated | 5,686 |
+| Failed Pairs (Execution Errors) | 14,380 |
+| Total Generation Attempts | 24,380 |
+| Unique Generation Success Rate (%) | 23.32% |

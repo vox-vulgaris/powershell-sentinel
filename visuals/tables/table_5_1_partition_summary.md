@@ -2,6 +2,6 @@
 
 | Split | Count |
 | --- | --- |
-| Total Samples | 10000 (Placeholder) |
-| Training Set (90%) | 9000 (Placeholder) |
-| Test Set (10%) | 1000 (Placeholder) |
+| Total Unique Samples | 5,686 |
+| Training Set (90%) | 5,117 |
+| Test Set (10%) | 569 |

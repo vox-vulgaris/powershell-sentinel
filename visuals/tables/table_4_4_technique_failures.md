@@ -2,8 +2,8 @@
 
 | Technique | Failure Count |
 | --- | --- |
-| obfuscate_variables | 5739 |
-| obfuscate_format_operator | 5669 |
-| obfuscate_concat | 5627 |
-| obfuscate_types | 4665 |
-| obfuscate_base64 | 2146 |
+| obfuscate_variables | 5,739 |
+| obfuscate_format_operator | 5,669 |
+| obfuscate_concat | 5,627 |
+| obfuscate_types | 4,665 |
+| obfuscate_base64 | 2,146 |
