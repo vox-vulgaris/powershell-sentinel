@@ -36,6 +36,18 @@ class IntentEnum(str, Enum):
     UNSECURED_CREDENTIALS_FILES = "Unsecured Credentials: Credentials In Files"
     BOOT_OR_LOGON_AUTOSTART_REGISTRY = "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder"
     CREATE_OR_MODIFY_SYSTEM_PROCESS_SERVICE = "Create or Modify System Process: Windows Service"
+    # --- NEW INTENTS FOR V2 DATASET ---
+    # Execution Tactic
+    COMMAND_AND_SCRIPTING_INTERPRETER = "Execution: Command and Scripting Interpreter"
+    WINDOWS_MANAGEMENT_INSTRUMENTATION = "Execution: Windows Management Instrumentation (WMI)"
+    # Command & Control Tactic
+    INGRESS_TOOL_TRANSFER = "Command and Control: Ingress Tool Transfer"
+    # Defense Evasion Tactic
+    MASQUERADING = "Defense Evasion: Masquerading"
+    MODIFY_REGISTRY = "Defense Evasion: Modify Registry"
+    # --- Final V2 Additions ---
+    COMMAND_AND_CONTROL_WEB_PROTOCOLS = "Command and Control: Web Protocols"
+    COMMAND_AND_CONTROL_DNS = "Command and Control: DNS"
 
 class CommandOutput(BaseModel):
     stdout: str = Field(..., alias='Stdout')

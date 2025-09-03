@@ -221,7 +221,7 @@ class PrimitivesManager:
                 before_logs = self.lab.query_splunk('index=* earliest=-1m')
                 time.sleep(2)
                 self.lab.run_remote_powershell(primitive.primitive_command)
-                time.sleep(5)
+                time.sleep(15)
                 after_logs = self.lab.query_splunk('index=* earliest=-1m')
                 delta_logs = snapshot_differ.get_delta_logs(before_logs, after_logs)
                 self._save_json(delta_log_path, delta_logs)

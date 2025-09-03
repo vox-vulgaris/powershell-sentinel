@@ -40,5 +40,47 @@
     "source_match": "Splunk could not get the description for this event",
     "extraction_method": "regex",
     "detail_key_or_pattern": "Got the following information from this event:\\s*([\\s\\S]*?)[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}"
+  },
+  {
+    "rule_name": "PowerShell-EID8197-RunspaceState",
+    "event_id": 8197,
+    "source_match": "PowerShell/Operational",
+    "extraction_method": "key_value",
+    "detail_key_or_pattern": "Message"
+  },
+  {
+    "rule_name": "PowerShell-EID12039-ActivityCorrelation",
+    "event_id": 12039,
+    "source_match": "PowerShell/Operational",
+    "extraction_method": "key_value",
+    "detail_key_or_pattern": "Message"
+  },
+  {
+    "rule_name": "PowerShell-EID8196-RunspaceOpening",
+    "event_id": 8196,
+    "source_match": "PowerShell/Operational",
+    "extraction_method": "key_value",
+    "detail_key_or_pattern": "Message"
+  },
+  {
+    "rule_name": "PowerShell-EID8195-RunspacePoolState",
+    "event_id": 8195,
+    "source_match": "PowerShell/Operational",
+    "extraction_method": "key_value",
+    "detail_key_or_pattern": "Message"
+  },
+  {
+    "rule_name": "PowerShell-EID8194-RunspacePoolCreate",
+    "event_id": 8194,
+    "source_match": "PowerShell/Operational",
+    "extraction_method": "key_value",
+    "detail_key_or_pattern": "Message"
+  },
+  {
+    "rule_name": "PowerShell-EID8193-RunspaceCreate",
+    "event_id": 8193,
+    "source_match": "PowerShell/Operational",
+    "extraction_method": "key_value",
+    "detail_key_or_pattern": "Message"
   }
 ]

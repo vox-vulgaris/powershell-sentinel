@@ -1079,5 +1079,77 @@
         "details": "sc.exe create My Backdoor Service binPath= C:\\Windows\\System32\\calc.exe"
       }
     ]
+  },
+  {
+    "primitive_id": "PS-051",
+    "primitive_command": "(New-Object System.Net.WebClient).DownloadString('http://example.com')",
+    "intent": [ "Command and Control: Web Protocols" ],
+    "mitre_ttps": [ "T1071.001" ],
+    "telemetry_rules": [
+      { "source": "WinEventLog:Microsoft-Windows-Sysmon/Operational", "event_id": 3, "details": "Network connection detected from powershell.exe to example.com" }
+    ]
+  },
+  {
+    "primitive_id": "PS-052",
+    "primitive_command": "Resolve-DnsName -Name google.com -Type A",
+    "intent": [ "Command and Control: DNS" ],
+    "mitre_ttps": [ "T1071.004" ],
+    "telemetry_rules": [
+      { "source": "WinEventLog:Microsoft-Windows-Sysmon/Operational", "event_id": 3, "details": "Network connection detected from powershell.exe to DNS server" }
+    ]
+  },
+  {
+    "primitive_id": "PS-053",
+    "primitive_command": "Invoke-RestMethod -Uri http://wttr.in/London",
+    "intent": [ "Command and Control: Web Protocols" ],
+    "mitre_ttps": [ "T1071.001" ],
+    "telemetry_rules": [
+      { "source": "WinEventLog:Microsoft-Windows-Sysmon/Operational", "event_id": 3, "details": "Network connection detected from powershell.exe to wttr.in" }
+    ]
+  },
+  {
+    "primitive_id": "PS-054",
+    "primitive_command": "[System.Net.Dns]::GetHostAddresses(\"cloudflare.com\")",
+    "intent": [ "Command and Control: DNS" ],
+    "mitre_ttps": [ "T1071.004" ],
+    "telemetry_rules": [
+      { "source": "WinEventLog:Microsoft-Windows-Sysmon/Operational", "event_id": 3, "details": "Network connection detected from powershell.exe to DNS server" }
+    ]
+  },
+  {
+    "primitive_id": "PS-055",
+    "primitive_command": "$wc = New-Object System.Net.WebClient; $wc.Headers.Add('User-Agent', 'Mozilla/5.0'); $wc.DownloadString('http://canihazip.com')",
+    "intent": [ "Command and Control: Web Protocols" ],
+    "mitre_ttps": [ "T1071.001" ],
+    "telemetry_rules": [
+      { "source": "WinEventLog:Microsoft-Windows-Sysmon/Operational", "event_id": 3, "details": "Network connection detected from powershell.exe with custom User-Agent" }
+    ]
+  },
+  {
+    "primitive_id": "PS-056",
+    "primitive_command": "Resolve-DnsName -Name gmail.com -Type MX",
+    "intent": [ "Command and Control: DNS" ],
+    "mitre_ttps": [ "T1071.004" ],
+    "telemetry_rules": [
+      { "source": "WinEventLog:Microsoft-Windows-Sysmon/Operational", "event_id": 3, "details": "Network connection for DNS MX record query" }
+    ]
+  },
+  {
+    "primitive_id": "PS-057",
+    "primitive_command": "$client = New-Object System.Net.Http.HttpClient; $client.GetStringAsync('http://v4.ident.me/').Result",
+    "intent": [ "Command and Control: Web Protocols" ],
+    "mitre_ttps": [ "T1071.001" ],
+    "telemetry_rules": [
+      { "source": "WinEventLog:Microsoft-Windows-Sysmon/Operational", "event_id": 3, "details": "Network connection via .NET HttpClient" }
+    ]
+  },
+  {
+    "primitive_id": "PS-058",
+    "primitive_command": "$tcpClient = New-Object System.Net.Sockets.TcpClient; $tcpClient.Connect('1.1.1.1', 53)",
+    "intent": [ "Command and Control: Web Protocols" ],
+    "mitre_ttps": [ "T1071.001" ],
+    "telemetry_rules": [
+      { "source": "WinEventLog:Microsoft-Windows-Sysmon/Operational", "event_id": 3, "details": "Low-level TCP connection from powershell.exe to 1.1.1.1:53" }
+    ]
   }
 ]

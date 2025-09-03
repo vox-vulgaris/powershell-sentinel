@@ -127,8 +127,9 @@ class LabConnection:
                  return CommandOutput(Stdout="", Stderr="FATAL: WinRM connection is dead and could not be recovered.", ReturnCode=-1)
 
         try:
-            safe_command = command.replace("'", "''")
-            final_script = POWERSHELL_HYBRID_WRAPPER.format(command=safe_command)
+            # safe_command = command.replace("'", "''")
+            # final_script = POWERSHELL_HYBRID_WRAPPER.format(command=safe_command)
+            final_script = POWERSHELL_HYBRID_WRAPPER.format(command=command)
             encoded_script = base64.b64encode(final_script.encode('utf-16-le')).decode('ascii')
             command_id = self.winrm_protocol.run_command(self.shell_id, 'powershell.exe', ['-EncodedCommand', encoded_script])
             stdout, stderr, return_code = self.winrm_protocol.get_command_output(self.shell_id, command_id)
