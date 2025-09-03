@@ -103,7 +103,7 @@ class SentinelToolkit:
             raise RuntimeError("Model is not loaded.")
 
         # Generate text using the loaded GGUF model
-        output = self.model(prompt, max_tokens=1024, temperature=0.1, stop=["### RESPONSE:"])
+        output = self.model(prompt, max_tokens=1024, temperature=0.1, stop=["###"])
         raw_output_string = output['choices'][0]['text']
 
         return raw_output_string.strip()
@@ -227,12 +227,22 @@ class SentinelToolkit:
             self.console.print("\n" + "─" * 50, style="bold magenta")
             self.console.print("  PowerShell Sentinel Toolkit Menu", style="bold magenta")
             self.console.print("─" * 50, style="bold magenta")
+
+            # --- THIS IS THE CORRECTED PART ---
+            # First, print the options clearly.
+            self.console.print("\n[1] Analyze Obfuscated Command")
+            self.console.print("[2] Threat Intel Lookup")
+            self.console.print("[3] About/Performance")
+            self.console.print("[q] Quit")
+
+            # Then, ask a simple question. No more 'description' argument.
             choice = Prompt.ask(
-                "Choose an option",
+                "\nChoose an option",
                 choices=["1", "2", "3", "q"],
-                show_choices=False,
-                description="\n[1] Analyze Obfuscated Command\n[2] Threat Intel Lookup\n[3] About/Performance\n[q] Quit\n"
+                show_default=False # This makes the prompt look cleaner
             )
+            # --- END OF CORRECTION ---
+
             if choice == '1':
                 self.feature_analyze_command()
             elif choice == '2':
