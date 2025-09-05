@@ -13,12 +13,25 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 from trl import SFTTrainer
 from powershell_sentinel.models import TrainingPair
 
+# --- MODIFICATION START: Unambiguous Prompt Template ---
+
+# This new prompt is explicitly structured to match the flattened LLMResponse model.
+# It defines the exact top-level keys and describes the contents of the complex
+# telemetry_signature field, leaving no room for model misinterpretation.
 WINNING_PROMPT_TEMPLATE = """### INSTRUCTION:
-Analyze the following obfuscated PowerShell command. Your response must be a JSON object containing the deobfuscated command, a list of intents, a list of MITRE TTPs, and a list of predicted telemetry signatures.
+Analyze the following obfuscated PowerShell command. Your response must be a JSON object with four top-level keys:
+1. "deobfuscated_command": A string containing the original, clean command.
+2. "intent": A list of strings describing the command's purpose.
+3. "mitre_ttps": A list of strings containing the relevant MITRE ATT&CK Technique IDs.
+4. "telemetry_signature": A list of JSON objects, where each object represents a predicted log event and has the keys "source", "event_id", and "details".
+
 ### INPUT:
 {prompt}
+
 ### RESPONSE:
 """
+# --- MODIFICATION END ---
+
 
 # --- THIS FUNCTION IS CRITICAL AND HAS BEEN RESTORED ---
 def format_dataset_for_trainer(training_pairs: List[dict]) -> List[dict]:
@@ -38,6 +51,7 @@ def run_preflight_checks(console: Console, train_dataset_path: str, test_dataset
         console.print(f"Validating schema for training data: [cyan]{train_dataset_path}[/]...")
         with open(train_dataset_path, 'r', encoding='utf-8') as f:
             train_data = json.load(f)
+        # Note: This will now use the new FlattenedLLMResponse via the TrainingPair model
         train_pairs = [TrainingPair.model_validate(item) for item in train_data]
         console.print(f"[green]Schema validation passed for {len(train_pairs)} training records.[/green]")
     except (FileNotFoundError, json.JSONDecodeError, ValidationError) as e:

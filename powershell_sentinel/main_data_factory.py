@@ -10,7 +10,7 @@ from pydantic import ValidationError
 from rich.progress import Progress, BarColumn, TextColumn, TimeRemainingColumn
 from rich.console import Console
 
-from powershell_sentinel.models import Primitive, TrainingPair, LLMResponse, Analysis, CommandOutput
+from powershell_sentinel.models_legacy import Primitive, TrainingPair, LLMResponse, Analysis, CommandOutput
 from powershell_sentinel.lab_connector import LabConnection
 
 # --- V2 CONFIGURATION ---

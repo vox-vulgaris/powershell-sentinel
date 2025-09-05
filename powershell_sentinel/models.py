@@ -84,14 +84,23 @@ class Primitive(BaseModel):
     mitre_ttps: List[MitreTTPEnum]
     telemetry_rules: List[TelemetryRule]
 
-class Analysis(BaseModel):
+# --- MODIFICATION START: Flattening the LLMResponse Structure ---
+
+# The nested `Analysis` class is now removed.
+# class Analysis(BaseModel):
+#     intent: List[IntentEnum]
+#     mitre_ttps: List[MitreTTPEnum]
+#     telemetry_signature: List[TelemetryRule]
+
+# The `LLMResponse` class is updated to be flat, containing all necessary fields at the top level.
+# This creates a clearer, more robust data contract for the fine-tuning and evaluation process.
+class LLMResponse(BaseModel):
+    deobfuscated_command: str
     intent: List[IntentEnum]
     mitre_ttps: List[MitreTTPEnum]
     telemetry_signature: List[TelemetryRule]
 
-class LLMResponse(BaseModel):
-    deobfuscated_command: str
-    analysis: Analysis
+# --- MODIFICATION END ---
 
 class TrainingPair(BaseModel):
     prompt: str
