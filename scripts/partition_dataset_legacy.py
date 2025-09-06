@@ -1,13 +1,13 @@
-# scripts/partition_dataset.py (Final Refactored Version)
+# scripts/partition_dataset_legacy.py (Final, Seedable Version)
 import json
 import random
 import os
 import argparse
 from pydantic import ValidationError
-from powershell_sentinel.models import TrainingPair
+from powershell_sentinel.models_legacy import TrainingPair # Using legacy models
 
-def partition_and_create_subsets(input_path: str, train_out_path: str, test_out_path: str, mini_train_path: str, mini_val_path: str):
-    print("--- Starting MLOps Data Partitioning ---")
+def partition_and_create_subsets(input_path: str, train_out_path: str, test_out_path: str, mini_train_path: str, mini_val_path: str, seed: int):
+    print("--- Starting MLOps Data Partitioning (Legacy) ---")
     print(f"Loading and validating clean dataset from: {input_path}")
     try:
         with open(input_path, 'r', encoding='utf-8') as f:
@@ -18,9 +18,13 @@ def partition_and_create_subsets(input_path: str, train_out_path: str, test_out_
         print(f"\n[FATAL ERROR] Could not load or validate the clean dataset: {e}")
         return
 
-    print("Shuffling the dataset...")
+    print(f"Shuffling the dataset with random seed: {seed}...")
     clean_dataset_dicts = [pair.model_dump(mode='json') for pair in clean_dataset]
+    
+    # --- THE CRITICAL FIX ---
+    random.seed(seed)
     random.shuffle(clean_dataset_dicts)
+    # --- END FIX ---
 
     split_index = int(len(clean_dataset_dicts) * 0.9)
     train_data = clean_dataset_dicts[:split_index]
@@ -54,5 +58,6 @@ if __name__ == '__main__':
     parser.add_argument("--test-out", required=True, help="Path to save the main test file.")
     parser.add_argument("--mini-train-out", required=True, help="Path to save the mini training file.")
     parser.add_argument("--mini-val-out", required=True, help="Path to save the mini validation file.")
+    parser.add_argument("--seed", type=int, default=42, help="Random seed for shuffling.")
     args = parser.parse_args()
-    partition_and_create_subsets(args.input, args.train_out, args.test_out, args.mini_train_out, args.mini_val_out)
+    partition_and_create_subsets(args.input, args.train_out, args.test_out, args.mini_train_out, args.mini_val_out, args.seed)
