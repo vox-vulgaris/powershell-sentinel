@@ -1,0 +1,5 @@
+INTENT:
+- Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder
+
+MITRE TTPs:
+- T1547.001

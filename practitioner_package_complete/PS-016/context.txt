@@ -1,0 +1,5 @@
+INTENT:
+- Local Groups
+
+MITRE TTPs:
+- T1069.001

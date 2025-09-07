@@ -1,0 +1,5 @@
+INTENT:
+- File and Directory Discovery
+
+MITRE TTPs:
+- T1083

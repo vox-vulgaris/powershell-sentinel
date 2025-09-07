@@ -1,0 +1,5 @@
+INTENT:
+- Create or Modify System Process: Windows Service
+
+MITRE TTPs:
+- T1543.003

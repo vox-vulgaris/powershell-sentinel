@@ -1,0 +1,1 @@
+reg.exe save hklm\sam C:\sam.save

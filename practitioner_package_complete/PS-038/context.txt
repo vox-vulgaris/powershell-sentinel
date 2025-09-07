@@ -1,0 +1,5 @@
+INTENT:
+- Security Software Discovery
+
+MITRE TTPs:
+- T1518.001

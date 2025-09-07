@@ -1,0 +1,5 @@
+INTENT:
+- Unsecured Credentials: Credentials In Files
+
+MITRE TTPs:
+- T1552.001

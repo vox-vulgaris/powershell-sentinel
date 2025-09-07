@@ -1,0 +1,1 @@
+reg.exe save hklm\system C:\system.save

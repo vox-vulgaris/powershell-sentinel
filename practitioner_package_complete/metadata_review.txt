@@ -1,0 +1,2 @@
+PS-028: The delta logs are empty.
+All other metedata looks correct.

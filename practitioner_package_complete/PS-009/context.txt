@@ -1,0 +1,5 @@
+INTENT:
+- System Owner/User Discovery
+
+MITRE TTPs:
+- T1033
