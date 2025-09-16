@@ -1,95 +1,60 @@
-# PowerShell-Sentinel: A Data-Centric Approach to Obfuscated Command Analysis
+# LLM-driven PowerShell Analysis Assistant
 
-## Overview
+An MSc dissertation project from University College London focused on fine-tuning a Large Language Model to automate the analysis of obfuscated PowerShell commands. This project demonstrates a novel, data-centric methodology for creating specialized AI tools for cybersecurity operations.
 
-This project engineers and validates a data-centric methodology for fine-tuning a Large Language Model (LLM) to perform structured analysis of obfuscated PowerShell commands. The core research contribution is the **"PowerShell-Sentinel Data Factory,"** a software pipeline for generating specialized, high-quality training data. This data is then used to fine-tune a `Gemma-2B` model, which powers a practical command-line analysis tool.
-
-The entire workflow—from lab setup and data curation to model training and evaluation—is designed to be a transparent, repeatable, and rigorous process, forming the basis of a dissertation on applied AI for cybersecurity.
-
----
-
-## Features (sentinel_toolkit v0)
-
-The final deliverable is a standalone, interactive command-line tool with three primary functions:
-
-*   **[1] Analyze Obfuscated Command:** The core feature. It leverages the fine-tuned LLM to take any obfuscated PowerShell command, deobfuscate it, and predict its intent, associated MITRE ATT&CK TTPs, and the likely telemetry signals it would generate. Includes an intelligent retry mechanism for robust performance.
-
-*   **[2] Threat Intel Lookup:** A high-speed, deterministic lookup tool. It allows a user to input a *clean*, known PowerShell command (e.g., `Invoke-Kerberoast`) and instantly retrieve the expert-curated `intent`, `TTPs`, and `telemetry_rules` from the project's internal knowledge base.
-
-*   **[3] About & Performance:** Displays static information about the tool, the base model used, and the final performance metrics (e.g., JSON Parse Success Rate, F1-Scores) as determined by the rigorous evaluation against a held-out test set.
+<p align="center">
+  <img src="docs/images/cli_tool_in_action.png" alt="PowerShell Sentinel CLI in Action">
+</p>
 
 ---
 
-## Setup & Installation
+## The Problem: The Challenge of Obfuscated PowerShell
 
-### For Development
+Modern attackers frequently use "Living Off the Land" (LOTL) techniques, abusing native tools like PowerShell to evade detection. They employ multiple, randomized layers of obfuscation (string manipulation, encoding, dynamic invocation) to hide malicious commands. This creates a "combinatorial explosion" of variations that break traditional signature-based security tools.
 
-This is for running the data factory, training scripts, or modifying the tool.
+For a Security Operations Center (SOC), manually deconstructing these commands is a slow, error-prone, and specialized task that doesn't scale during a real incident. This project aimed to solve this problem by automating the analysis process.
 
-1.  **Clone the repository:**
-    `git clone https://github.com/YourUsername/powershell-sentinel.git`
-2.  **Navigate to the project directory:**
-    `cd powershell-sentinel`
-3.  **Create and activate a Python virtual environment:**
-    *   `python -m venv venv`
-    *   Windows: `.\venv\Scripts\activate`
-    *   macOS/Linux: `source venv/bin/activate`
-4.  **Install dependencies:**
-    `pip install -r requirements.txt`
+## The Solution: A Data-Centric AI Assistant
 
-### Running the Packaged Tool (End-User)
+This project proves that a data-centric approach can transform a general-purpose Large Language Model (LLM) into a reliable, specialized security tool. The core of this work is the **PowerShell-Sentinel Data Factory**, a custom MLOps pipeline built to solve the critical bottleneck of data scarcity.
 
-This is for users who only want to use the final application.
+The pipeline automates the generation of a high-fidelity dataset of over **9,550 unique and validated** obfuscated PowerShell command-to-telemetry pairs. This was achieved through an iterative engineering process:
+1.  **Lab Architecture:** A controlled, multi-VM Azure lab with Active Directory, Windows Server, Splunk, and Sysmon was built to generate realistic, high-fidelity telemetry (Event IDs 4104, 4103, Sysmon EID 1 & 3, etc.).
+2.  **Iterative Generation:** An initial randomized factory revealed profound dataset bias. It was re-engineered into a deterministic, AST-aware obfuscation engine to produce a diverse and balanced dataset, mitigating the initial flaws.
+3.  **Model Fine-Tuning:** A `meta-llama/Llama-3-8B-Instruct` model was fine-tuned on this specialized dataset using QLoRA to teach it the complex task of deobfuscation and structured analysis.
 
-1.  Download `sentinel_toolkit.exe` (for Windows) or `sentinel_toolkit` (for macOS/Linux) from the project's releases page.
-2.  Open a terminal (PowerShell, Command Prompt, bash, etc.).
-3.  Navigate to the directory where you downloaded the file.
-4.  Run the tool:
-    *   **Windows:** `.\sentinel_toolkit.exe`
-    *   **macOS/Linux:** First, make it executable with `chmod +x ./sentinel_toolkit`, then run it with `./sentinel_toolkit`.
+<p align="center">
+  <img src="docs/images/data_factory_diagram.png" alt="Data Factory Pipeline">
+</p>
 
 ---
 
-## Project & Data Directory Structure
+## Performance: A Quantifiable Leap in Reliability and Accuracy
 
-The project follows a structured layout to separate source code, data, scripts, and tests.
+When evaluated on a diverse, locked test set, the final fine-tuned model demonstrated a profound improvement over a baseline model trained on a biased, lower-quality dataset. The data-centric approach was empirically validated.
 
-### `/powershell_sentinel/`
-The main Python source code for the application and its modules.
+| Metric | Baseline Model (on Diverse Test) | **Final Model (on Diverse Test)** | Improvement |
+| :--- | :--- | :--- | :--- |
+| **JSON Parse Success Rate** | 76.31% | **85.79%** | +9.48% |
+| **Deobfuscation Accuracy** | 10.90% | **74.78%** | **+586%** |
+| **Intent F1-Score (Macro)** | 9.92% | **69.48%** | **+599%** |
+| **Telemetry F1-Score (Macro)**| 11.27% | **75.40%** | **+569%** |
 
-### `/data/`
-This directory is organized to separate raw source data, intermediate artifacts, and final generated datasets.
+#### Key Achievements:
+*   ✔️ **Reliable for Automation:** Achieved an **85.79% JSON Parse Success Rate**, ensuring the model's output is structured and machine-readable for use in automated security pipelines (SOAR).
+*   ✔️ **Accurate Forensic Prediction:** Reached a **75.40% Telemetry F1-Score**, proving the model can accurately predict the exact forensic evidence a command will leave behind on a compromised host.
+*   ✔️ **Overcame "Cognitive Load":** The superior dataset enabled the model to handle complex semantic tasks (Intent Classification, Telemetry Prediction) while still adhering to a strict output format, solving a key challenge in fine-tuning LLMs.
 
-*   #### `/data/source/`
-    This directory contains the hand-curated, ground-truth data for the project.
+---
 
-    *   **`primitives_library.json`**: This is the master knowledge base. It is a list of "primitive" PowerShell commands representing various adversarial techniques. Each entry is a JSON object with a specific, required schema. This file is the primary input for the data factory.
-        *   **Schema:** `primitive_id`, `primitive_command`, `intent` (list), `mitre_ttps` (list), `telemetry_rules` (list of objects). The `telemetry_rules` field starts empty and is populated by the `primitives_manager.py` tool.
+## Tech Stack
 
-    *   **`mitre_ttp_library.json`**: A project-specific lookup file that provides canonical data (name and tactic) for every MITRE ATT&CK technique referenced in `primitives_library.json`. This file is not an exhaustive database of the entire ATT&CK framework; instead, it is curated iteratively. As new primitives are developed, any new TTPs they reference are added here. This ensures the `primitives_manager.py` tool has a consistent and validated source for populating its selection menus.
+*   **AI/ML:** Python, PyTorch, Hugging Face (Transformers, PEFT, TRL), QLoRA, Pydantic
+*   **Cybersecurity & Labs:** PowerShell, Splunk, Sysmon, MITRE ATT&CK Framework
+*   **Infrastructure:** Microsoft Azure (Virtual Machines, Virtual Networks), Windows Server, Active Directory, WinRM
 
-*   #### `/data/interim/`
-    Holds temporary data generated during the curation process, such as the `delta_logs` for each primitive.
+## Full Dissertation
 
-*   #### `/data/generated/`
-    Contains the final output of the `main_data_factory.py` script.
-    *   **`training_data_v0.json`**: The complete, large-scale dataset of obfuscated/deobfuscated pairs before partitioning.
-    *   **`failures.log`**: A critical log file that records any obfuscated command that failed execution in the lab, providing a feedback loop for improving the obfuscation engine.
+For a complete academic deep-dive into the methodology, data generation process, and model evaluation, the full dissertation is available here:
 
-*   #### `/data/sets/`
-    The final, ML-ready datasets after partitioning.
-    *   **`training_set_v0.json`**: The portion of the data used to fine-tune the model (e.g., 90%).
-    *   **`test_set_v0.json`**: The "locked," held-out portion of the data used for final, unbiased model evaluation (e.g., 10%).
-
-### `/scripts/`
-Contains utility and one-time experiment scripts, like the `prompt_engineering` suite and the `partition_dataset.py` script.
-
-### `/tests/`
-Contains all unit and integration tests for the project.
-
-*   #### `/tests/test_data/`
-    This subdirectory holds small, specific data files required for running tests.
-
-    *   **`expert_ground_truth.json`**: This file acts as the definitive "answer key" for the data curation integration tests. It contains a small, representative subset of primitives where the `telemetry_rules`, `intent`, and `mitre_ttps` have been meticulously hand-curated by a human domain expert. The automated curation pipeline's output is compared against this file to calculate an F1-score for accuracy.
-
-    *   **`test_cli_lookup.json`**: A small, mock version of `primitives_library.json` used to unit test the non-LLM "Threat Intel Lookup" feature of the final `sentinel_toolkit` CLI, ensuring it can correctly parse the file and retrieve data without needing the full dataset.
+[`[PDF] LLM-driven PowerShell Analysis Assistant`](docs/dissertation.pdf)
