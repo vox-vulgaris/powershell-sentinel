@@ -9,8 +9,6 @@ from rich.table import Table
 import argparse
 from typing import Set
 
-# --- Core Logic Functions (Self-Contained, No External Imports) ---
-
 def infer_techniques_from_prompt(prompt: str) -> Set[str]:
     """
     Infers the set of obfuscation techniques used based on signatures in a prompt string.
@@ -71,7 +69,7 @@ def analyze_failures(console: Console, log_path: str):
     for line in log_lines:
         try:
             record = json.loads(line)
-            # [DEFINITIVE FIX] Use .update() for primitives for consistency and testability.
+            # Use .update() for primitives for consistency and testability.
             primitive_id = record.get('primitive_id', 'Unknown')
             primitive_failures.update([primitive_id])
             technique_failures.update(record.get('obfuscation_chain', []))

@@ -1,14 +1,10 @@
-# =============================================================================
-# Original Layering Model - Validation Harness
-#
-# Objective: To definitively test if the original, more complex layering
-#            hierarchy (Arguments -> Command -> Base64) is viable with the
-#            new, surgically reconstructed engine.
-# =============================================================================
+# Definitively test if the original, more complex layering
+# hierarchy (Arguments -> Command -> Base64) is viable with the
+# new, surgically reconstructed engine.
 
 $ErrorActionPreference = "Stop"
 
-# --- CONFIGURATION ---
+# Configuration
 $primitive = "Get-LocalGroupMember -Group ""Administrators"""
 
 # The argument obfuscation layers
@@ -28,8 +24,7 @@ $command_finisher = 'Invoke-SentinelCommand'
 # The final execution wrapper
 $base64_finisher = 'Invoke-SentinelBase64'
 
-# --- UTILITY FUNCTION ---
-# (Same as before)
+# Utility Function
 function Apply-ObfuscationChain {
     param( [string]$InitialCommand, [string[]]$Recipe )
     $currentCommand = $InitialCommand
@@ -45,8 +40,7 @@ function Apply-ObfuscationChain {
     return $currentCommand
 }
 
-# --- TEST EXECUTION ---
-
+# Test Execution
 Write-Host "--- Validating Original Layering Model ---`n" -ForegroundColor Cyan
 Import-Module .\PowerShellSentinelObfuscator.psm1 -Force
 

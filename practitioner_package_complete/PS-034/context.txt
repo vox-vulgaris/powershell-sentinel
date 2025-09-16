@@ -1,5 +1,0 @@
-INTENT:
-- System Information Discovery
-
-MITRE TTPs:
-- T1082

@@ -106,7 +106,7 @@ class LabConnection:
         self.shell_id = None
         self.winrm_protocol = None
     
-    # [DEFINITIVE FIX] Add the reset_shell method back into the class.
+    # Add the reset_shell method back into the class.
     def reset_shell(self):
         """Performs a full teardown and rebuild of the WinRM connection."""
         console.print("\n[bold yellow]Shell Resetting:[/bold yellow] Discarding and rebuilding full WinRM connection...", end="")

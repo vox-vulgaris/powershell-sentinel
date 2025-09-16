@@ -13,7 +13,7 @@ REQUIRED_SETTINGS = {
 
 def parse_winrm_output(output: str) -> dict:
     """Parses the key-value output of a 'winrm get' command."""
-    # [DEFINITIVE FIX] Add a guard clause to handle None or empty string input.
+    # Add a guard clause to handle None or empty string input.
     if not output:
         return {}
         

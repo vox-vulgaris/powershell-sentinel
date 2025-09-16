@@ -1,5 +1,0 @@
-INTENT:
-- Scheduled Task/Job: Scheduled Task
-
-MITRE TTPs:
-- T1053.005

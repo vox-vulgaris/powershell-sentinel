@@ -1,5 +1,0 @@
-INTENT:
-- OS Credential Dumping: Security Account Manager
-
-MITRE TTPs:
-- T1003.002

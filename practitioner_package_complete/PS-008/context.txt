@@ -1,7 +1,0 @@
-INTENT:
-- File and Directory Discovery
-- System Network Configuration Discovery
-
-MITRE TTPs:
-- T1083
-- T1016

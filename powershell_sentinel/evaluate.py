@@ -16,8 +16,7 @@ from powershell_sentinel.models import TrainingPair, LLMResponse, IntentEnum, Mi
 from powershell_sentinel.train import WINNING_PROMPT_TEMPLATE
 from powershell_sentinel.utils.metrics import calculate_multilabel_f1_scores, calculate_f1_for_telemetry
 
-def calculate_metrics(predictions: List[LLMResponse], ground_truths: List[TrainingPair], parse_failures: int, total_samples_override: int = None) -> Dict[str, float]:
-    # ... (This function is correct) ...
+def calculate_metrics(predictions: List[LLMResponse], ground_truths: List[TrainingPair], parse_failures: int, total_samples_override: int = None) -> Dict[str, float]:    
     total_original_samples = total_samples_override if total_samples_override is not None else len(ground_truths) + parse_failures
     parse_success_rate = len(predictions) / total_original_samples if total_original_samples > 0 else 0
     parsed_ground_truths = [gt.response for gt in ground_truths]
@@ -61,8 +60,7 @@ def perform_breakdown_analysis_by_primitive(predictions: List[LLMResponse], trut
         report['primitive_id'] = primitive_id
         breakdown_report_list.append(report)
     breakdown_report_list.sort(key=lambda x: x['Telemetry F1-Score (Macro)'], reverse=True)
-    
-    # --- THE CRITICAL FIX ---
+        
     table = Table(title="V2 Model Performance Breakdown by Primitive")
     table.add_column("Primitive ID", style="cyan"); table.add_column("Samples", style="magenta"); table.add_column("Deobfus. Acc.", style="green"); table.add_column("Intent F1", style="green"); table.add_column("TTP F1", style="green"); table.add_column("Telemetry F1", style="bold green")
     for metrics in breakdown_report_list:
@@ -76,8 +74,7 @@ def perform_breakdown_analysis_by_primitive(predictions: List[LLMResponse], trut
         )
     console.print(table)
 
-def evaluate(args: argparse.Namespace):
-    # ... (main evaluate function is unchanged) ...
+def evaluate(args: argparse.Namespace):    
     console = Console()
     try:
         with open(args.test_set_path, 'r', encoding='utf-8') as f: test_data = json.load(f)
@@ -122,8 +119,7 @@ def evaluate(args: argparse.Namespace):
     if args.breakdown:
         perform_breakdown_analysis_by_primitive(successful_predictions, corresponding_truths, console)
 
-if __name__ == '__main__':
-    # ... (main block is unchanged) ...
+if __name__ == '__main__':    
     parser = argparse.ArgumentParser(description="Evaluate a fine-tuned PowerShell analysis model.")
     parser.add_argument("--model_path", type=str, required=True, help="Path to the fine-tuned adapter weights.")
     parser.add_argument("--base_model_path", type=str, required=True, help="Path to the base model.")

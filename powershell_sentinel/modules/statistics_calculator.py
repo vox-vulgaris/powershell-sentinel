@@ -27,16 +27,6 @@ def calculate_global_rarity(primitives_library: List[Primitive]) -> Dict[str, fl
         A dictionary where keys are a unique JSON string representation of a TelemetryRule
         and values are their IPF scores (e.g., log(total_primitives / count)).
     """
-    # TODO: Implement the logic.
-    # 1. Initialize `log_counts` to store the frequency of each rule. Use defaultdict(int).
-    # 2. Iterate through each primitive in `primitives_library`.
-    # 3. For each rule in its `telemetry_rules`, create a unique, hashable representation.
-    #    The best way is `rule.model_dump_json()` which creates a consistent string.
-    # 4. Increment the count for that rule string in `log_counts`.
-    # 5. After counting, initialize an empty dictionary `rarity_scores`.
-    # 6. Iterate through `log_counts`. Calculate the IPF score for each rule:
-    #    `math.log(total_primitives / count)`. Store it in `rarity_scores`.
-    # 7. Return `rarity_scores`.
     
     total_primitives = len(primitives_library)
     if total_primitives == 0:
@@ -66,20 +56,6 @@ def calculate_local_relevance(primitives_library: List[Primitive]) -> Dict[str, 
     Returns:
         A nested dictionary: {mitre_ttp_string: {rule_json_string: relevance_score}}.
     """
-    # TODO: Implement the logic.
-    # 1. Initialize `tag_counts` (defaultdict(int)).
-    # 2. Initialize `tag_log_counts` (defaultdict(int)).
-    # 3. Iterate through each primitive in the library.
-    #    a. For each tag in the primitive's `mitre_ttps`, increment `tag_counts[tag.value]`.
-    #    b. For each rule in the primitive's `telemetry_rules`:
-    #       c. For each tag in the primitive's `mitre_ttps`:
-    #          d. Increment `tag_log_counts[(tag.value, rule.model_dump_json())]`.
-    # 4. After counting, initialize an empty `relevance_scores` (defaultdict(dict)).
-    # 5. Iterate through `tag_log_counts.items()`.
-    #    a. Unpack the key into `tag` and `rule_repr`.
-    #    b. Get the count of the rule with that tag, and the total count for that tag.
-    #    c. Calculate relevance and store it: `relevance_scores[tag][rule_repr] = ...`
-    # 6. Return `relevance_scores`.
 
     tag_counts = defaultdict(int)
     tag_log_counts = defaultdict(int)

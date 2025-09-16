@@ -1,7 +1,0 @@
-INTENT:
-- System Service Discovery
-- Process Discovery
-
-MITRE TTPs:
-- T1007
-- T1057

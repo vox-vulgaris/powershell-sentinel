@@ -29,13 +29,6 @@ def get_delta_logs(before_logs: List[SplunkLogEvent], after_logs: List[SplunkLog
     Returns:
         A list of SplunkLogEvent models representing the new log events (the delta).
     """
-    # TODO: Implement the logic.
-    # 1. Create a set of the `raw` string content from each log in the `before_logs` list for efficient lookup.
-    # 2. Initialize an empty list, `delta_logs`.
-    # 3. Iterate through each log in the `after_logs` list.
-    # 4. If the `raw` content of the current log is NOT in the set of "before" logs,
-    #    append the full SplunkLogEvent object to the `delta_logs` list.
-    # 5. Return the `delta_logs` list.
 
     seen_raw_logs = {log.raw for log in before_logs}
     delta_logs = [log for log in after_logs if log.raw not in seen_raw_logs]

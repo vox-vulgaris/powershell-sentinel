@@ -6,8 +6,6 @@ setup(
     version="0.1.0",
     packages=find_packages(),
     install_requires=[
-        # Your list of dependencies from requirements.txt can go here,
-        # but for this project, using requirements.txt directly is fine.
     ],
     entry_points={
         'console_scripts': [

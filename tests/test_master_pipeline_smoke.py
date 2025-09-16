@@ -46,7 +46,7 @@ class TestMasterPipelineSmoke(unittest.TestCase):
         
         mock_lab_instance = mock_lab_connection.return_value
         
-        # [DEFINITIVE FIX] The mock CommandOutput object MUST be created using the
+        # The mock CommandOutput object MUST be created using the
         # aliased, PowerShell-style field names (PascalCase) to pass validation.
         mock_lab_instance.run_remote_powershell.return_value = CommandOutput(
             ReturnCode=0, 

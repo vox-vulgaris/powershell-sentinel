@@ -3,25 +3,9 @@ import json
 import argparse
 import os
 
-# ======================================================================================
-# DISSERTATION CONTEXT & ANNOTATIONS
-#
 # This script is a standalone data preparation tool. Its purpose is to take the
 # raw, contaminated output from the data factory and produce a clean, de-duplicated
 # dataset suitable for use in the MLOps pipeline.
-#
-# NARRATIVE PLACEMENT:
-# This script is executed *after* the analysis of the duplication issue in Chapter 4.
-# It represents the practical solution to the problem identified by
-# `analyze_dataset_uniqueness.py`. The output of this script, a file like
-# `training_data_v0_clean.json`, becomes the definitive, trusted source dataset
-# that is handed off to the next phase of the project.
-#
-# METHODOLOGY:
-# The script preserves the *first* occurrence of each unique prompt it encounters,
-# ensuring that the final dataset is both unique and maintains the original data
-# order as much as possible before shuffling in the next step.
-# ======================================================================================
 
 def deduplicate_dataset(input_path: str, output_path: str):
     """

@@ -1,7 +1,0 @@
-INTENT:
-- System Network Connections Discovery
-- Network Service Discovery
-
-MITRE TTPs:
-- T1049
-- T1046

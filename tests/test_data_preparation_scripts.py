@@ -21,7 +21,6 @@ def deduplicate_dataset(input_path: str, output_path: str):
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(deduped_data, f)
-# --- FIX ENDS HERE ---
 
 
 class TestDataPreparationScripts(unittest.TestCase):

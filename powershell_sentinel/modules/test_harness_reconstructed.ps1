@@ -1,14 +1,11 @@
-# =============================================================================
-# Reconstructed Engine - Full-Stack Validation Harness (v3 - FINAL)
-#
-# Objective: To validate that our custom-built, non-interactive obfuscation
-#            module can successfully handle both of the mutually exclusive
-#            "finisher" branches (Variables and Base64).
-# =============================================================================
+# Validate that custom-built, non-interactive obfuscation
+# module can successfully handle both of the mutually exclusive
+# "finisher" branches (Variables and Base64).
+
 
 $ErrorActionPreference = "Stop"
 
-# --- CONFIGURATION ---
+# Configuration
 
 # 1. The Primitive to Test
 $primitive = "Get-LocalGroupMember -Group ""Administrators"""
@@ -29,7 +26,7 @@ $recipe_A_finisher = 'Invoke-SentinelCommand'
 $recipe_B_finisher = 'Invoke-SentinelBase64' # This is now active
 
 
-# --- UTILITY FUNCTION ---
+# Utility Function
 function Apply-ObfuscationChain {
     param(
         [string]$InitialCommand,
@@ -39,7 +36,7 @@ function Apply-ObfuscationChain {
     foreach ($technique in $Recipe) {
         Write-Host "  Applying Layer: $technique ..." -ForegroundColor Yellow
         
-        # Directly invoke the function from our module
+        # Directly invoke the function from module
         $obfuscatedOutput = & $technique -Command $currentCommand
         
         if ([string]::IsNullOrWhiteSpace($obfuscatedOutput) -or $obfuscatedOutput.Contains("Error")) {
@@ -52,11 +49,11 @@ function Apply-ObfuscationChain {
 }
 
 
-# --- TEST EXECUTION ---
+# Test Execution
 
 Write-Host "--- Starting Reconstructed Engine Validation ---`n" -ForegroundColor Cyan
 
-# Import our custom module (with the new Base64 function)
+# Import custom module (with the new Base64 function)
 Import-Module .\PowerShellSentinelObfuscator.psm1 -Force
 
 # --- TEST A: Variables as the Finisher ---
@@ -83,7 +80,7 @@ try {
 # --- TEST B: Base64 as the Finisher ---
 Write-Host "`n--- TEST B: Finishing with Invoke-SentinelBase64 ---" -ForegroundColor White
 try {
-    # Step 1: Apply the same complex argument obfuscation chain
+    # Step 1: Apply the same argument obfuscation chain
     Write-Host "Step 1: Applying Argument Obfuscation Chain..."
     $obfuscated_base_B = Apply-ObfuscationChain -InitialCommand $primitive -Recipe $argument_recipe
 

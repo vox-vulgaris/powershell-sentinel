@@ -1,5 +1,4 @@
 # scripts/prompt_engineering/evaluate_prompts.py
-# FINAL, CORRECTED SCRIPT (VERSION: 2025-08-10, Step-Finding)
 import os
 import json
 import argparse

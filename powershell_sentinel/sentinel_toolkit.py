@@ -227,21 +227,17 @@ class SentinelToolkit:
             self.console.print("\n" + "─" * 50, style="bold magenta")
             self.console.print("  PowerShell Sentinel Toolkit Menu", style="bold magenta")
             self.console.print("─" * 50, style="bold magenta")
-
-            # --- THIS IS THE CORRECTED PART ---
-            # First, print the options clearly.
+                        
             self.console.print("\n[1] Analyze Obfuscated Command")
             self.console.print("[2] Threat Intel Lookup")
             self.console.print("[3] About/Performance")
             self.console.print("[q] Quit")
-
-            # Then, ask a simple question. No more 'description' argument.
+            
             choice = Prompt.ask(
                 "\nChoose an option",
                 choices=["1", "2", "3", "q"],
-                show_default=False # This makes the prompt look cleaner
-            )
-            # --- END OF CORRECTION ---
+                show_default=False 
+            )            
 
             if choice == '1':
                 self.feature_analyze_command()

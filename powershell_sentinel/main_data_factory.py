@@ -169,7 +169,7 @@ def main(primitives_path: str, dry_run: bool):
                     obfuscated_cmd = current_command
                     execution_result = None # Initialize to None
 
-                    # PRE-FLIGHT LENGTH CHECK (THE NEW, REFINED TWEAK)
+                    # PRE-FLIGHT LENGTH CHECK 
                     if len(obfuscated_cmd) > 8000:
                         # SIMULATE a lab failure instead of skipping.
                         # We will create a fake "CommandOutput" object that mirrors the real error.

@@ -1,5 +1,0 @@
-INTENT:
-- Process Discovery
-
-MITRE TTPs:
-- T1057

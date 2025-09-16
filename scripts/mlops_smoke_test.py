@@ -5,20 +5,11 @@ import subprocess
 import argparse
 from rich.console import Console
 
-# ======================================================================================
-# DISSERTATION CONTEXT & ANNOTATIONS
-#
 # This script serves as a full end-to-end "smoke test" for the entire MLOps
 # pipeline, from training to evaluation. Its purpose is to provide a rapid,
 # low-cost way to verify that the environment, dependencies, and core scripts
 # are all functioning correctly before committing to a long-running, final
 # training job.
-#
-# NARRATIVE PLACEMENT:
-# This tool is a key part of the MLOps and Quality Assurance strategy discussed
-# in Chapters 4 and 5. It represents a practical risk-mitigation technique
-# used to ensure experimental integrity.
-# ======================================================================================
 
 def run_command(command: str, console: Console):
     """Executes a shell command and streams its output."""

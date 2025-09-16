@@ -1,5 +1,0 @@
-INTENT:
-- Account Discovery: Local Account
-
-MITRE TTPs:
-- T1087.001

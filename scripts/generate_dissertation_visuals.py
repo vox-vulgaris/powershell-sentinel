@@ -12,85 +12,10 @@ import matplotlib.pyplot as plt
 
 # --- Script Overview and Workflow Instructions ---
 """
+(Initial Research Pass Visuals)
 This script is the master engine and central checklist for generating all visuals
 for the dissertation. It automates the creation of all data-driven tables and
-provides detailed instructions for all manually created visuals.
-
---------------------------------------------------------------------------------
-WORKFLOW INSTRUCTIONS FOR MICROSOFT WORD
---------------------------------------------------------------------------------
-
-**Step 1: Run This Script**
-   - Execute from the terminal: `python scripts/generate_dissertation_visuals.py`
-   - This will create a `visuals/` directory in your project root. Inside, you
-     will find a `tables/` subdirectory containing each automated table as a
-     separate .md (Markdown) file.
-
-**Step 2: Inserting AUTOMATED Tables into Word**
-   1. Open the relevant Markdown file (e.g., `visuals/tables/table_5_2.md`).
-   2. Copy the entire contents of the file.
-   3. In your Word document, place the cursor at the desired location.
-   4. Right-click and under "Paste Options," select "Keep Text Only".
-   5. Highlight the pasted text, go to "Insert" -> "Table" -> "Convert Text to Table...".
-   6. Set the separator to the pipe symbol (|) and click OK.
-   7. The text will be converted into a native Word table for styling.
-
-**Step 3: Creating and Inserting MANUAL Visuals**
-   - Follow the detailed instructions for each manual visual in the
-     "MANUAL VISUALS GUIDE" section of this script's comments below.
-"""
-
-# ==============================================================================
-# --- COMPLETE VISUALIZATION PLAN ---
-# ==============================================================================
-
-# CHAPTER 3: Lab Architecture and Data Curation
-#   - [MANUAL]   Figure 3.1: Lab Architecture Diagram
-#   - [MANUAL]   Table 3.1: Sample of Curated Primitives
-
-# CHAPTER 4: The PowerShell-Sentinel Data Factory
-#   - [MANUAL]   Figure 4.1: PowerShell-Sentinel Data Factory Pipeline
-#   - [MANUAL]   Table 4.1: Multi-Stage QA Framework
-#   - [AUTOMATED] Table 4.2: Data Generation Run Summary
-#   - [AUTOMATED] Table 4.3: Most Frequent Primitive Failures
-#   - [AUTOMATED] Table 4.4: Obfuscation Technique Failure Frequency
-#   - [AUTOMATED] Table 4.5: Inferred Final-Layer Obfuscation Bias (on Clean Data)
-#   - [AUTOMATED] Table 4.6: Inferred Inner Variety in Base64 Payloads (on Clean Data)
-
-# CHAPTER 5: Model Fine-Tuning, Evaluation and Delivery
-#   - [AUTOMATED] Table 5.1: Dataset Partitioning Summary
-#   - [AUTOMATED] Table 5.2: Final Model Performance Evaluation
-#   - [AUTOMATED] Table 5.3: Qualitative Evaluation of GGUF Quantization Levels
-#   - [MANUAL]   Figure 5.2: Sentinel Toolkit CLI in Action
-
-# ==============================================================================
-# --- MANUAL VISUALS GUIDE ---
-# ==============================================================================
-"""
-**Figure 3.1: Lab Architecture Diagram**
-  - **Goal:** Visually represent the three-VM lab environment.
-  - **Tool:** diagrams.net (formerly draw.io).
-  - **Content:** Draw a large box for the Azure VNet, containing three smaller boxes for the VMs (DEV/Splunk, DC, VICTIM). Use arrows to show WinRM and Splunk Forwarder connections.
-
-**Table 3.1: Sample of Curated Primitives**
-  - **Goal:** Show the structure of a fully curated primitive.
-  - **Tool:** Microsoft Word's table editor or Markdown.
-  - **Content:** Columns: "Primitive ID", "Primitive Command", "Sample Telemetry Rule". Select 4-5 diverse primitives from `primitives_library.json`.
-
-**Figure 4.1: PowerShell-Sentinel Data Factory Pipeline**
-  - **Goal:** Create a flowchart of the `main_data_factory.py` logic.
-  - **Tool:** diagrams.net.
-  - **Content:** Use standard flowchart shapes to represent the process of selecting, obfuscating, executing, and validating primitives in a loop.
-
-**Table 4.1: Multi-Stage QA Framework**
-  - **Goal:** Summarize the QA strategy.
-  - **Tool:** Microsoft Word's table editor or Markdown.
-  - **Content:** Columns: "QA Stage" and "Purpose". Rows for Obfuscator Unit Testing, Live Execution Validation, and Pipeline Integration Testing.
-
-**Figure 5.2: Sentinel Toolkit CLI in Action**
-  - **Goal:** Show the final user-facing application.
-  - **Tool:** Screenshot tool.
-  - **Content:** Capture a clean screenshot of the terminal showing the "Analyze" feature with an obfuscated command and the final, well-formatted JSON output.
+provides detailed instructions for all manually created visuals. 
 """
 
 # --- Core Logic Functions ---

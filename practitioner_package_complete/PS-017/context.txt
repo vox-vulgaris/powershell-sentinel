@@ -1,5 +1,0 @@
-INTENT:
-- System Network Configuration Discovery
-
-MITRE TTPs:
-- T1016

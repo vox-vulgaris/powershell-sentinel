@@ -49,7 +49,7 @@ def get_recommendations(
     if not parsed_rules:
         return []
 
-    # [FIX] If statistics are empty (i.e., first run), return all parsed rules.
+    # If statistics are empty (i.e., first run), return all parsed rules.
     # This is the "bootstrap" mode for the initial curation.
     is_bootstrap = not global_rarity and not local_relevance
     if is_bootstrap:
@@ -79,8 +79,7 @@ def get_recommendations(
         anno_rule for anno_rule in annotated_rules
         if anno_rule.rarity_score >= RARITY_THRESHOLD or anno_rule.relevance_score >= RELEVANCE_THRESHOLD
     ]
-
-    # --- [NEW FALLBACK LOGIC] ---
+    
     # If filtering removed all candidates, it means we've encountered new telemetry
     # that doesn't meet our current statistical model. In this case, we fall back
     # to showing all parsed rules so the user can curate them and improve the model.

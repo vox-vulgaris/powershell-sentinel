@@ -1,1 +1,0 @@
-sc.exe create "My Backdoor Service" binPath= "C:\Windows\System32\calc.exe"

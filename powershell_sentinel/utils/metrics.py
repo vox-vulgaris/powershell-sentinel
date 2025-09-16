@@ -30,8 +30,6 @@ def calculate_multilabel_f1_scores(
     return {"f1_macro": f1}
 
 
-# --- NEW FUNCTION ADDED FOR TELEMETRY EVALUATION ---
-
 def calculate_f1_for_telemetry(y_pred: List[List[BaseModel]], y_true: List[List[BaseModel]]) -> Dict[str, float]:
     """
     Calculates the F1 score for lists of Pydantic TelemetryRule objects.

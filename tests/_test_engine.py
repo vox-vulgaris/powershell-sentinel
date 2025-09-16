@@ -1,5 +1,4 @@
 import sys
-# Add the project root to the path to allow imports
 sys.path.append('.') 
 from powershell_sentinel.main_data_factory import invoke_sentinel_engine
 

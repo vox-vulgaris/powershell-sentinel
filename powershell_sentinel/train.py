@@ -1,5 +1,4 @@
 # powershell_sentinel/train.py
-# FINAL, CORRECTED SCRIPT WITH DATA FORMATTING RESTORED
 import json
 import argparse
 import os
@@ -18,6 +17,7 @@ from powershell_sentinel.models import TrainingPair
 # This new prompt is explicitly structured to match the flattened LLMResponse model.
 # It defines the exact top-level keys and describes the contents of the complex
 # telemetry_signature field, leaving no room for model misinterpretation.
+
 WINNING_PROMPT_TEMPLATE = """### INSTRUCTION:
 Analyze the following obfuscated PowerShell command. Your response must be a JSON object with four top-level keys:
 1. "deobfuscated_command": A string containing the original, clean command.
@@ -30,10 +30,7 @@ Analyze the following obfuscated PowerShell command. Your response must be a JSO
 
 ### RESPONSE:
 """
-# --- MODIFICATION END ---
 
-
-# --- THIS FUNCTION IS CRITICAL AND HAS BEEN RESTORED ---
 def format_dataset_for_trainer(training_pairs: List[dict]) -> List[dict]:
     """Formats the list of Pydantic models into the required {'text': ...} format."""
     formatted_texts = []
@@ -43,7 +40,6 @@ def format_dataset_for_trainer(training_pairs: List[dict]) -> List[dict]:
         full_text = WINNING_PROMPT_TEMPLATE.format(prompt=pair['prompt']) + response_str
         formatted_texts.append({"text": full_text})
     return formatted_texts
-# --- END OF RESTORED FUNCTION ---
 
 def run_preflight_checks(console: Console, train_dataset_path: str, test_dataset_path: str) -> bool:
     console.print("--- Running Pre-flight Checks ---", style="bold blue")
@@ -80,12 +76,10 @@ def train_model(console: Console, model_name: str, dataset_path: str, output_dir
     
     with open(dataset_path, 'r', encoding='utf-8') as f:
         raw_data = json.load(f)
-    
-    # --- THIS IS THE CRITICAL FIX ---
+        
     # Apply the formatting before creating the Hugging Face Dataset
     formatted_data = format_dataset_for_trainer(raw_data)
     hf_dataset = Dataset.from_list(formatted_data)
-    # --- END OF CRITICAL FIX ---
     
     console.print(f"Loaded and formatted [magenta]{len(hf_dataset)}[/magenta] samples.")
 
